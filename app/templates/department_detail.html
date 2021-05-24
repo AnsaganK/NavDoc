@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ department.name }}
+{% endblock %}
+
+{% block head %}
+<style>
+    .table{
+        border-spacing: 0px;
+        width: 100%;
+        max-width: 1200px;
+        margin: auto;
+        margin-top: 20px;
+        box-shadow:0px 0px 2px #000;
+        border-radius:10px;
+    }
+    .tr{
+        border-bottom:1px solid grey;
+    }
+    .td, .th{
+        color:#000000b8;
+        text-align:center;
+        padding:13px 10px;
+        border-bottom:1px solid #757575;
+    }
+    tr:last-child td.td{
+        border-bottom-width:0px;
+    }
+    .th:first-child{
+        border-top-left-radius:10px;
+    }
+    .th:last-child{
+        border-top-right-radius:10px;
+    }
+    .th{
+        background:blanchedalmond;
+        color: #1b61a9;
+        background: #ffffff8c;
+
+    }
+    .employee_table_title{
+        text-align:center;
+        font-size:17px;
+    }
+    .employee_table_title td{
+        color: #ffffff;
+        background: #005fa278;
+    }
+    .delete_button{
+            background-color: #ff5b5b;
+            padding: 10px 20px;
+            display: flex;
+            color: white;
+            position: absolute;
+            justify-content: space-between;
+            width: 10px;
+            align-items: center;
+            right: 20px;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            margin-top:-30px;
+            transition:width .3s ease;
+            cursor:pointer;
+    }
+    .edit_button{
+            background-color: #0055dc;
+            padding: 10px 20px;
+            display: flex;
+            color: white;
+            position: absolute;
+            justify-content: space-between;
+            width: 10px;
+            align-items: center;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            margin-top: 15px;
+            right: 20px;
+            transition:width .3s ease;
+            cursor:pointer;
+    }
+    .archive_button{
+            background-color: #da681e;
+            padding: 10px 20px;
+            display: flex;
+            color: white;
+            position: absolute;
+            justify-content: space-between;
+            width: 10px;
+            align-items: center;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            margin-top: 60px;
+            right: 20px;
+            transition:width .3s ease;
+            cursor:pointer;
+    }
+    .edit_button img, .delete_button img, .archive_button img{
+        margin-right:50px;
+    }
+    .edit_button:hover, .delete_button:hover, .archive_button:hover{
+        width:120px;
+    }
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 1000;
+}
+.modal .modal_content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    z-index: 99999;
+    border-radius:10px;
+}
+.modal .modal_content .close_modal_window {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+    <div id="my_modal" class="modal">
+        <div class="modal_content">
+          <span class="close_modal_window">×</span>
+            <form action="{% url 'department_edit' department.pk %}" method="post" class="form_box">
+                {% csrf_token %}
+                <div class="form_item">
+                    <label for="">Название</label>
+                    <input type="text" value="{{ department.name }}" name="name">
+                </div>
+                <button type="submit" class="form_button">Изменить</button>
+            </form>
+        </div>
+      </div>
+    <div class="content">
+        <h3 class="content_title">{{ department.name }}</h3>
+        <a class="edit_button" id="btn_modal_window">
+            <img src="{% static 'img/edit.svg' %}" alt="" width="15px" height="15px">
+            Изменить
+        </a>
+        <a href="{% url 'department_archive' department.pk %}" {% if department.archive %}style="background-color:#009a00;"{% endif %} class="archive_button">
+            <img src="{% static 'img/archive.svg' %}" alt="" width="15px" height="15px">
+            {% if department.archive %}Общий{% else %}Архив{% endif %}
+        </a>
+        <a href="{% url 'department_delete' department.pk %}" class="delete_button">
+            <img src="{% static 'img/remove.svg' %}" alt="" width="15px" height="15px">
+            Удалить
+        </a>
+        <table class="table">
+                <tr class="tr">
+                    <th class="th">ФИО</th>
+                    <th class="th">Дата рождения</th>
+                    <th class="th">Отдел</th>
+                    <th class="th">Должность</th>
+                    <th class="th">Номер моб.</th>
+                </tr>
+            <tr class="employee_table_title" ><td class="td" colspan="5">Руководитель</td></tr>
+            {% for user in chef_users %}
+                <tr class="tr">
+                    <td class="td">{{ user.first_name|slice:"1" }}.{{ user.last_name }}</td>
+                    <td class="td">{{ user.profile }}</td>
+                    <td class="td">{{ user.profile.department }}</td>
+                    <td class="td">{{ user.profile.role }}</td>
+                    <td class="td">{{ user.profile.mobile }}</td>
+                </tr>
+                {% endfor %}
+            <tr class="employee_table_title"><td class="td" colspan="5">Сотрудники</td></tr>
+                {% for user in employee_users %}
+                <tr class="tr">
+                    <td class="td">{{ user.first_name|slice:"1" }}.{{ user.last_name }}</td>
+                    <td class="td">{{ user.profile }}</td>
+                    <td class="td">{{ user.profile.department }}</td>
+                    <td class="td">{{ user.profile.role }}</td>
+                    <td class="td">{{ user.profile.mobile }}</td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+     var modal = document.getElementById("my_modal");
+ var btn = document.getElementById("btn_modal_window");
+ var span = document.getElementsByClassName("close_modal_window")[0];
+
+ btn.onclick = function () {
+    modal.style.opacity = 1;
+    modal.style.display = "block";
+ }
+
+ span.onclick = function () {
+    modal.style.display = "none";
+ }
+
+ window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+{% endblock %}

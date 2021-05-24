@@ -1,0 +1,43 @@
+{% load static %}
+
+<html>
+<head>
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .content_login{
+            min-height: 500px;
+            background: #fff;
+            width: 90%;
+            max-width: 1200px;
+            opacity: 0.75;
+            border-radius: 10px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <div class="header">
+        <img src="{% static 'img/navistar.png' %}" height="100%">
+    </div>
+        <div class="content_login">
+            <h3 class="content_title">Авторизация</h3>
+            <form action="{% url 'login' %}" class="form_box" method="post">
+                {% csrf_token %}
+                <div class="form_item">
+                    <label for="">Логин</label>
+                    <input type="text" name="username">
+                </div>
+                <div class="form_item">
+                    <label for="">Пароль</label>
+                    <input type="text" name="password">
+                </div>
+                <button type="submit" class="form_button">Войти</button>
+            </form>
+        </div>
+</div>
+    <img class="background" src="{% static 'img/10.jpg' %}">
+</body>
+</html>

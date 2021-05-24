@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Добавление пользователя
+{% endblock %}
+
+
+{% block content %}
+<div class="content">
+    <h3 class="content_title">Добавление пользователя</h3>
+    <form action="{% url 'user_add' %}" class="form_box" method="post">
+        {% csrf_token %}
+        {% if userNameFound %}
+            <p class="error">Пользователь с таким логином уже существует</p>
+        {% endif %}
+        {% if passwordCheck %}
+            <p class="error">Пароли не совпадают</p>
+        {% endif %}
+        {% if emailFound %}
+            <p class="error">Пользователь с такой почтой уже есть в системе</p>
+        {% endif %}
+        <div class="form_item">
+            <label for="">Логин</label>
+            <input type="text" name="username">
+        </div>
+
+        <div class="form_item">
+            <label for="">Имя</label>
+            <input type="text"name="first_name">
+        </div>
+        <div class="form_item">
+            <label for="">Фамилия</label>
+            <input type="text"name="last_name">
+        </div>
+        <div class="form_item">
+            <label for="">Почта</label>
+            <input type="email"name="email">
+        </div>
+        <div class="form_item">
+            <label for="">Пароль</label>
+            <input type="text" name="password1">
+        </div>
+        <div class="form_item">
+            <label for="">Пароль(повтор)</label>
+            <input type="text" name="password2">
+        </div>
+        <select name="department" id="" class="form_select">
+            {% for department in departments %}
+            <option value="{{ department.id }}">{{ department.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="role" id="" class="form_select">
+            {% for role in roles %}
+            <option value="{{ role.id }}">{{ role.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="form_button">
+            Сохранить
+        </button>
+    </form>
+</div>
+{% endblock %}

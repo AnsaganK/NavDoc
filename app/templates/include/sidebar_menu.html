@@ -1,0 +1,36 @@
+{% load static %}
+
+<div class="sidebar_menu">
+    <a href="{% url 'home' %}" href="#" class="sidebar_item {% if request.path == '/' %}active_link{% endif %}">
+        <img src="{% static 'img/home.svg' %}" alt="" width="20px" height="20px">
+        Главная
+    </a>
+    <a href="{% url 'users_list' %}" class="sidebar_item {% if '/users' in request.path %}active_link{% endif %}">
+        <img src="{% static 'img/users.svg' %}" alt="" width="20px" height="20px">
+        Пользователи
+    </a>
+    <a href="{% url 'my_notes_list' %}" class="sidebar_item {% if '/my-notes' in request.path  %}active_link{% endif %}">
+        <img src="{% static 'img/letter.svg' %}" alt="" width="20px" height="20px">
+        Принятые СЗ
+    </a>
+    <a href="{% url 'notes_list' %}" class="sidebar_item {% if '/notes' in request.path  %}active_link{% endif %}">
+        <img src="{% static 'img/send.svg' %}" alt="" width="20px" height="20px">
+        Отправленные СЗ
+    </a>
+    <a href="{% url 'departments_list' %}" class="sidebar_item {% if '/departments' in request.path  %}active_link{% endif %}">
+        <img src="{% static 'img/department.svg' %}" alt="" width="20px" height="20px">
+        Отделы
+    </a>
+    <!--<a href="{% url 'chat' %}" class="sidebar_item">
+        <img src="{% static 'img/users.svg' %}" alt="" width="20px" height="20px">
+        Чат
+    </a>-->
+    <a href="{% url 'calendar' %}" class="sidebar_item {% if request.path == '/calendar' %}active_link{% endif %}">
+        <img src="{% static 'img/calendar.svg' %}" alt="" width="20px" height="20px">
+        Календарь
+    </a>
+    <a href="{% url 'calendar' %}" class="sidebar_item {% if request.path == '/statistics' %}active_link{% endif %}">
+        <img src="{% static 'img/statistic.svg' %}" alt="" width="20px" height="20px">
+        Статистика
+    </a>
+</div>

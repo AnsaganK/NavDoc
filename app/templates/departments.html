@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load app_tags %}
+
+
+{% block head %}
+<style>
+.departments{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+}
+.department{
+    width:335px;
+        padding: 15px;
+    color: white;
+    box-shadow: 0px 0px 3px 0px #595959;
+    /* border: 1px solid white; */
+    margin: 20px 10px;
+    border-radius: 10px;
+    background-color: #4a99ed;
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+}
+.department svg, .departments img{
+    margin-right:20px;
+}
+.department_info{
+    display:flex;
+    justify-content:center;
+    flex-grow:1;
+    flex-direction:column;
+}
+.department_name{
+    color: #ffffff;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    text-align:end;
+    border-bottom: 1px solid white;
+}
+
+</style>
+{% endblock %}
+
+{% block title %}
+Отделы
+{% endblock %}
+
+
+{% block content %}
+<div class="content">
+    <h3 class="content_title">
+        Отделы
+    </h3>
+    <div class="departments">
+        {% for department in departments %}
+
+        <a href="{{ department.get_absolute_url }}" {% if department.archive %}style="background-color:grey;"{% endif %} class="department">
+            {% if department.picture %}
+            <img src="{{ department.picture.url }}" alt="" height="80px" width="80px">
+            {% else %}
+            <img src="{% static 'img/office.svg' %}" alt="" height="70px" width="70px">
+            {% endif %}
+            <div class="department_info">
+                <span class="department_name">{{ department.name }}</span>
+                <span class="department_shief">{{ department.profiles|department_chefs }}
+                </span>
+                <span class="department_employyes">Сотрудников: {{ department.profiles.count }}</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    <a href="{% url 'department_add' %}">
+        <div class="circle_add">
+            +
+        </div>
+    </a>
+</div>
+{% endblock %}

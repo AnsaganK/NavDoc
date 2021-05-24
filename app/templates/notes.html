@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Отправленные
+{% endblock %}
+
+{% block head %}
+<style>
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 1000;
+}
+.modal .modal_content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    z-index: 99999;
+    border-radius:10px;
+}
+.modal .modal_content .close_modal_window {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+        <div id="my_modal" class="modal">
+        <div class="modal_content">
+          <span class="close_modal_window">×</span>
+            <form action="" method="get" class="form_box">
+                {% csrf_token %}
+                <h3 class="form_title">Служебная записка</h3>
+                <div class="form_item">
+                    <label for="">Название</label>
+                    <input type="text" name="name">
+                </div>
+                <div class="form_item">
+                    <label for="">Дата</label>
+                    <input type="date" name="name">
+                </div>
+                <div class="form_item">
+                    <label for="">Название</label>
+                    <input type="text" name="name">
+                </div>
+                <div class="form_item">
+                    <label for="">Название</label>
+                    <input type="text" name="name">
+                </div>
+                <div class="form_item">
+                    <label for="">Название</label>
+                    <input type="text" name="name">
+                </div>
+
+
+                <button type="submit" class="form_button">Создать</button>
+            </form>
+        </div>
+      </div>
+    <div class="content">
+        <h3 class="content_title">
+            Отправленные
+        </h3>
+    </div>
+    <a id="btn_modal_window">
+            <div class="circle_add">
+                +
+            </div>
+        </a>
+{% endblock %}
+
+
+{% block script %}
+<script>
+     var modal = document.getElementById("my_modal");
+ var btn = document.getElementById("btn_modal_window");
+ var span = document.getElementsByClassName("close_modal_window")[0];
+
+ btn.onclick = function () {
+    modal.style.opacity = 1;
+    modal.style.display = "block";
+ }
+
+ span.onclick = function () {
+    modal.style.display = "none";
+ }
+
+ window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+{% endblock %}

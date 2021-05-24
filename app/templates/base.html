@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Главная{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    {% block head %}
+
+    {% endblock %}
+    <style>
+        .subheader{
+            height:20px;
+            background-color:red;
+        }
+        .profile_ul{
+            border-radius: 10px;
+            width: 160px;
+            list-style-type: none;
+            position: absolute;
+            top: 40px;
+            right:19px;
+            color: white;
+            padding: 0px;
+        }
+        .profile_ul li{
+            background: #fff;
+            color: #3a92ff;
+            border: 1px solid #73abf9;
+            border-bottom:0px;
+            transition:background .3s ease;
+        }
+        .profile_ul li a{
+            display:block;
+            padding:10px;
+            color:#538df7;
+        }
+        .profile_ul li:hover{
+            background: gainsboro;
+        }
+        .profile_ul li:first-child{
+            border-top-right-radius:10px;
+            border-top-left-radius:10px;
+        }
+        .profile_ul li:last-child{
+            border-bottom-right-radius:10px;
+            border-bottom-left-radius:10px;
+        }
+        #profile_menu{
+            display:none;
+        }
+        .show_menu{
+            display:block !important;
+        }
+        @keyframes fadeInMenu {
+         from {opacity: 0}
+         to {opacity: 1}
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <div class="header">
+        <img src="{% static 'img/navistar.png' %}" height="100%">
+        <button class="profile_button">
+            {% if request.user.is_authenticated %}
+            <img src="{% static 'img/profile.svg' %}" alt="" width="17px" height="17px">
+				<span>
+					{{ request.user.first_name|slice:"1" }}.{{ request.user.last_name }}
+				</span>
+            <div class="line">
+
+            </div>
+            <span style="cursor: pointer" onclick="show_menu()">
+                <img src="{% static 'img/arrow.svg' %}" alt="" width="13px" height="13px">
+            </span>
+            <ul class="profile_ul" id="profile_menu">
+                <li><a href="{% url 'profile' %}">Профиль</a></li>
+                <li><a href="">Мои СЗ</a></li>
+                <li><a href="{% url 'logout' %}">Выйти</a></li>
+            </ul>
+            {% else %}
+            <span>Войти</span>
+            {% endif %}
+        </button>
+    </div>
+    <div class="main">
+        {% include 'include/sidebar_menu.html' %}
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+</div>
+<img class="background" src="{% static 'img/10.jpg' %}">
+<script>
+    function show_menu(){
+        var menu = document.getElementById("profile_menu");
+        menu.classList.toggle("show_menu");
+        menu.classList.contains('hideText') ? menu.style.animation='none' :
+        menu.style.animation='fadeInMenu .3s';
+    }
+</script>
+{% block script %}
+
+{% endblock %}
+</body>
+</html>

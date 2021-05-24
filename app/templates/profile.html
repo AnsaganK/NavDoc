@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Профиль
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <h3 class="content_title">
+            Профиль
+        </h3>
+        {{ user.first_name }}
+        {{ user.last_name }}
+    </div>
+{% endblock %}
