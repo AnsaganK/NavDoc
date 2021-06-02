@@ -124,7 +124,6 @@ def notes_list(request):
     # notes = user.sign_notes.all()
     last = ServiceNote.objects.last()
     tags = Tags.objects.all()
-
     notes = ServiceNote.objects.filter(user=request.user).order_by('-pk')
     count_all = notes.count()
     count_wait = notes.filter(status=None).count()
