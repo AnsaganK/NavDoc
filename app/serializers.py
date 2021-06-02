@@ -24,7 +24,7 @@ class UserNoteSerializer(serializers.ModelSerializer):
     user = UserIdSerializer()
     class Meta:
         model = NoteUsers
-        fields = ('index', 'status','user', 'comment')
+        fields = ('index', 'status', 'user', 'comment', 'date_create')
 
 
 class ServiceMyNoteSerializer(serializers.ModelSerializer):

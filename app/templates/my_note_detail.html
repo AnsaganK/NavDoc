@@ -47,7 +47,7 @@
             {% csrf_token %}
             <textarea name="comment" id="" cols="60" rows="10" placeholder="Комментарии" style="width: auto;padding: 5px" >{% if userNote.comment %}{{ userNote.comment }}{% endif %}</textarea>
             <div class="statuses">
-                <input class="status_input" type="radio" name="status" value="success" id="status_1"{% if userNote.status == 'success' %} checked {% endif %}>
+                <input class="status_input" type="radio" name="status" value="success" id="status_1"{% if userNote.status == 'success' or userNote.status == None %} checked {% endif %}>
                 <label class="status_label" for="status_1">Подписать</label>
                 <input class="status_input" type="radio" name="status" value="edit" id="status_2"{% if userNote.status == 'edit' %} checked {% endif %}>
                 <label class="status_label" for="status_2">На редактирование</label>
