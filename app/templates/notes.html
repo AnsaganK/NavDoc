@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}
 Отправленные
 {% endblock %}
@@ -7,101 +7,370 @@
 {% block head %}
 <style>
     .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
-    z-index: 1000;
-}
-.modal .modal_content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 600px;
-    z-index: 99999;
-    border-radius:10px;
-}
-.modal .modal_content .close_modal_window {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+    }
+
+    .modal .modal_content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 800px;
+        z-index: 99999;
+        border-radius: 10px;
+    }
+
+    .modal .modal_content .close_modal_window {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .form_item {
+        width: 600px;
+    }
+
+    .form_box input, .form_box textarea, .form_box select {
+        width: 450px;
+    }
+
+    .form_box textarea {
+        max-width: 450px;
+        min-width: 450px;
+    }
+
+    .notes_table {
+        width: 100%;
+        padding: 10px;
+        color: #000000b8;
+    }
+
+    .notes_table th, .notes_table td {
+        border-bottom: 1px solid slategrey;
+        padding: 10px;
+    }
+
+    .tags {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    label.tag {
+        cursor: pointer;
+        margin: 5px;
+        padding: 7px;
+        border-radius: 5px;
+        background-color: grey;
+        color: white;
+        transition: background-color .3s ease;
+    }
+
+    .tags input[type="checkbox"] {
+        display: none;
+    }
+
+    input:checked + label.tag {
+        background-color: #31be7d;
+    }
+
+    .user_select {
+        display: flex;
+        justify-content: center;
+    }
+
+    .user_select_number {
+        background: #5096ff;
+        border-top-left-radius: 10px;
+        height: min-content;
+        padding: 8px 10px;
+        color: white;
+        border-bottom-left-radius: 10px;
+    }
+
+    .form_box select {
+        border-bottom-left-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+    .select_buttons{
+        display: flex;
+        width: 458px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .delete_select_button{
+        align-items: center;
+        padding: 5px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        color: white;
+        height: 20px;
+        margin-top: -15px;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 0px 0px 3px 1px #616161;
+        background-color: red;
+    }
+    .add_select_button {
+        align-items: center;
+        padding: 11px;
+        font-size: 30px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        width: 20px;
+        color: white;
+        height: 20px;
+        margin-top: -15px;
+        border-radius: 100%;
+        cursor: pointer;
+        box-shadow: 0px 0px 3px 1px #616161;
+        background-color: #50a6ff;
+    }
+    .input_files{
+        display: flex;
+        width: 458px;
+        flex-wrap: wrap;
+    }
+    .input_file_label{
+        border:1px dashed black;
+        padding:15px 20px;
+        margin-right: 20px;
+    }
+    .input_file input{
+        display: none;
+    }
+    .fast{
+        margin: auto;
+        background: grey;
+        padding: 12px;
+        color: white;
+        border-radius: 7px;
+        box-shadow: 0px 0px 3px 1px #1c1c1c;
+        color: white;
+        transition: background .3s ease;
+    }
+    #fast:checked+label{
+        background:#ff4a4a;
+    }
+    label.fast{
+        color: #fff;
+    }
+    .slider_wrap{
+        width: 50px;
+        height: 27px;
+        margin-bottom: 20px;
+        display: flex;
+        border-radius: 27px;
+        background-color: grey;
+        align-items: center;
+        transition: background-color .3s ease-in;
+    }
+    .slider_circle{
+        width: 27px;
+        height: 27px;
+        border-radius: 100%;
+        background-color: white;
+        margin-left: 0px;
+        transition: margin-left .3s ease-in;
+        border: 1px solid grey;
+    }
+    #slider_input:checked+label .slider_wrap{
+        background-color: #7dbdff;
+    }
+    #slider_input:checked+label .slider_circle{
+        margin-left: 23px;
+        background-color: #3a92ff;
+    }
+
 </style>
 {% endblock %}
 
 {% block content %}
-        <div id="my_modal" class="modal">
-        <div class="modal_content">
-          <span class="close_modal_window">×</span>
-            <form action="" method="get" class="form_box">
-                {% csrf_token %}
-                <h3 class="form_title">Служебная записка</h3>
-                <div class="form_item">
-                    <label for="">Название</label>
-                    <input type="text" name="name">
-                </div>
-                <div class="form_item">
-                    <label for="">Дата</label>
-                    <input type="date" name="name">
-                </div>
-                <div class="form_item">
-                    <label for="">Название</label>
-                    <input type="text" name="name">
-                </div>
-                <div class="form_item">
-                    <label for="">Название</label>
-                    <input type="text" name="name">
-                </div>
-                <div class="form_item">
-                    <label for="">Название</label>
-                    <input type="text" name="name">
-                </div>
+<div id="my_modal" class="modal">
+    <div class="modal_content">
+        <span class="close_modal_window">×</span>
+        <form action="{% url 'service_note_add' %}" method="post" class="form_box" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h3 class="form_title" style="margin-left: 20px">Служебная записка №<input type="number" class="note_number_input" name="number" value="{{number}}"></h3>
 
-
-                <button type="submit" class="form_button">Создать</button>
-            </form>
-        </div>
-      </div>
-    <div class="content">
-        <h3 class="content_title">
-            Отправленные
-        </h3>
-    </div>
-    <a id="btn_modal_window">
-            <div class="circle_add">
-                +
+            <div class="form_item">
+                <label for="">Название</label>
+                <input type="text" name="title" style="text-align: center" required>
             </div>
+            <div class="form_item">
+                <label for="">Дата</label>
+                <input type="date" name="date" required>
+            </div>
+            <div class="form_item">
+                <label for="">Текст</label>
+                <textarea type="text" name="text" rows="4" required></textarea>
+            </div>
+            <div class="form_item">
+                <label for="">Итого</label>
+                <input type="number" name="summa" style="text-align: center" required>
+            </div>
+            <div class="form_item" style="margin-bottom: 30px;margin-top: 10px;">
+                <label for="">Файлы</label>
+                <div class="input_files">
+                    <div class="input_file">
+                        <input type="file" id="input_file_1" name="input_file_1" onchange="file_upload(this)">
+                        <label for="input_file_1" class="input_file_label">+</label>
+                    </div>
+                    <div class="input_file">
+                        <input type="file" id="input_file_2" name="input_file_2" onchange="file_upload(this)">
+                        <label for="input_file_2" class="input_file_label">+</label>
+                    </div>
+                    <div class="input_file">
+                        <input type="file" id="input_file_3" name="input_file_3" onchange="file_upload(this)">
+                        <label for="input_file_3" class="input_file_label">+</label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form_item">
+                <label for="">Кому</label>
+                <div class="user_selects" id="user_selects">
+                    <div class="user_select">
+                        <span class="user_select_number" data-tag-id="1">1</span>
+                        <select name="user_1" id="" style="width:430px;">
+                            {% for user in users %}
+                            <option value="{{ user.pk }}">{{ user.first_name|slice:"1" }}.{{ user.last_name }}({{ user.profile.position }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form_item" style="justify-content: flex-end">
+
+            <div class="select_buttons">
+                <span class="add_select_button" onclick="add_select()">+</span>
+                <span class="delete_select_button" onclick="delete_select()">Удалить</span>
+            </div>
+            </div>
+            <div class="form_item">
+                <label for="">
+                    Срочно
+                </label>
+                <div>
+
+            <input type="checkbox" id="slider_input" name="fast" style="display: none">
+            <label for="slider_input">
+                <div class="slider_wrap">
+                    <div class="slider_circle"></div>
+                </div>
+            </label>
+                </div>
+            </div>
+                <!--<div class="form_item">
+                    <input type="checkbox" id="fast" style="display: none">
+                    <label for="fast" class="fast">Срочно</label>
+                </div>-->
+            <div class="form_item" style="border-top:1px solid #cecece;padding-top:10px;">
+                <div class="tags">
+                    {% for tag in tags %}
+                    <input type="checkbox" id="tag_{{ tag.pk }}" name="tag_{{ tag.pk }}">
+                    <label class="tag" for="tag_{{ tag.pk }}">
+                        {{ tag.name }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <button type="submit" class="form_button">Создать</button>
+        </form>
+    </div>
+</div>
+<div class="content" style="padding-left: 0px; padding-right: 0px">
+    <h3 class="content_title">
+        Отправленные
+    </h3>
+    <div class="flex_notes">
+        {% for note in notes %}
+        <a href="{{ note.get_absolute_url }}" class="flex_note {% if note.fast %}fast_note{% endif %}">
+            <div class="note_number">{{ note.number }}</div>
+            <div class="note_title">{{ note.title }}</div>
+            <div class="note_text">{{ note.text }}</div>
+            <div class="note_date">{{ note.date }}</div>
         </a>
+        {% empty %}
+        <h4 class="not_found">Вы не создавали служебных записок</h4>
+        {% endfor %}
+    </div>
+</div>
+<a id="btn_modal_window">
+    <div class="circle_add">
+        +
+    </div>
+</a>
 {% endblock %}
 
 
 {% block script %}
 <script>
-     var modal = document.getElementById("my_modal");
- var btn = document.getElementById("btn_modal_window");
- var span = document.getElementsByClassName("close_modal_window")[0];
+    var modal = document.getElementById("my_modal");
+    var btn = document.getElementById("btn_modal_window");
+    var span = document.getElementsByClassName("close_modal_window")[0];
 
- btn.onclick = function () {
-    modal.style.opacity = 1;
-    modal.style.display = "block";
- }
+    btn.onclick = function () {
+        modal.style.opacity = 1;
+        modal.style.display = "block";
+    }
 
- span.onclick = function () {
-    modal.style.display = "none";
- }
-
- window.onclick = function (event) {
-    if (event.target == modal) {
+    span.onclick = function () {
         modal.style.display = "none";
     }
-}
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function delete_select(){
+        var selects = document.getElementsByClassName('user_select');
+        var last_select = selects[selects.length - 1];
+        if(selects.length>1) {
+            last_select.remove();
+        }
+    }
+    function add_select() {
+        var selects = document.getElementsByClassName('user_select');
+        var last_select = selects[selects.length - 1];
+        var last_number = last_select.children[0].getAttribute("data-tag-id");
+        var data = '<span class = "user_select_number" data-tag-id = "' + (1 + parseInt(last_number)) + '">' + (1 + parseInt(last_number)) + '</span><select name="user_'+(1+parseInt(last_number))+'" id="" style="width:430px;">{% for user in users %}<option value="{{ user.pk }}">{{user.first_name|slice:"1"}}.{{user.last_name}}({{ user.profile.position }})</option>{% endfor %}</select>';
+        let div = document.createElement('div');
+        div.classList.add("user_select");
+        div.id = "user_selects"
+        div.innerHTML = data;
+        document.getElementById("user_selects").append(div);
+    }
+    function file_upload(r){
+        var data = r.parentNode.children[1];
+        console.log(data);
+        if (r.files.length === 0){
+            data.innerHTML = "+";
+            data.style = 'border:1px dashed grey;color:grey';
+        }
+        else {
+            var z = r.files[0].name;
+            data.innerHTML = "<img src=/static/img/success.svg width=20>";
+            data.style = 'border:1px solid #a5eb78;color:#a5eb78;padding: 19px 17px;padding-bottom: 12px;';
+        }
+    }
 </script>
 {% endblock %}

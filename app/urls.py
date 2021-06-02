@@ -7,6 +7,7 @@ urlpatterns = [
     path("calendar", calendar, name="calendar"),
     path("chat", chat, name="chat"),
     path("departments", departments_list, name="departments_list"),
+    path("tags", tags_list, name="tags_list"),
     path("my-notes", my_notes_list, name="my_notes_list"),
     path("notes", notes_list, name="notes_list"),
     path("users", users_list, name="users_list"),
@@ -17,4 +18,8 @@ urlpatterns = [
     path("departments/<int:pk>", department_detail, name="department_detail"),
     path("users/add", user_add, name="user_add"),
     path("users/<int:pk>", user_detail, name="user_detail"),
+    path("my-notes/<int:pk>", my_note_detail, name="my_note_detail"),
+    path("notes/status", edit_status_note, name="edit_status_note"),
+    path("notes/add", service_note_add, name="service_note_add"),
+    path("notes/<int:pk>", note_detail, name="note_detail"),
 ]

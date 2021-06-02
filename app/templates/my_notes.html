@@ -5,9 +5,22 @@
 {% endblock %}
 
 {% block content %}
-    <div class="content">
+    <div class="content" style="padding-left:0px; padding-right:0px">
         <h3 class="content_title">
             Принятые
         </h3>
+        <div class="flex_notes">
+        {% for note in notes %}
+        <a href="{% url 'my_note_detail' note.pk %}" class="flex_note {% if note.fast %}fast_note{% endif %}">
+            <div class="note_number">{{ note.number }}</div>
+            <div class="note_title">{{ note.title }}</div>
+            <div class="note_text">{{ note.text }}</div>
+            <div class="note_date">{{ note.date }}</div>
+        </a>
+        {% empty %}
+        <h4 class="not_found">Нет принятых служебных записок</h4>
+        {% endfor %}
+    </div>
+
     </div>
 {% endblock %}

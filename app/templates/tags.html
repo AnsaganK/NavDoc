@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Тэги
+{% endblock %}
+
+{% block head %}
+<style>
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 10px;
+        justify-content: center;
+    }
+
+    .tag {
+        height: 120px;
+        min-width: 200px;
+        width: 220px;
+        max-width: 220px;
+        background-color: #3c81e9;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: space-between;
+        flex-direction: column;
+        margin: 10px;
+    }
+    .tag_circle {
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        margin-left: -185px;
+        margin-top: 8px;
+        border-radius: 100%;
+        border: 1px solid #3c81e9;
+    }
+    .tag_circle2 {
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        margin-left: 185px;
+        margin-top: 8px;
+        border-radius: 100%;
+        border: 1px solid #3c81e9;
+    }
+    .tag_name{
+        height: 66%;
+        width: 100%;
+        background: white;
+        display: flex;
+        border-radius: 10px;
+        color: #3c81e9;
+        justify-content: center;
+        align-items: center;
+    }
+    .tag_count{
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h3 class="content_title">
+        Тэги
+    </h3>
+    <div class="tags">
+
+        {% for tag in tags %}
+        <a href="" class="tag">
+            <span class="tag_circle">
+
+            </span>
+            <span class="tag_circle2">
+
+            </span>
+            <span class="tag_name">
+                {{ tag.name }}
+            </span>
+            <span class="tag_count">
+                Всего: {{ tag.notes.all.count }}
+            </span>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

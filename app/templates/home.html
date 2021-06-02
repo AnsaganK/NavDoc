@@ -13,62 +13,19 @@
                     </div>
                     <div class="status_content">
                         <div class="last_notes last_wait">
-                            <a href="" class="last_note">
+                            {% for i in notStatus %}
+                            <a href="{% url 'my_note_detail' i.pk %}" class="last_note">
 										<span class="last_note_number">
-											№435
+											№{{ i.number }}
 										</span>
                                 <span class="last_note_title">
-											Командировка
+											{{ i.title }}
 										</span>
                                 <span class="last_note_date">
-											19.04.21
+											{{ i.date }}
 										</span>
                             </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
-
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -78,50 +35,19 @@
                     </div>
                     <div class="status_content">
                         <div class="last_notes last_edit">
-                            <a href="" class="last_note">
+                            {% for i in editStatus %}
+                            <a href="{% url 'my_note_detail' i.pk %}" class="last_note">
 										<span class="last_note_number">
-											№435
+											№{{ i.number }}
 										</span>
                                 <span class="last_note_title">
-											Командировка
+											{{ i.title }}
 										</span>
                                 <span class="last_note_date">
-											19.04.21
+											{{ i.date }}
 										</span>
                             </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
+                            {% endfor %}
 
                         </div>
                     </div>
@@ -132,29 +58,19 @@
                     </div>
                     <div class="status_content">
                         <div class="last_notes last_success">
-                            <a href="" class="last_note">
+                            {% for i in successStatus %}
+                            <a href="{% url 'my_note_detail' i.pk %}" class="last_note">
 										<span class="last_note_number">
-											№435
+											№{{ i.number }}
 										</span>
                                 <span class="last_note_title">
-											Командировка
+											{{ i.title }}
 										</span>
                                 <span class="last_note_date">
-											19.04.21
+											{{ i.date }}
 										</span>
                             </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
-
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -164,39 +80,19 @@
                     </div>
                     <div class="status_content">
                         <div class="last_notes last_fail">
-                            <a href="" class="last_note">
+                            {% for i in errorStatus %}
+                            <a href="{% url 'my_note_detail' i.pk %}" class="last_note">
 										<span class="last_note_number">
-											№435
+											№{{ i.number }}
 										</span>
                                 <span class="last_note_title">
-											Командировка
+											{{ i.title }}
 										</span>
                                 <span class="last_note_date">
-											19.04.21
+											{{ i.date }}
 										</span>
                             </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
-                            <a href="" class="last_note">
-										<span class="last_note_number">
-											№435
-										</span>
-                                <span class="last_note_title">
-											Командировка
-										</span>
-                                <span class="last_note_date">
-											19.04.21
-										</span>
-                            </a>
+                            {% endfor %}
 
                         </div>
                     </div>

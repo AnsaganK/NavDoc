@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+{{ note.title }}
+{% endblock %}
+
+{% block head %}
+<style>
+.note_download{
+        width:550px;
+        display: flex;
+    margin: auto;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .download_button{
+        width: 250px;
+        margin: 5px 10px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        background-color: red;
+        color: #fff;
+    }
+    .pdf{
+        background-color: #ff6500;
+    }
+    .doc{
+        background-color: #109bff;
+    }
+    .note_info{
+        display: flex;
+        max-width: 750px;
+        width: 90%;
+        margin: auto;
+        margin-top: 27px;
+        border-radius: 10px;
+        padding:15px;
+        background: white;
+        flex-direction: column;
+    }
+    .note_info_item{
+        border-bottom: 1px solid grey;
+        display: flex;
+        margin-bottom:10px;
+        justify-content: space-between;
+    }
+    ul{
+        list-style-type: none;
+    }
+    .note_detail_tags{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .note_detail_tag{
+        margin: 5px 10px;
+        padding:7px;
+        border-radius: 5px;
+        color: white;
+        background: #628bb5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="content_title">
+        Служебная записка №{{ note.number }}
+    </div>
+    <div class="note_detail">
+        <div class="note_info">
+            <div class="note_info_item"><span>Создал:</span> <span>{{ note.user.first_name }} {{ note.user.last_name }}</span></div>
+            <div class="note_info_item"><span>Название:</span> <span>{{ note.title }}</span></div>
+            <div class="note_info_item"><span>Дата СЗ:</span> <span>{{ note.date }}</span></div>
+            <div class="note_info_item"><span>Дата создания:</span> <span>{{ note.date_create }}</span></div>
+            <div class="note_info_item"><span>Текст:</span> <span>{{ note.text }}</span></div>
+            <div class="note_info_item"><span>Срочный:</span> <span>{{ note.fast }}</span></div>
+            <div class="note_info_item"><span>Итого:</span> <span>{{ note.summa }}</span></div>
+            <div class="note_info_item"><span>У кого:</span> <span>{{ note.user_index }}</span></div>
+
+            <ul class="note_detail_tags">
+
+                {% for i in note.tags.all %}
+                <li class="note_detail_tag">{{ i.name }}</li>
+                {% endfor %}
+            </ul>
+            <div class="note_download"><!--
+                <img src="{% static 'img/pdf.svg' %}" alt="">
+                <img src="{% static 'img/doc.svg' %}" alt="">-->
+                <a href="" class="download_button pdf">Скачать PDF</a>
+                <a href="" class="download_button pdf">Скачать PDF(без подписей)</a>
+                <a href="" class="download_button doc">Скачать Doc</a>
+                <a href="" class="download_button doc">Скачать Doc(без подписей)</a>
+            </div>
+        </div>
+        <ul class="note_detail_users">
+                {% for i in note.users.all %}
+                    <li class="note_detail_user">{{ i.user.first_name }} {{ i.user.last_name }}</li>
+                {% endfor %}
+        </ul>
+
+    </div>
+</div>
+{% endblock %}

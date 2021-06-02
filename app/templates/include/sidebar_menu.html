@@ -21,6 +21,10 @@
         <img src="{% static 'img/department.svg' %}" alt="" width="20px" height="20px">
         Отделы
     </a>
+    <a href="{% url 'tags_list' %}" class="sidebar_item {% if '/tags' in request.path  %}active_link{% endif %}">
+        <img src="{% static 'img/tag.svg' %}" alt="" width="20px" height="20px">
+        Тэги
+    </a>
     <!--<a href="{% url 'chat' %}" class="sidebar_item">
         <img src="{% static 'img/users.svg' %}" alt="" width="20px" height="20px">
         Чат

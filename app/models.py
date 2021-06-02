@@ -29,22 +29,49 @@ class Tags(models.Model):
 
 
 class ServiceNote(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes")
-    number = models.IntegerField()
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="notes")
+    number = models.IntegerField(null=True, blank=True)
     title = models.CharField(max_length=120)
     text = models.TextField()
+    summa = models.CharField(max_length=200, null=True, blank=True)
+    fast = models.BooleanField(default=False)
     date_create = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
     date = models.DateField(null=True, blank=True)
     tags = models.ManyToManyField(Tags, null=True, blank=True, related_name="notes")
-    signers = models.ManyToManyField(User, null=True, blank=True, related_name="sign_notes")
+    user_index = models.IntegerField(default=1, null=True, blank=True)
 
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("note_detail", args=[str(self.pk)])
+
     class Meta:
         verbose_name = "Служебная записка"
         verbose_name_plural = "Служебные записки"
+
+
+statuses = (
+    ("success", "Подписать"),
+    ("edit", "На редактирование"),
+    ("error", "Отказать"),
+)
+
+
+class NoteUsers(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="note")
+    note = models.ForeignKey(ServiceNote, on_delete=models.CASCADE, related_name="users")
+    index = models.IntegerField(null=True, blank=True)
+    comment = models.TextField(null=True, blank=True)
+    status = models.CharField(max_length=200,choices=statuses, null=True, blank=True)
+
+    def __str__(self):
+        return self.note.title
+
+    class Meta:
+        verbose_name = "Подписывающий"
+        verbose_name_plural = "Подписывающие"
 
 
 class Department(models.Model):
@@ -68,7 +95,7 @@ class NoteFiles(models.Model):
     file = models.FileField(upload_to="note_files/")
 
     def __str__(self):
-        return self.note.name
+        return self.note.title
 
     class Meta:
         verbose_name = "Файл для записки"
@@ -79,6 +106,7 @@ class Profile(models.Model):
     picture = models.FileField(upload_to="users_avatar", null=True, blank=True)
     position = models.CharField(max_length=300, null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    signature = models.FileField(upload_to='user_signatures', null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     role = models.ForeignKey(Role, on_delete=models.PROTECT, null=True, blank=True, related_name="users")
     department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True, blank=True, related_name="profiles")

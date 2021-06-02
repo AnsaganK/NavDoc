@@ -11,5 +11,11 @@
         </h3>
         {{ user.first_name }}
         {{ user.last_name }}
+        {% if user.profile.signature %}
+        <div class="user_signature">
+            {{ signature|safe }}
+            <img src="{{ user.profile.signature.url }}" alt="" style="background: #ffffff66;border-radius: 12px;">
+        </div>
+        {% endif %}
     </div>
 {% endblock %}

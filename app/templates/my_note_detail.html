@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ note.title }}
+{% endblock %}
+
+
+{% block content %}
+<div class="content">
+    <form action="" class="form_box">
+        {% csrf_token %}
+        <div class="form_item">
+            <label for="">Комментарии</label>
+        </div>
+    </form>
+</div>
+{% endblock %}
