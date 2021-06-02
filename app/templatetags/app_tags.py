@@ -4,6 +4,9 @@ from django import template
 import json
 import random
 
+from bs4 import BeautifulSoup as BS
+
+from app.models import NoteUsers
 from app.views import role_chef_name
 
 register = template.Library()
@@ -22,3 +25,20 @@ def department_chefs(users_list):
             users_str+=i.user.first_name[0]+"."+i.user.last_name+", "
         return users_str[:-2]
     return users_str
+
+@register.filter(name="isSignature")
+def isSignature(note, user):
+    user_note = NoteUsers.objects.filter(note = note, user=user).first()
+    if user_note:
+        status = user_note.status
+        if status != "success":
+            return True
+    return False
+
+@register.filter(name="htmlToText")
+def htmlToText(data):
+    if data.startswith("<"):
+        text = BS(data)
+        return text.get_text()
+    else:
+        return data

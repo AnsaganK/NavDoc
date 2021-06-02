@@ -8,103 +8,353 @@
 
 {% block head %}
 <style>
-.note_download{
-        width:550px;
-        display: flex;
-    margin: auto;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: center;
+
+    .form_item {
+        width: 600px;
     }
-    .download_button{
-        width: 250px;
-        margin: 5px 10px;
+
+    .form_box input, .form_box textarea, .form_box select {
+        width: 450px;
+    }
+
+    .form_box textarea {
+        max-width: 450px;
+        min-width: 450px;
+    }
+
+    .notes_table {
+        width: 100%;
+        padding: 10px;
+        color: #000000b8;
+    }
+
+    .notes_table th, .notes_table td {
+        border-bottom: 1px solid slategrey;
+        padding: 10px;
+    }
+
+    .tags {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    label.tag {
+        cursor: pointer;
+        margin: 5px;
+        padding: 7px;
         border-radius: 5px;
+        background-color: grey;
+        color: white;
+        transition: background-color .3s ease;
+    }
+
+    .tags input[type="checkbox"] {
+        display: none;
+    }
+
+    input:checked + label.tag {
+        background-color: #31be7d;
+    }
+
+    .user_select {
         display: flex;
         justify-content: center;
+    }
+
+    .user_select_number {
+        background: #5096ff;
+        border-top-left-radius: 10px;
+        height: min-content;
+        padding: 8px 10px;
+        color: white;
+        border-bottom-left-radius: 10px;
+    }
+
+    .form_box select {
+        border-bottom-left-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+    .select_buttons{
+        display: flex;
+        width: 458px;
+        flex-direction: row;
         align-items: center;
-        height: 40px;
-        background-color: red;
-        color: #fff;
-    }
-    .pdf{
-        background-color: #ff6500;
-    }
-    .doc{
-        background-color: #109bff;
-    }
-    .note_info{
-        display: flex;
-        max-width: 750px;
-        width: 90%;
-        margin: auto;
-        margin-top: 27px;
-        border-radius: 10px;
-        padding:15px;
-        background: white;
-        flex-direction: column;
-    }
-    .note_info_item{
-        border-bottom: 1px solid grey;
-        display: flex;
-        margin-bottom:10px;
         justify-content: space-between;
     }
-    ul{
-        list-style-type: none;
-    }
-    .note_detail_tags{
+    .delete_select_button{
+        align-items: center;
+        padding: 5px;
+        margin-bottom: 20px;
         display: flex;
         justify-content: center;
-        align-items: center;
-    }
-    .note_detail_tag{
-        margin: 5px 10px;
-        padding:7px;
-        border-radius: 5px;
         color: white;
-        background: #628bb5;
+        height: 20px;
+        margin-top: -15px;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 0px 0px 3px 1px #616161;
+        background-color: red;
     }
+    .add_select_button {
+        align-items: center;
+        padding: 11px;
+        font-size: 30px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        width: 20px;
+        color: white;
+        height: 20px;
+        margin-top: -15px;
+        border-radius: 100%;
+        cursor: pointer;
+        box-shadow: 0px 0px 3px 1px #616161;
+        background-color: #50a6ff;
+    }
+    .input_files{
+        display: flex;
+        width: 458px;
+        flex-wrap: wrap;
+    }
+    .input_file_label{
+        border:1px dashed black;
+        padding:15px 20px;
+        margin-right: 20px;
+    }
+    .input_file input{
+        display: none;
+    }
+    .fast{
+        margin: auto;
+        background: grey;
+        padding: 12px;
+        color: white;
+        border-radius: 7px;
+        box-shadow: 0px 0px 3px 1px #1c1c1c;
+        color: white;
+        transition: background .3s ease;
+    }
+    #fast:checked+label{
+        background:#ff4a4a;
+    }
+    label.fast{
+        color: #fff;
+    }
+    .slider_wrap{
+        width: 50px;
+        height: 27px;
+        margin-bottom: 20px;
+        display: flex;
+        border-radius: 27px;
+        background-color: grey;
+        align-items: center;
+        transition: background-color .3s ease-in;
+    }
+    .slider_circle{
+        width: 27px;
+        height: 27px;
+        border-radius: 100%;
+        background-color: white;
+        margin-left: 0px;
+        transition: margin-left .3s ease-in;
+        border: 1px solid grey;
+    }
+    #slider_input:checked+label .slider_wrap{
+        background-color: #7dbdff;
+    }
+    #slider_input:checked+label .slider_circle{
+        margin-left: 23px;
+        background-color: #3a92ff;
+    }
+        td, th{
+            padding:1px;
+            margin:1px;
+            border:1px solid grey;
+        }
 </style>
 {% endblock %}
 
 {% block content %}
+<div id="my_modal" class="modal">
+    <div class="modal_content">
+        <span class="close_modal_window">×</span>
+        <form action="{% url 'service_note_edit' note.pk %}" method="post" class="form_box" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h3 class="form_title" style="margin-left: 20px">Служебная записка №{{ note.number }}<!--<input type="number" class="note_number_input" name="number" value="{{note.number}}">--></h3>
+
+            <div class="form_item">
+                <label for="">Название</label>
+                <input type="text" name="title" style="text-align: center" required value="{{ note.title }}">
+            </div>
+            <div class="form_item">
+                <label for="">Дата</label>
+                <input type="date" name="date" required value="{{ note.date.year }}-{% if note.date.month < 10 %}0{{ note.date.month }}{% else %}{{ note.date.month }}{% endif %}-{% if note.date.day < 10 %}0{{ note.date.day }}{% else %}{{ note.date.day }}{% endif %}">
+            </div>
+            <div class="form_item" style="flex-direction:column">
+                <label for="">Текст</label>
+                <textarea type="text" name="text" rows="4" id="editor1">{{ note.text|safe }}</textarea>
+            </div>
+            <div class="form_item">
+                <label for="">Итого</label>
+                <input type="number" name="summa" style="text-align: center" required value="{{ note.summa }}">
+            </div>
+            <div class="form_item" style="margin-bottom: 30px;margin-top: 10px;">
+                <label for="">Файлы</label>
+                <div class="input_files">
+                    <div class="input_file">
+                        <input type="file" id="input_file_1" name="input_file_1" onchange="file_upload(this)">
+                        <label for="input_file_1" class="input_file_label">+</label>
+                    </div>
+                    <div class="input_file">
+                        <input type="file" id="input_file_2" name="input_file_2" onchange="file_upload(this)">
+                        <label for="input_file_2" class="input_file_label">+</label>
+                    </div>
+                    <div class="input_file">
+                        <input type="file" id="input_file_3" name="input_file_3" onchange="file_upload(this)">
+                        <label for="input_file_3" class="input_file_label">+</label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form_item">
+                <label for="">Кому</label>
+                <div class="user_selects" id="user_selects">
+
+                        {% for i in note.users.all %}
+                    <div class="user_select">
+                        <span class="user_select_number" data-tag-id="{{ forloop.counter }}">{{ forloop.counter }}</span>
+                        <select name="user_1" id="" style="width:430px;">
+                            {% for user in users %}
+                            <option value="{{ user.pk }}" {% if user.pk == i.user.pk %}selected{% endif %}>{{ user.first_name|slice:"1" }}.{{ user.last_name }}({{ user.profile.position }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form_item" style="justify-content: flex-end">
+
+            <div class="select_buttons">
+                <span class="add_select_button" onclick="add_select()">+</span>
+                <span class="delete_select_button" onclick="delete_select()">Удалить</span>
+            </div>
+            </div>
+            <div class="form_item">
+                <label for="">
+                    Срочно
+                </label>
+                <div>
+
+            <input type="checkbox" id="slider_input" name="fast" {% if note.fast %}checked{% endif %} style="display: none">
+            <label for="slider_input">
+                <div class="slider_wrap">
+                    <div class="slider_circle"></div>
+                </div>
+            </label>
+                </div>
+            </div>
+                <!--<div class="form_item">
+                    <input type="checkbox" id="fast" style="display: none">
+                    <label for="fast" class="fast">Срочно</label>
+                </div>-->
+            <div class="form_item" style="border-top:1px solid #cecece;padding-top:10px;">
+                <div class="tags">
+                    {% for tag in tags %}
+                    <input type="checkbox" id="tag_{{ tag.pk }}" name="tag_{{ tag.pk }}" {% if tag in note.tags.all %}checked{% endif %}>
+                    <label class="tag" for="tag_{{ tag.pk }}">
+                        {{ tag.name }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <button type="submit" class="form_button">Изменить</button>
+        </form>
+    </div>
+</div>
 <div class="content">
     <div class="content_title">
         Служебная записка №{{ note.number }}
     </div>
-    <div class="note_detail">
-        <div class="note_info">
-            <div class="note_info_item"><span>Создал:</span> <span>{{ note.user.first_name }} {{ note.user.last_name }}</span></div>
-            <div class="note_info_item"><span>Название:</span> <span>{{ note.title }}</span></div>
-            <div class="note_info_item"><span>Дата СЗ:</span> <span>{{ note.date }}</span></div>
-            <div class="note_info_item"><span>Дата создания:</span> <span>{{ note.date_create }}</span></div>
-            <div class="note_info_item"><span>Текст:</span> <span>{{ note.text }}</span></div>
-            <div class="note_info_item"><span>Срочный:</span> <span>{{ note.fast }}</span></div>
-            <div class="note_info_item"><span>Итого:</span> <span>{{ note.summa }}</span></div>
-            <div class="note_info_item"><span>У кого:</span> <span>{{ note.user_index }}</span></div>
+    {% include 'include/note_detail.html' %}
 
-            <ul class="note_detail_tags">
-
-                {% for i in note.tags.all %}
-                <li class="note_detail_tag">{{ i.name }}</li>
-                {% endfor %}
-            </ul>
-            <div class="note_download"><!--
-                <img src="{% static 'img/pdf.svg' %}" alt="">
-                <img src="{% static 'img/doc.svg' %}" alt="">-->
-                <a href="" class="download_button pdf">Скачать PDF</a>
-                <a href="" class="download_button pdf">Скачать PDF(без подписей)</a>
-                <a href="" class="download_button doc">Скачать Doc</a>
-                <a href="" class="download_button doc">Скачать Doc(без подписей)</a>
+    {% if note.status == 'edit' %}
+        <a id="btn_modal_window">
+            <div class="circle_add" style="background-color: orangered">
+                <img src="{% static 'img/se.svg' %}" alt="" width="25">
             </div>
-        </div>
-        <ul class="note_detail_users">
-                {% for i in note.users.all %}
-                    <li class="note_detail_user">{{ i.user.first_name }} {{ i.user.last_name }}</li>
-                {% endfor %}
-        </ul>
+        </a>
+    {% endif %}
 
-    </div>
+{% include 'include/user_timeline.html' %}
 </div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    var modal = document.getElementById("my_modal");
+    var btn = document.getElementById("btn_modal_window");
+    var span = document.getElementsByClassName("close_modal_window")[0];
+
+    btn.onclick = function () {
+        modal.style.opacity = 1;
+        modal.style.display = "block";
+    }
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function delete_select(){
+        var selects = document.getElementsByClassName('user_select');
+        var last_select = selects[selects.length - 1];
+        if(selects.length>1) {
+            last_select.remove();
+        }
+    }
+    function add_select() {
+        var selects = document.getElementsByClassName('user_select');
+        var last_select = selects[selects.length - 1];
+        var last_number = last_select.children[0].getAttribute("data-tag-id");
+        var data = '<span class = "user_select_number" data-tag-id = "' + (1 + parseInt(last_number)) + '">' + (1 + parseInt(last_number)) + '</span><select name="user_'+(1+parseInt(last_number))+'" id="" style="width:430px;">{% for user in users %}<option value="{{ user.pk }}">{{user.first_name|slice:"1"}}.{{user.last_name}}({{ user.profile.position }})</option>{% endfor %}</select>';
+        let div = document.createElement('div');
+        div.classList.add("user_select");
+        div.id = "user_selects"
+        div.innerHTML = data;
+        document.getElementById("user_selects").append(div);
+    }
+    function file_upload(r){
+        var data = r.parentNode.children[1];
+        console.log(data);
+        if (r.files.length === 0){
+            data.innerHTML = "+";
+            data.style = 'border:1px dashed grey;color:grey';
+        }
+        else {
+            var z = r.files[0].name;
+            data.innerHTML = "<img src=/static/img/success.svg width=20>";
+            data.style = 'border:1px solid #a5eb78;color:#a5eb78;padding: 19px 17px;padding-bottom: 12px;';
+        }
+    }
+</script>
+{% if note.status == 'edit' %}
+<script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+<script>
+   ClassicEditor
+            .create( document.querySelector( '#editor1' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+</script>
+{% endif %}
+
 {% endblock %}

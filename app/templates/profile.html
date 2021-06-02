@@ -1,21 +1,249 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 Профиль
 {% endblock %}
 
+{% block head %}
+<style>
+    .profile_info_block{
+        padding:20px;
+        background-color: white;
+        width: 400px;
+        margin: 20px;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+        border-radius: 10px;
+    }
+    .profile_info_picture{
+        margin: auto;
+        border: 1px solid #dbdbdb;
+        border-radius: 10%;
+        width: 170px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 170px;
+    }
+    .profile_info_item{
+        border-bottom: 1px solid #b8b8b8;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+    }
+    .profile_info_item:last-child{
+        border: 0px;
+    }
+    .profile_info_item span:last-child{
+        margin-left: 20px;
+        text-align: end;
+    }
+    .profile_buttons{
+        display: flex;
+        justify-content: space-between;
+        padding-left: 20px;
+        padding-right: 20px;
+        box-sizing: border-box;
+        align-items: center;
+        width: 100%;
+        flex-direction: row;
+        margin-top: 10px;
+    }
+    .profile_edit_button{
+        padding: 10px;
+        background-color: #1b61a9;
+        border-radius: 3px;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+    }
+    .profile_delete_button{
+        padding: 10px;
+        background-color: orangered;
+        border-radius: 3px;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+    }
+    .signature_block{
+        width: 120px;
+        height: 120px;
+        border-radius: 5px;
+        border: 1px solid gray;
+        margin: auto;
+        margin-top: 20px;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-    <div class="content">
-        <h3 class="content_title">
-            Профиль
-        </h3>
-        {{ user.first_name }}
-        {{ user.last_name }}
-        {% if user.profile.signature %}
-        <div class="user_signature">
-            {{ signature|safe }}
-            <img src="{{ user.profile.signature.url }}" alt="" style="background: #ffffff66;border-radius: 12px;">
+
+<div id="my_modal" class="modal">
+    <div class="modal_content">
+        <span class="close_modal_window">×</span>
+        <div style="display: flex;justify-content: center;align-items:center;flex-direction: column">
+            <p>Изменение профиля</p>
+            <form action="{% url 'profile_edit' user.pk %}" method="post" class="form_box" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div style="margin-bottom: 20px" class="profile_info_picture"><img width="80" height="80" src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'img/camera.svg' %}{% endif %}" alt=""></div>
+                <div class="form_item">
+                    <label for="">Фамилия</label>
+                    <input type="text" name="last_name" value="{{ user.last_name }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Имя</label>
+                    <input type="text" name="first_name" value="{{ user.first_name }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Отчество</label>
+                    <input type="text" name="patronymic" value="{{ user.profile.patronymic }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Почта</label>
+                    <input type="email" name="email" value="{{ user.email }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Должность</label>
+                    <input type="text" name="position" value="{{ user.profile.position }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Мобильный</label>
+                    <input type="text" name="mobile" value="{{ user.profile.mobile }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Дата рождения</label>
+                    <input type="date" name="birth_date"
+                    value="{{ user.profile.birth_date.year }}-{% if user.profile.birth_date.month < 10 %}0{{ user.profile.birth_date.month  }}{% else %}{{ user.profile.birth_date.month  }}{% endif %}-{% if user.profile.birth_date.day < 10 %}0{{ user.profile.birth_date.day }}{% else %}{{ user.profile.birth_date.day }}{% endif %}">
+                </div>
+
+                <span>Подпись</span>
+                 <div class="form_item">
+                    <input type="file" name="signature" style="display: none"  id="input_file_1" name="input_file_1" onchange="onFileSelected(event, this)">
+                    <label for="input_file_1" class="signature_block" style="cursor:pointer;">{% if user.profile.signature %} <img id="user_signature_img" src="{{ user.profile.signature.url }}" alt="" width="100%" height="100%"> {% endif %}</label>
+                </div>
+                <button type="submit" class="form_button">Изменить</button>
+            </form>
         </div>
-        {% endif %}
     </div>
+</div>
+<div id="my_modal2" class="modal">
+    <div class="modal_content" style="width: 500px">
+        <span class="close_modal_window2">×</span>
+        <div style="display: flex;justify-content: space-between;align-items: center;flex-direction: column; height: 120px;padding: 10px">
+
+            <p>Вы уверены что хотите удалить аккаунт</p>
+            <div style="display: flex;width: 250px;justify-content: space-between;align-items: center">
+                 <a href="{% url 'user_delete' user.pk %}" class="profile_delete_button">Да, я уверен</a>
+                        <a onclick="close_modal()" class="profile_delete_button" style="background-color: gray">Отмена</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="content">
+    <h3 class="content_title">
+        Профиль
+    </h3>
+    <div class="profile_info_block">
+        <div class="profile_info_picture"><img width="80" height="80" src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'img/camera.svg' %}{% endif %}" alt=""></div>
+        <div class="profile_info_item"><span>Имя: </span><span>{{ user.first_name }}</span></div>
+        <div class="profile_info_item"><span>Фамилия: </span><span>{{ user.last_name }}</span></div>
+        <div class="profile_info_item"><span>Отчество: </span><span>{{ user.profile.patronymic }}</span></div>
+        <div class="profile_info_item"><span>Почта: </span><span>{{ user.email }}</span></div>
+        <div class="profile_info_item"><span>Должность: </span><span>{{ user.profile.position }}</span></div>
+        <div class="profile_info_item"><span>Отдел: </span><span>{{ user.profile.department }}</span></div>
+        <div class="profile_info_item"><span>Мобильный: </span><span>{{ user.profile.mobile }}</span></div>
+        <div class="profile_info_item"><span>Дата рождения: </span><span>{{ user.profile.birth_date }}</span></div>
+        <div class="profile_info_item"><span>Подпись: </span>
+            {% if user.profile.signature %}
+                <!--{{ signature|safe }}-->
+            <span>
+                <img src="{{ user.profile.signature.url }}" alt="" style="background: #ffffff66;border-radius: 12px;" width="120px" height="120px">
+                </span>
+            {% endif %}
+        </div>
+        <div class="profile_buttons">
+            <div class="profile_delete_button" id="btn_modal_window2">Удалить</div>
+            <div class="profile_edit_button" id="btn_modal_window">Изменить</div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+    var modal = document.getElementById("my_modal");
+    var btn = document.getElementById("btn_modal_window");
+    var span = document.getElementsByClassName("close_modal_window")[0];
+
+    var modal2 = document.getElementById("my_modal2");
+    var btn2 = document.getElementById("btn_modal_window2");
+    var span2 = document.getElementsByClassName("close_modal_window2")[0];
+
+    btn.onclick = function () {
+        modal.style.opacity = 1;
+        modal.style.display = "block";
+    }
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal || event.target == modal2) {
+            modal.style.display = "none";
+            modal2.style.display = "none";
+        }
+    }
+
+    btn2.onclick = function () {
+        modal2.style.opacity = 1;
+        modal2.style.display = "block";
+    }
+
+    span2.onclick = function () {
+        modal2.style.display = "none";
+    }
+    function close_modal(){
+        modal2.style.display = "none";
+    }
+    function file_upload(r){
+        var data = r.parentNode.children[1];
+        console.log(data);
+        if (r.files.length === 0){
+            data.innerHTML = "{% if user.profile.signature %}{{ user.profile.signature.url }}{% endif %}";
+            data.style = 'border:1px dashed grey;color:grey';
+        }
+        else {
+            var z = r.files[0].name;
+            data.innerHTML = "<img src=/static/img/success.svg width=20>";
+            data.style = 'border:1px solid #a5eb78;color:#a5eb78;padding: 19px 17px;padding-bottom: 12px;';
+        }
+    }
+    function onFileSelected(event, r) {
+      var selectedFile = event.target.files[0];
+        console.log(selectedFile);
+      var reader = new FileReader();
+
+      var imgtag = document.getElementById("user_signature_img");
+
+      if (r.files.length === 0){
+        imgtag.src = "{% if user.profile.signature %}{{ user.profile.signature.url }}{% endif %}";
+      }
+
+      imgtag.title = selectedFile.name;
+
+      reader.onload = function(event) {
+        imgtag.src = event.target.result;
+      };
+
+      reader.readAsDataURL(selectedFile);
+         console.log(selectedFile);
+    }
+</script>
 {% endblock %}

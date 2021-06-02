@@ -6,40 +6,7 @@
 {% endblock %}
 
 {% block head %}
-<style>
-    .table{
-        border-spacing: 0px;
-        width: 100%;
-        max-width: 1200px;
-        margin: auto;
-        margin-top: 20px;
-        box-shadow:0px 0px 2px #000;
-        border-radius:10px;
-    }
-    .tr{
-        border-bottom:1px solid grey;
-    }
-    .td, .th{
-        color:#000000b8;
-        text-align:center;
-        padding:13px 10px;
-        border-bottom:1px solid #757575;
-    }
-    tr:last-child td.td{
-        border-bottom-width:0px;
-    }
-    .th:first-child{
-        border-top-left-radius:10px;
-    }
-    .th:last-child{
-        border-top-right-radius:10px;
-    }
-    .th{
-        background:blanchedalmond;
-        color: #1b61a9;
-        background: #ffffff8c;
-
-    }
+<style>my_
     .employee_table_title{
         text-align:center;
         font-size:17px;
@@ -148,7 +115,7 @@
             </form>
         </div>
       </div>
-    <div class="content">
+    <div class="content" style="padding-right: 0px;padding-left: 0px">
         <h3 class="content_title">{{ department.name }}</h3>
         <a class="edit_button" id="btn_modal_window">
             <img src="{% static 'img/edit.svg' %}" alt="" width="15px" height="15px">
@@ -162,32 +129,29 @@
             <img src="{% static 'img/remove.svg' %}" alt="" width="15px" height="15px">
             Удалить
         </a>
-        <table class="table">
-                <tr class="tr">
-                    <th class="th">ФИО</th>
-                    <th class="th">Дата рождения</th>
-                    <th class="th">Отдел</th>
-                    <th class="th">Должность</th>
-                    <th class="th">Номер моб.</th>
+        <table class="my_table">
+                <tr class="my_tr">
+                    <th class="my_th">ФИО</th>
+                    <th class="my_th">Должность</th>
+                    <th class="my_th">Дата рождения</th>
+                    <th class="my_th">Номер моб.</th>
                 </tr>
-            <tr class="employee_table_title" ><td class="td" colspan="5">Руководитель</td></tr>
+            <tr class="employee_table_title" ><td class="my_td" colspan="5">Руководитель</td></tr>
             {% for user in chef_users %}
-                <tr class="tr">
-                    <td class="td">{{ user.first_name|slice:"1" }}.{{ user.last_name }}</td>
-                    <td class="td">{{ user.profile }}</td>
-                    <td class="td">{{ user.profile.department }}</td>
-                    <td class="td">{{ user.profile.role }}</td>
-                    <td class="td">{{ user.profile.mobile }}</td>
+                <tr class="my_tr">
+                    <td class="my_td"><a href="{% url 'user_detail' user.pk %}">{{ user.first_name|slice:"1" }}.{{ user.last_name }}</a></td>
+                    <td class="my_td">{{ user.profile.position }}</td>
+                    <td class="my_td">{{ user.profile.birth_date }}</td>
+                    <td class="my_td">{{ user.profile.mobile }}</td>
                 </tr>
                 {% endfor %}
-            <tr class="employee_table_title"><td class="td" colspan="5">Сотрудники</td></tr>
+            <tr class="employee_table_title"><td class="my_td" colspan="5">Сотрудники</td></tr>
                 {% for user in employee_users %}
-                <tr class="tr">
-                    <td class="td">{{ user.first_name|slice:"1" }}.{{ user.last_name }}</td>
-                    <td class="td">{{ user.profile }}</td>
-                    <td class="td">{{ user.profile.department }}</td>
-                    <td class="td">{{ user.profile.role }}</td>
-                    <td class="td">{{ user.profile.mobile }}</td>
+                <tr class="my_tr">
+                    <td class="my_td"><a href="{% url 'user_detail' user.pk %}">{{ user.first_name|slice:"1" }}.{{ user.last_name }}</a></td>
+                    <td class="my_td">{{ user.profile.position }}</td>
+                    <td class="my_td">{{ user.profile.birth_date }}</td>
+                    <td class="my_td">{{ user.profile.mobile }}</td>
                 </tr>
                 {% endfor %}
         </table>

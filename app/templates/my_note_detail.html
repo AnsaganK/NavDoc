@@ -1,17 +1,99 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 {{ note.title }}
 {% endblock %}
 
+{% block head %}
+<style>
+    .statuses{
+        display: flex;
+        justify-content: center;
+    }
+    .status_label {
+        background-color: grey;
+        padding: 10px;
+        margin: 10px;
+        transition: background-color, box-shadow .3s ease;
+        border-radius: 5px;
+        color: white !important;
+        cursor: pointer;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+    }
+
+    .status_input {
+        display: none;
+    }
+
+    .status_input:checked + label {
+        background-color: #3c81e9;
+        box-shadow: 0px 0px 0px;
+    }
+        td, th{
+            padding:1px;
+            margin:1px;
+            border:1px solid grey;
+        }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="content">
-    <form action="" class="form_box">
-        {% csrf_token %}
-        <div class="form_item">
-            <label for="">Комментарии</label>
-        </div>
-    </form>
+<div id="my_modal" class="modal">
+    <div class="modal_content">
+        <span class="close_modal_window">×</span>
+        {% if request.user.profile.signature %}
+        <form action="{% url 'edit_status_note' note.pk %}" class="form_box" method="post">
+            {% csrf_token %}
+            <textarea name="comment" id="" cols="60" rows="10" placeholder="Комментарии" style="width: auto;padding: 5px" >{% if userNote.comment %}{{ userNote.comment }}{% endif %}</textarea>
+            <div class="statuses">
+                <input class="status_input" type="radio" name="status" value="success" id="status_1"{% if userNote.status == 'success' %} checked {% endif %}>
+                <label class="status_label" for="status_1">Подписать</label>
+                <input class="status_input" type="radio" name="status" value="edit" id="status_2"{% if userNote.status == 'edit' %} checked {% endif %}>
+                <label class="status_label" for="status_2">На редактирование</label>
+                <input class="status_input" type="radio" name="status" value="error" id="status_3"{% if userNote.status == 'error' %} checked {% endif %}>
+                <label class="status_label" for="status_3">Отказать</label>
+            </div>
+            <button class="form_button">Отправить</button>
+        </form>
+        {% else %}
+        <h3 style="text-align: center">Вы не можете подписать</h3>
+        <p style="color:gray;text-align: center">У вас нет персональной подписи</p>
+        {% endif %}
+    </div>
 </div>
+<div class="content">
+    <h3 class="content_title">Служебная записка №{{ note.number }}</h3>
+    {% include 'include/note_detail.html' %}
+    {% if userNote.status == None %}
+        <a id="btn_modal_window">
+            <div class="circle_add" style="background-color: #ff6500">
+                <img src="{% static 'img/signature_button.svg' %}" alt="" width="30">
+            </div>
+        </a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    var modal = document.getElementById("my_modal");
+    var btn = document.getElementById("btn_modal_window");
+    var span = document.getElementsByClassName("close_modal_window")[0];
+
+    btn.onclick = function () {
+        modal.style.opacity = 1;
+        modal.style.display = "block";
+    }
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 {% endblock %}

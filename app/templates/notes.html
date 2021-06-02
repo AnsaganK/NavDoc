@@ -1,41 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load app_tags %}
 {% block title %}
 Отправленные
 {% endblock %}
 
 {% block head %}
 <style>
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.6);
-        z-index: 1000;
-    }
-
-    .modal .modal_content {
-        background-color: #fefefe;
-        margin: 10% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 800px;
-        z-index: 99999;
-        border-radius: 10px;
-    }
-
-    .modal .modal_content .close_modal_window {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
 
     .form_item {
         width: 600px;
@@ -196,6 +167,9 @@
         margin-left: 23px;
         background-color: #3a92ff;
     }
+    .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+    border-color: #47a2ff !important;
+}
 
 </style>
 {% endblock %}
@@ -216,9 +190,9 @@
                 <label for="">Дата</label>
                 <input type="date" name="date" required>
             </div>
-            <div class="form_item">
+            <div class="form_item" style="flex-direction:column;">
                 <label for="">Текст</label>
-                <textarea type="text" name="text" rows="4" required></textarea>
+                <textarea type="text" id="editor1" name="text" rows="4"></textarea>
             </div>
             <div class="form_item">
                 <label for="">Итого</label>
@@ -299,12 +273,21 @@
     <h3 class="content_title">
         Отправленные
     </h3>
+    <div class="note_statuses">
+            <a href="{% url 'notes_list' %}" class="note_status {% if request.get_full_path == '/notes' %}note_status_active{% endif %}">Все ({{ count_all }})</a>
+            <a href="?status=wait" class="note_status {% if request.get_full_path == '/notes?status=wait' %}note_status_active{% endif %}">В ожидании ({{ count_wait }})</a>
+            <a href="?status=fast" class="note_status  {% if request.get_full_path == '/notes?status=fast' %}note_status_active{% endif %}">Срочные ({{ count_fast }})</a>
+            <a href="?status=success" class="note_status  {% if request.get_full_path == '/notes?status=success' %}note_status_active{% endif %}">Одобренные ({{ count_success }})</a>
+            <a href="?status=edit" class="note_status  {% if request.get_full_path == '/notes?status=edit' %}note_status_active{% endif %}">На редактировании ({{ count_edit }})</a>
+            <a href="?status=error" class="note_status  {% if request.get_full_path == '/notes?status=error' %}note_status_active{% endif %}">Отказанные ({{ count_error }})</a>
+            <a href="?status=files" class="note_status  {% if request.get_full_path == '/notes?status=files' %}note_status_active{% endif %}">С файлами ({{ count_files }})</a>
+    </div>
     <div class="flex_notes">
         {% for note in notes %}
         <a href="{{ note.get_absolute_url }}" class="flex_note {% if note.fast %}fast_note{% endif %}">
             <div class="note_number">{{ note.number }}</div>
             <div class="note_title">{{ note.title }}</div>
-            <div class="note_text">{{ note.text }}</div>
+            <div class="note_text">{{ note.text|htmlToText }}</div>
             <div class="note_date">{{ note.date }}</div>
         </a>
         {% empty %}
@@ -372,5 +355,15 @@
             data.style = 'border:1px solid #a5eb78;color:#a5eb78;padding: 19px 17px;padding-bottom: 12px;';
         }
     }
+
+</script>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+<script>
+   ClassicEditor
+            .create( document.querySelector( '#editor1' ) )
+            .catch( error => {
+                console.error( error );
+            } );
 </script>
 {% endblock %}

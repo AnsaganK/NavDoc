@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}
 Главная
 {% endblock %}
@@ -15,6 +17,9 @@
                         <div class="last_notes last_wait">
                             {% for i in notStatus %}
                             <a href="{% url 'my_note_detail' i.pk %}" class="last_note">
+                                {% if i.fast %}
+                                <img src="{% static 'img/light_little.svg' %}" class="light_little" alt="" width="25">
+                                {% endif %}
 										<span class="last_note_number">
 											№{{ i.number }}
 										</span>
@@ -37,6 +42,9 @@
                         <div class="last_notes last_edit">
                             {% for i in editStatus %}
                             <a href="{% url 'my_note_detail' i.pk %}" class="last_note">
+                                {% if i.fast %}
+                                <img src="{% static 'img/light_little.svg' %}" class="light_little" alt="" width="25">
+                                {% endif %}
 										<span class="last_note_number">
 											№{{ i.number }}
 										</span>
@@ -60,6 +68,9 @@
                         <div class="last_notes last_success">
                             {% for i in successStatus %}
                             <a href="{% url 'my_note_detail' i.pk %}" class="last_note">
+                                {% if i.fast %}
+                                <img src="{% static 'img/light_little.svg' %}" class="light_little" alt="" width="25">
+                                {% endif %}
 										<span class="last_note_number">
 											№{{ i.number }}
 										</span>
@@ -82,6 +93,9 @@
                         <div class="last_notes last_fail">
                             {% for i in errorStatus %}
                             <a href="{% url 'my_note_detail' i.pk %}" class="last_note">
+                                {% if i.fast %}
+                                <img src="{% static 'img/light_little.svg' %}" class="light_little" alt="" width="25">
+                                {% endif %}
 										<span class="last_note_number">
 											№{{ i.number }}
 										</span>

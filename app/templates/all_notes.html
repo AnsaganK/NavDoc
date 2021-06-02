@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load app_tags %}
+
+{% block title %}
+Все СЗ
+{% endblock %}
+
+{% block head %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="content" style="padding-left:0px; padding-right:0px">
+        <h3 class="content_title">
+            Все СЗ
+        </h3>
+
+        <!--<input type="text" class="input_search" placeholder="Поиск...">-->
+        <div class="note_statuses">
+            <a href="{% url 'all_notes' %}" class="note_status {% if request.get_full_path == '/all-notes' %}note_status_active{% endif %}">Все ({{ count_all }})</a>
+            <a href="?status=wait" class="note_status {% if request.get_full_path == '/all-notes?status=wait' %}note_status_active{% endif %}">В ожидании ({{ count_wait }})</a>
+            <a href="?status=fast" class="note_status  {% if request.get_full_path == '/all-notes?status=fast' %}note_status_active{% endif %}">Срочные ({{ count_fast }})</a>
+            <a href="?status=success" class="note_status  {% if request.get_full_path == '/all-notes?status=success' %}note_status_active{% endif %}">Одобренные ({{ count_success }})</a>
+            <a href="?status=edit" class="note_status  {% if request.get_full_path == '/all-notes?status=edit' %}note_status_active{% endif %}">На редактировании ({{ count_edit }})</a>
+            <a href="?status=error" class="note_status  {% if request.get_full_path == '/all-notes?status=error' %}note_status_active{% endif %}">Отказанные ({{ count_error }})</a>
+        </div>
+        <div class="flex_notes">
+        {% for note in notes %}
+        <a href="{% url 'my_note_detail' note.pk %}" class="flex_note {% if note.fast %}fast_note{% endif %}">
+            <div class="note_number">{{ note.number }}</div>
+            <div class="note_title">{{ note.title }}</div>
+            <div class="note_text">{{ note.text|htmlToText }}</div>
+            <div class="note_date">{{ note.date }}</div>
+        </a>
+        {% empty %}
+        <span class="not_found">Служебные записки не найдены</span>
+        {% endfor %}
+    </div>
+
+    </div>
+{% endblock %}

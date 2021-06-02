@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}
+Роли
+{% endblock %}
+
+{% block head %}
+<style>
+    .roles{
+        display:flex;
+        justify-content:center;
+    }
+    .role{
+        width: 200px;
+        height: 200px;
+        background-color: #d8724f;
+        display: flex;
+        font-size: 21px;
+        color: white;
+        border-radius: 22px;
+        margin: 10px;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+        transition:box-shadow .3s ease;
+    }
+    .role a{
+        height: 100%;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+    .role:hover{
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 80%), 0 1px 3px 1px rgb(60 64 67 / 65%);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="content_title">
+        Роли
+    </div>
+    <ul class="roles">
+    {% for role in roles %}
+        <li class="role"><a href="{{ role.get_absolute_url }}">{{ role.name }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

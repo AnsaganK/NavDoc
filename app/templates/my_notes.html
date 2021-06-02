@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}
+{% load static %}
+{% load app_tags %}
 
+{% block title %}
+Мои СЗ
+{% endblock %}
+
+{% block head %}
+<style>
+
+</style>
 {% endblock %}
 
 {% block content %}
@@ -9,16 +18,27 @@
         <h3 class="content_title">
             Принятые
         </h3>
+
+        <!--<input type="text" class="input_search" placeholder="Поиск...">-->
+        <div class="note_statuses">
+            <a href="{% url 'my_notes_list' %}" class="note_status {% if request.get_full_path == '/my-notes' %}note_status_active{% endif %}">Все ({{ count_all }})</a>
+            <a href="?status=wait" class="note_status {% if request.get_full_path == '/my-notes?status=wait' %}note_status_active{% endif %}">В ожидании ({{ count_wait }})</a>
+            <a href="?status=fast" class="note_status  {% if request.get_full_path == '/my-notes?status=fast' %}note_status_active{% endif %}">Срочные ({{ count_fast }})</a>
+            <a href="?status=success" class="note_status  {% if request.get_full_path == '/my-notes?status=success' %}note_status_active{% endif %}">Одобренные ({{ count_success }})</a>
+            <a href="?status=edit" class="note_status  {% if request.get_full_path == '/my-notes?status=edit' %}note_status_active{% endif %}">На редактировании ({{ count_edit }})</a>
+            <a href="?status=error" class="note_status  {% if request.get_full_path == '/my-notes?status=error' %}note_status_active{% endif %}">Отказанные ({{ count_error }})</a>
+            <a href="?status=files" class="note_status  {% if request.get_full_path == '/my-notes?status=files' %}note_status_active{% endif %}">С файлами ({{ count_files }})</a>
+        </div>
         <div class="flex_notes">
         {% for note in notes %}
-        <a href="{% url 'my_note_detail' note.pk %}" class="flex_note {% if note.fast %}fast_note{% endif %}">
-            <div class="note_number">{{ note.number }}</div>
-            <div class="note_title">{{ note.title }}</div>
-            <div class="note_text">{{ note.text }}</div>
-            <div class="note_date">{{ note.date }}</div>
+        <a href="{% url 'my_note_detail' note.note.pk %}" class="flex_note {% if note.note.fast %}fast_note{% endif %}">
+            <div class="note_number">{{ note.note.number }}</div>
+            <div class="note_title">{{ note.note.title }}</div>
+            <div class="note_text">{{ note.note.text|htmlToText }}</div>
+            <div class="note_date">{{ note.note.date }}</div>
         </a>
         {% empty %}
-        <h4 class="not_found">Нет принятых служебных записок</h4>
+        <span class="not_found">Служебные записки не найдены</span>
         {% endfor %}
     </div>
 

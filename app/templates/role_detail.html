@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ {{ role.name }}
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="content_title">
+        {{ role.name }}
+    </div>
+    <table class="my_table">
+        <tr>
+            <th class="my_th">ФИО</th>
+            <th class="my_th">Должность</th>
+            <th class="my_th">Отдел</th>
+        </tr>
+        {% for i in role.users.all %}
+        <tr>
+            <td class="my_td">{{ i.user.last_name }} {{ i.user.first_name|slice:"1" }}.{{ i.patronymic|slice:"1" }}.</td>
+            <td class="my_td">{{ i.position }}</td>
+            <td class="my_td">{{ i.department }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

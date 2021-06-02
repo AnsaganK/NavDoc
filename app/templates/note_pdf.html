@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base href="http://127.0.0.1:8000/">
+    <title>{{ note.title }}</title>
+    <style>
+        .headers {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            width: 100%;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .header1 {
+            left: 20px;
+            width: 250px;
+            float: left;
+        }
+
+        .header2 {
+            width: 250px;
+            float: right;
+            right: 20px;
+        }
+
+        .sized {
+            height: 135px;
+        }
+
+        .head_bottom_text {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .date_text {
+            margin-top: 24px;
+            font-size: 21px;
+            text-decoration: underline;
+        }
+
+        .director_name {
+            float: right;
+            margin-top: -10px;
+            font-size: 24px;
+        }
+
+        .title {
+            font-size: 24px;
+            text-align: center;
+            margin-top: 100px;
+            margin-bottom: 30px;
+        }
+
+        .text {
+            position: absolute;
+            text-align: justify;
+            font-size: 24px;
+            line-height: 1.5;
+        }
+
+        .p {
+            margin-left: 40px;
+        }
+
+        .summa {
+            font-size: 21px;
+        }
+
+        .footer {
+            width: 100%;
+            text-align: center;
+            font-size: 17px;
+            position: absolute;
+            top: {{top}}px;
+        }
+
+        .foot_item {
+            font-size: 24px;
+            margin-bottom: 10px;
+            height: 30px;
+        }
+        .position {
+            position: absolute;
+            float: left;
+            text-align: left;
+        }
+        .username{
+            position: absolute;
+            float: right;
+            text-align: right;
+            right: 10px;
+        }
+        .foot_b{
+            margin-top: 20px;
+        }
+        .p_first{
+            display:inline;
+        }
+        td, th{
+            padding:1px;
+            margin:1px;
+            border:1px solid grey;
+        }
+    </style>
+</head>
+<body>
+<div class="headers">
+    <div class="header1">
+        <b>“NAVISTAR ASIA” <br></b>
+        жауапкершiлiгi <br>
+        шектеулi <br>
+        серiктестiгi
+    </div>
+    <img src="static/img/navistar.png" alt="" width="320px" style="left: 300px;position: absolute;text-align: center;display: block">
+    <div class="header2">
+        Товарищество <br>
+        с ограниченной <br> ответственностью <br>
+        <b>“NAVISTAR ASIA”</b>
+    </div>
+</div>
+<div class="sized">
+
+</div>
+<hr>
+<div class="head_bottom_text">
+    <b>020000 Республика Казахстан, г. Кокшетау, ул. Магжана Жумабаева д.122</b> <br>
+    <b>РНН</b> 032 600 251 000, Кбе-17 Регистрационный Номер 503-1902-01-ТОО Код ОКПО 51667029 <b>ДБ АО
+    «Cбербанк»</b><br>
+    Расчетный счет: KZ49914132203KZ000PY БИК SABRKZKX БИН 120740015790
+</div>
+<div class="date_text">
+    {% if note.date.day < 10 %}0{{ note.date.day }}{% else %}{{ note.date.day }}{% endif %}.{% if note.date.month < 10 %}0{{ note.date.month }}{% else %}{{ note.date.month }}{% endif %}.{{ note.date.year }}г. №{{ note.number }}
+</div>
+<div class="director_name">
+    <b>
+        Директору <br> Ахматову Ч.К.
+    </b>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+<div class="text">
+
+    <div class="title">
+        <b>Служебная записка</b>
+    </div>
+    <span class="p"></span>
+          В связи с производственной необходимостью, {{ text|safe }}
+    <br>
+    <br><br><br>
+
+
+    <b>Итого: {{ note.summa }} тенге.</b>
+</div>
+<div class="footer">
+
+    <div class="signature">
+        {% for user in note.users.all %}
+        <div class="foot_item">
+            <span class="position"><b>{{ user.user.profile.position }}</b></span>
+            <span class="username"><b>{% if user.status == 'success' and isSignature and user.user.profile.signature %}<img style="right: 200px;position: absolute;bottom: 0px" height="50" src="http://127.0.0.1:8000{{ user.user.profile.signature.url }}" alt="">{% endif %}{{ user.user.last_name }} {{ user.user.first_name|slice:"1" }}.{% if user.user.profile.patronymic %}{{ user.user.profile.patronymic|slice:"1" }}.{% endif %}</b></span>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+    <hr>
+    <b class="foot_b"> ТОО «Navistar Asia» г.Кокшетау ул. М. Жумабаева 122 <br>
+        Тел/Факс +7 7162 33 68 41 Сот: +7 777 100 9260 e-mail: navistar_asia@mail.ru <br>
+        web-site: www.navistar-asia.com</b>
+</div>
+</body>
+</html>

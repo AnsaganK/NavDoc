@@ -12,6 +12,9 @@ class Role(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('role_detail', args=[str(self.pk)])
+
     class Meta:
         verbose_name = "Роль"
         verbose_name_plural = "Роли"
@@ -28,6 +31,12 @@ class Tags(models.Model):
         verbose_name_plural = "Тэги"
 
 
+statuses = (
+    ("success", "Подписать"),
+    ("edit", "На редактирование"),
+    ("error", "Отказать"),
+)
+
 class ServiceNote(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="notes")
     number = models.IntegerField(null=True, blank=True)
@@ -40,6 +49,7 @@ class ServiceNote(models.Model):
     date = models.DateField(null=True, blank=True)
     tags = models.ManyToManyField(Tags, null=True, blank=True, related_name="notes")
     user_index = models.IntegerField(default=1, null=True, blank=True)
+    status = models.CharField(max_length=200, choices=statuses, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -52,11 +62,6 @@ class ServiceNote(models.Model):
         verbose_name_plural = "Служебные записки"
 
 
-statuses = (
-    ("success", "Подписать"),
-    ("edit", "На редактирование"),
-    ("error", "Отказать"),
-)
 
 
 class NoteUsers(models.Model):
@@ -65,6 +70,7 @@ class NoteUsers(models.Model):
     index = models.IntegerField(null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=200,choices=statuses, null=True, blank=True)
+    date_create = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.note.title
@@ -106,15 +112,19 @@ class Profile(models.Model):
     picture = models.FileField(upload_to="users_avatar", null=True, blank=True)
     position = models.CharField(max_length=300, null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    patronymic = models.CharField(max_length=120, null=True, blank=True)
     signature = models.FileField(upload_to='user_signatures', null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     role = models.ForeignKey(Role, on_delete=models.PROTECT, null=True, blank=True, related_name="users")
     department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True, blank=True, related_name="profiles")
     mobile = models.CharField(max_length=100, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-
+    blocked = models.BooleanField(default=False)
     def __str__(self):
         return self.user.username
+
+    def get_absolute_url(self):
+        return reverse('user_detail', args=[str(self.user.pk)])
 
     class Meta:
         verbose_name = "Профиль"

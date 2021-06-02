@@ -25,7 +25,13 @@ SECRET_KEY = '%##v!zflpr5(6=ir20zavz(z18-l(k%(13!@%_@1p$o^dhy^xn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '10.0.2.2',
+    '127.0.0.1',
+    'localhost',
+    '192.168.100.55',
+    '185.237.165.243'
+]
 
 
 # Application definition
@@ -38,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'wkhtmltopdf',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -109,7 +117,7 @@ LANGUAGE_CODE = 'ru-ru'
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Bishkek'
 
 USE_I18N = True
 
@@ -122,8 +130,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'

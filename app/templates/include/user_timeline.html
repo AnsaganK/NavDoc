@@ -1,0 +1,29 @@
+{% load static %}
+<div class="container">
+    <!--<h1 class="project-name">Подписанты</h1>-->
+		<div id="timeline">
+			{% for i in note.users.all %}
+			<div class="timeline-item
+					{% if i.status == None %}{% endif %}
+					{% if i.status == 'success' %}success{% endif %}
+					{% if i.status == 'edit' %}edit{% endif %}
+					{% if i.status == 'error' %}error{% endif %}
+			">
+				<div class="timeline-icon">
+					{% if i.status == None %}<img src="{% static 'img/time_2.svg' %}" width="40" alt="">{% endif %}
+					{% if i.status == 'success' %}<img src="{% static 'img/success.svg' %}" width="40" alt="">{% endif %}
+					{% if i.status == 'edit' %}<img src="{% static 'img/warning_2.svg' %}" width="40" alt="">{% endif %}
+					{% if i.status == 'error' %}<img src="{% static 'img/error.svg' %}" width="40" alt="">{% endif %}
+				</div>
+				<div class="timeline-content {% if forloop.counter|divisibleby:'2' %}right{% endif %}">
+					<h2 style="display: flex; justify-content: space-between">{{ i.user.first_name|slice:"1" }}.{{ i.user.last_name }} {% if i.status %} <span style="font-size: 14px;color: white">{{ i.date_create }}</span>{% endif %}</h2>
+					<p>
+						{% if i.comment %}{{ i.comment }}{% else %} <p style="color: gray">Без комментариев</p> {% endif %}
+					</p>
+					<!--<a href="#" class="btn">button</a>-->
+				</div>
+			</div>
+
+			{% endfor %}
+		</div>
+	</div>

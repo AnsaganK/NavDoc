@@ -1,0 +1,58 @@
+{% load static %}
+<div class="note_detail">
+
+    <div class="note_download"><!--
+                <img src="{% static 'img/pdf.svg' %}" alt="">
+                <img src="{% static 'img/doc.svg' %}" alt="">-->
+        <a href="{% url 'note_signature_download' note.pk %}" class="download_button pdf">PDF</a>
+        <a href="{% url 'note_download' note.pk %}" class="download_button pdf">PDF(без подписей)</a>
+        <!--<a href="" class="download_button doc">Doc</a>
+        <a href="" class="download_button doc">Doc(без подписей)</a>-->
+    </div>
+    <div class="note_info">
+
+        <img src="{% if note.status == None %}{% static 'img/wait.svg' %}{% endif %}
+                  {% if note.status == 'success' %}{% static 'img/success.svg' %}{% endif %}
+                  {% if note.status == 'edit' %}{% static 'img/warning.svg' %}{% endif %}
+                  {% if note.status == 'error' %}{% static 'img/error.svg' %}{% endif %}" class="note_info_img" width="30" height="30">
+        <div class="note_info_item"><span>Создал:</span>
+            <span>{{ note.user.first_name }} {{ note.user.last_name }}</span></div>
+        <div class="note_info_item"><span>Название:</span> <span>{{ note.title }}</span></div>
+        <div class="note_info_item"><span>Дата СЗ:</span> <span>{{ note.date }}</span></div>
+        <div class="note_info_item"><span>Дата создания:</span> <span>{{ note.date_create }}</span></div>
+        <div class="note_info_item"><span>Текст:</span> <span>{{ note.text|safe }}</span></div>
+        <div class="note_info_item"><span>Итого:</span> <span>{{ note.summa }}</span></div>
+        {% if note.files.all %}
+        <div class="note_info_item"><span>Файлы:</span> <span>{% for file in note.files.all %}<a href="{{ file.file.url }}" download style="margin-left: 10px" title="{{ file.file.name }}"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg fill="#1b61a9" id="Layer_1" width="30" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <title>file, document, office, work, letter</title>
+    <path d="M16.17,0H2V24H22V6.8ZM20,22H4V2h9V9h7ZM15,7V2h.25l4.29,5Z"/>
+    <rect x="6" y="12" width="12" height="2"/>
+    <rect x="6" y="15" width="12" height="2"/>
+    <rect x="6" y="18" width="12" height="2"/>
+    <rect x="6" y="7" width="5" height="2"/>
+</svg></a>{% endfor %}</span></div>
+        {% endif %}
+        <ul class="note_detail_tags">
+
+            {% for i in note.tags.all %}
+            <li class="note_detail_tag">{{ i.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <ul class="note_detail_users">
+        {% for i in note.users.all %}
+        <li class="note_detail_user
+                    {% if forloop.counter == note.user_index and note.status == None %}current_user{% endif %}
+                    {% if forloop.counter == note.user_index and note.status == 'success' %}success_user{% endif %}
+                    {% if forloop.counter == note.user_index and note.status == 'edit' %}edit_user{% endif %}
+                    {% if forloop.counter == note.user_index and note.status == 'error' %}error_user{% endif %}
+                    {% if forloop.counter < note.user_index %}success_user{% endif %}
+                    ">{{ i.user.first_name }} {{ i.user.last_name }}
+        </li>
+        <span class="user_line"></span>
+        {% endfor %}
+    </ul>
+
+</div>

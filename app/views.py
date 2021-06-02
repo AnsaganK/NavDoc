@@ -1,10 +1,29 @@
+from datetime import datetime
+from django.db.models import F
 from django.shortcuts import render, redirect
+from django.views.generic import DetailView
 
-from .forms import DepartmentForm, UserForm, ServiceNoteForm
+from django.db.models import Q
+from django.views.generic.base import View
+from wkhtmltopdf.views import PDFTemplateResponse
+
+from .forms import DepartmentForm, UserForm, ServiceNoteForm, TagForm, UserEditForm, ProfileForm, ServiceNoteEditForm
 from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+
+
+from rest_framework import viewsets, generics
+from rest_framework.views import APIView
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.http import Http404
+
+from bs4 import BeautifulSoup as BS
+
+from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer
 
 role_employee_name = 'employee'
 role_chef_name = 'chef'
@@ -23,18 +42,20 @@ def home(request):
     successStatus = []
     editStatus = []
     errorStatus = []
-    notes = NoteUsers.objects.filter(user=user).order_by("-pk")
+    notes = NoteUsers.objects.filter(user=user).filter(note__user_index__gte=F('index')).order_by("-pk")
     for note in notes:
-        if note.note.user_index == note.index:
-            if note.status == None:
-                notStatus.append(note.note)
-            elif note.status == success:
-                successStatus.append(note.note)
-            elif note.status == edit:
-                editStatus.append(note.note)
-            else:
-                errorStatus.append(note.note)
-    return render(request, "home.html", {"notStatus": notStatus[:5],"successStatus": successStatus[:5], "editStatus":editStatus[:5], "errorStatus": errorStatus[:5]})
+        if note.status == None:
+            notStatus.append(note.note)
+        elif note.status == success:
+            successStatus.append(note.note)
+        elif note.status == edit:
+            editStatus.append(note.note)
+        else:
+            errorStatus.append(note.note)
+    return render(request, "home.html",
+                  {"notStatus": notStatus[:5], "successStatus": successStatus[:5], "editStatus": editStatus[:5],
+                   "errorStatus": errorStatus[:5]})
+
 
 @login_required()
 def calendar(request):
@@ -54,17 +75,48 @@ def departments_list(request):
 
 @login_required()
 def my_notes_list(request):
-    notes = NoteUsers.objects.filter(user=request.user).order_by('-pk')
-    result = []
-    for note in notes:
-        if note.note.user_index == note.index:
-            result.append(note.note)
-    return render(request, 'my_notes.html', {"notes": result})
+    notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).order_by('-pk')
+
+    count_all = notes.count()
+    count_wait = notes.filter(status=None).count()
+    count_fast = notes.filter(status=None).filter(note__fast=True).count()
+    count_success = notes.filter(status=success).count()
+    count_edit = notes.filter(status=edit).count()
+    count_error = notes.filter(status=error).count()
+    count_files = notes.filter(~Q(note__files = None)).count()
+
+    if request.GET:
+        q = request.GET.get("status")
+        if q == "wait":
+            notes = notes.filter(status=None)
+        elif q == "fast":
+            notes = notes.filter(status=None).filter(note__fast=True)
+        elif q == "success":
+            notes = notes.filter(status=success)
+        elif q == "edit":
+            notes = notes.filter(status=edit)
+        elif q == "error":
+            notes = notes.filter(status=error)
+        elif q == "files":
+            notes = notes.filter(~Q(note__files=None))
+
+    return render(request, 'my_notes.html', {"notes": notes,
+                                          "count_all": count_all,
+                                          "count_wait": count_wait,
+                                          "count_fast": count_fast,
+                                          "count_success": count_success,
+                                          "count_edit": count_edit,
+                                          "count_error": count_error,
+                                          "count_files": count_files,
+                                             })
 
 
+@login_required()
 def my_note_detail(request, pk):
     note = ServiceNote.objects.get(pk=pk)
-    return render(request, "my_note_detail.html", {"note": note})
+    userNote = NoteUsers.objects.filter(user=request.user).filter(note=note).first()
+    return render(request, "my_note_detail.html", {"note": note, "userNote": userNote})
+
 
 @login_required()
 def notes_list(request):
@@ -72,13 +124,45 @@ def notes_list(request):
     # notes = user.sign_notes.all()
     last = ServiceNote.objects.last()
     tags = Tags.objects.all()
+
     notes = ServiceNote.objects.filter(user=request.user).order_by('-pk')
+    count_all = notes.count()
+    count_wait = notes.filter(status=None).count()
+    count_fast = notes.filter(status=None).filter(fast=True).count()
+    count_success = notes.filter(status=success).count()
+    count_edit = notes.filter(status=edit).count()
+    count_error = notes.filter(status=error).count()
+    count_files = notes.filter(~Q(files = None)).count()
+    if request.GET:
+        q = request.GET.get("status")
+        if q == "wait":
+            notes = notes.filter(status=None)
+
+        elif q == "fast":
+            notes = notes.filter(status=None).filter(fast=True)
+        elif q == "success":
+            notes = notes.filter(status=success)
+        elif q == "edit":
+            notes = notes.filter(status=edit)
+        elif q == "error":
+            notes = notes.filter(status=error)
+        elif q == "files":
+            notes = notes.filter(~Q(files=None))
+
     users = User.objects.all()
     if last:
-        number = last.number+1 if last.number else 1
+        number = last.number + 1 if last.number else 1
     else:
         number = 1
-    return render(request, 'notes.html', {"users": users, "notes": notes, "tags": tags, "number": number})
+    return render(request, 'notes.html', {"users": users, "notes": notes, "tags": tags, "number": number,
+                                          "count_all": count_all,
+                                          "count_wait": count_wait,
+                                          "count_fast": count_fast,
+                                          "count_success": count_success,
+                                          "count_edit": count_edit,
+                                          "count_error": count_error,
+                                          "count_files": count_files,
+                                          })
 
 
 @login_required()
@@ -86,34 +170,48 @@ def tags_list(request):
     tags = Tags.objects.all()
     return render(request, "tags.html", {"tags": tags})
 
+
+@login_required()
+def tag_add(request):
+    if request.method == 'POST':
+        form = TagForm(request.POST)
+        if form.is_valid():
+            form.save()
+    return redirect('tags_list')
+
 @login_required()
 def note_detail(request, pk):
     note = ServiceNote.objects.get(pk=pk)
-    return render(request, "note_detail.html", {"note": note})
+    users = User.objects.all()
+    tags = Tags.objects.all()
+    return render(request, "note_detail.html", {"note": note, "users": users, "tags": tags})
 
 
 @login_required()
-def edit_status_note(request):
+def edit_status_note(request, pk):
     if request.method == "POST":
         post = request.POST
-        note_id = post["note_id"][0]
-        status = post['status'][0]
-        comment = post['comment'][0]
-        note = ServiceNote.objects.get(pk=note_id)
+        status = post['status']
+        note = ServiceNote.objects.get(pk=pk)
         user_note = NoteUsers.objects.filter(user=request.user).filter(note=note).first()
         if status == success:
             users = note.users.all()
-            user_note.comment = comment
             user_note.status = success
-            if users.last()["pk"] < user_note.index:
-                note.user_index += 1
-                note.save()
+            if user_note.index < len(users):
+                note.user_index = user_note.index + 1
+                note.status = None
+            elif user_note.index == len(users):
+                note.status = success
         elif status == edit:
-            user_note.comment = comment
             user_note.status = edit
+            note.status = edit
         elif status == error:
-            user_note.comment = comment
             user_note.status = error
+            note.status = error
+        if 'comment' in post:
+            comment = post['comment']
+            user_note.comment = comment
+        note.save()
         user_note.save()
     return redirect('my_notes_list')
 
@@ -209,10 +307,10 @@ def user_add(request):
     return render(request, "user_add.html", {"roles": roles, "departments": departments})
 
 
-@login_required()
-def user_detail(request, pk):
-    user = User.objects.get(pk=pk)
-    return render(request, "user_detail.html", {"user": user})
+#@login_required()
+#def user_detail(request, pk):
+#    user = User.objects.get(pk=pk)
+#    return render(request, "user_detail.html", {"user": user})
 
 
 @login_required()
@@ -255,3 +353,239 @@ def service_note_add(request):
         else:
             print(form.errors)
     return redirect("notes_list")
+
+
+def service_note_edit(request, pk):
+    note = ServiceNote.objects.get(pk=pk)
+    note.tags.clear()
+    userNote = NoteUsers.objects.filter(status="edit").filter(note=note).filter(note__user_index=F('index')).first()
+    if request.method == "POST":
+        post = request.POST
+        files = request.FILES
+        form = ServiceNoteEditForm(request.POST, instance=note)
+        if form.is_valid():
+            data = form.save()
+            data.number = note.number
+            data.status = None
+
+            for i in post:
+                if "tag" in i:
+                    tag_id = i.split("_")[-1]
+                    tag = Tags.objects.get(pk=tag_id)
+                    data.tags.add(tag)
+            userNote.status = None
+            note.status = None
+
+            note.save()
+            userNote.save()
+            #for i in post:
+            #    if "user" in i:
+            #        index = i.split("_")[1]
+            #        user_id = post[i]
+            #        user = User.objects.get(pk=user_id)
+            #        signer = NoteUsers.objects.create(user=user, index=index, note=data)
+            #        signer.save()
+
+    return redirect(note.get_absolute_url())
+
+def generate_notes():
+    user = User.objects.get(pk=5)
+    user1 = User.objects.get(pk=1)
+    user_list = [user, user1]
+    for i in range(1, 200):
+        last_note = ServiceNote.objects.last()
+        last_number = last_note.pk + 1
+        if i % 2 == 0:
+            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что", date=datetime.now(),
+                                              number=last_number, summa=21334, fast=1)
+        else:
+            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что", date=datetime.now(),
+                                              number=last_number, summa=21334, fast=0)
+        note.user_index = 1
+        signer = NoteUsers.objects.create(user=user, index=1, note=note)
+        signer1 = NoteUsers.objects.create(user=user1, index=2, note=note)
+        signer.save()
+        signer1.save()
+
+
+def all_notes(request):
+    notes = ServiceNote.objects.order_by("-pk").all()
+    count_all = notes.count()
+    count_wait = notes.filter(status=None).count()
+    count_fast = notes.filter(status=None).filter(fast=True).count()
+    count_success = notes.filter(status=success).count()
+    count_edit = notes.filter(status=edit).count()
+    count_error = notes.filter(status=error).count()
+    if request.GET:
+        q = request.GET.get("status")
+        if q == "wait":
+            notes = notes.filter(status=None)
+
+        elif q == "fast":
+            notes = notes.filter(status=None).filter(fast=True)
+        elif q == "success":
+            notes = notes.filter(status=success)
+        elif q == "edit":
+            notes = notes.filter(status=edit)
+        elif q == "error":
+            notes = notes.filter(status=error)
+
+    return render(request, "all_notes.html", {"notes": notes,
+                                          "count_all": count_all,
+                                          "count_wait": count_wait,
+                                          "count_fast": count_fast,
+                                          "count_success": count_success,
+                                          "count_edit": count_edit,
+                                          "count_error": count_error,})
+
+
+def statistics(request):
+    return render(request, "statistics.html")
+
+
+class CreatePdf(DetailView):
+    template='note_pdf.html'
+    context = {}
+    model = ServiceNote
+
+    def get(self, request, *args, **kwargs):
+        self.context['note'] = self.get_object()
+        self.context['isSignature'] = False
+        text = self.get_object().text
+        self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith(
+            "<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
+
+
+        count = self.get_object().users.count()
+        if count<4:
+            self.context['top'] = 1200-(50*self.get_object().users.count())
+        else:
+            self.context['top'] = 1200-(60*self.get_object().users.count())
+        response=PDFTemplateResponse(request=request,
+                                     template=self.template,
+                                     filename=f"{self.get_object().title}.pdf",
+                                     context=self.context,
+                                     show_content_in_browser=False,
+                                     )
+        return response
+
+class CreatePdfSignature(DetailView):
+    template='note_pdf.html'
+    context = {}
+    model = ServiceNote
+
+    def get(self, request, *args, **kwargs):
+        self.context['note'] = self.get_object()
+        self.context['isSignature'] = True
+        text = self.get_object().text
+        self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith("<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
+        count = self.get_object().users.count()
+        if count<4:
+            self.context['top'] = 1200-(50*self.get_object().users.count())
+        else:
+            self.context['top'] = 1200-(60*self.get_object().users.count())
+        response=PDFTemplateResponse(request=request,
+                                     template=self.template,
+                                     filename=f"{self.get_object().title}.pdf",
+                                     context=self.context,
+                                     show_content_in_browser=False,
+                                     )
+        return response
+
+@login_required()
+def note_download(request, pk):
+    note = ServiceNote.objects.get(pk=pk)
+    return render(request, "note_pdf.html", {"note": note})
+
+
+@login_required()
+def user_delete(request, pk):
+    user = User.objects.get(pk=pk)
+    user.delete()
+    return redirect("home")
+
+
+@login_required()
+def profile_edit(request, pk):
+    user = User.objects.get(pk=pk)
+    if request.method == "POST":
+
+        form = UserEditForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+
+        form2 = ProfileForm(request.POST,request.FILES, instance=user.profile)
+        if form2.is_valid():
+            form2.save()
+
+        else:
+            print(form2.errors)
+    if user == request.user:
+        return redirect('profile')
+    else:
+        return redirect(user.profile.get_absolute_url())
+
+
+@login_required()
+def user_detail(request, pk):
+    user = User.objects.get(pk=pk)
+    return render(request, "profile.html", {"user": user})
+
+@login_required()
+def roles(request):
+    roles = Role.objects.all()
+    return render(request, "roles.html", {"roles": roles})
+
+
+@login_required()
+def role_detail(request, pk):
+    role = Role.objects.get(pk=pk)
+    return render(request, "role_detail.html", {"role": role})
+
+
+
+class NoteList(APIView):
+    def get(self, request, pk, format=None):
+        user = User.objects.get(pk=pk)
+        if user:
+            notes = ServiceNote.objects.filter(user=user).order_by('-pk')
+            count_all = notes.count()
+            count_wait = notes.filter(status=None).count()
+            count_fast = notes.filter(status=None).filter(fast=True).count()
+            count_success = notes.filter(status=success).count()
+            count_edit = notes.filter(status=edit).count()
+            count_error = notes.filter(status=error).count()
+            serializer = ServiceNoteSerializer(notes, many=True)
+            #serializer.data["count_all"] = count_all
+            return Response({"notes":serializer.data})
+
+
+class MyNoteList(APIView):
+    def get(self, request, pk, format=None):
+        user = User.objects.get(pk=pk)
+        if user:
+            notes = []
+            userNotes = NoteUsers.objects.filter(user=user).filter(note__user_index__gte=F('index')).order_by('-pk')
+            for i in userNotes:
+                notes.append(i.note)
+            serializer = ServiceMyNoteSerializer(notes, many=True)
+            return Response({"notes": serializer.data})
+
+
+class MyNoteDetail(APIView):
+    def get(self, request, pk, format=None):
+        note = ServiceNote.objects.filter(pk=pk).first()
+        if note.text.startswith("<"):
+            text = BS(note.text)
+            text = text.get_text()
+        else:
+            text = note.text
+        if note == None:
+            return Http404()
+        serializer = ServiceMyNoteDetailSerializer(note)
+        data = serializer.data
+        data["text"] = text
+        return Response(data)
+
+#class Login(APIView):
+#    def post(self, request, pk, format=None):

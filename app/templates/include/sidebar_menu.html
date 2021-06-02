@@ -33,7 +33,17 @@
         <img src="{% static 'img/calendar.svg' %}" alt="" width="20px" height="20px">
         Календарь
     </a>
-    <a href="{% url 'calendar' %}" class="sidebar_item {% if request.path == '/statistics' %}active_link{% endif %}">
+    <div class="menu_line"></div>
+    <a href="{% url 'roles' %}" class="sidebar_item {% if '/roles' in request.path  %}active_link{% endif %}">
+        <img src="{% static 'img/visit.svg' %}" alt="" width="20px" height="20px">
+        Роли
+    </a>
+    <a href="{% url 'all_notes' %}" class="sidebar_item {% if '/all-notes' in request.path  %}active_link{% endif %}">
+        <img src="{% static 'img/letter.svg' %}" alt="" width="20px" height="20px">
+        Все СЗ
+    </a>
+
+    <a href="{% url 'statistics' %}" class="sidebar_item {% if request.path == '/statistics' %}active_link{% endif %}">
         <img src="{% static 'img/statistic.svg' %}" alt="" width="20px" height="20px">
         Статистика
     </a>

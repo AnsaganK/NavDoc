@@ -6,61 +6,25 @@
 
 {% block head %}
 <style>
-    .table{
-        border-spacing: 0px;
-        width: 100%;
-        background: #a5cdff;
-        max-width: 1200px;
-        margin: auto;
-        margin-top: 20px;
-        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
-        border-radius: 10px;
-    }
-    .tr{
-        border-bottom:1px solid grey;
-    }
-    .td, .th{
-        color: #000000b8;
-        text-align: center;
-        padding: 13px 10px;
-        border-bottom: 1px solid #9c9c9c;
-    }
-    .tr:last-child td{
-        border-bottom-width:0px;
-    }
-    .th:first-child{
-        border-top-left-radius:10px;
-    }
-    .th:last-child{
-        border-top-right-radius:10px;
-    }
-    .th{
-        background:blanchedalmond;
-        color: #1b61a9;
-        background: #ffffff8c;
-
-    }
 </style>
 {% endblock %}
 
 {% block content %}
-    <div class="content">
+    <div class="content" style="padding-left: 0px; padding-right: 0px">
         <h3 class="content_title">Пользователи</h3>
-        <table class="table">
-                <tr class="tr">
-                    <th class="th">ФИО</th>
-                    <th class="th">Дата рождения</th>
-                    <th class="th">Отдел</th>
-                    <th class="th">Должность</th>
-                    <th class="th">Номер моб.</th>
+        <table class="my_table">
+                <tr class="my_tr">
+                    <th class="my_th">ФИО</th>
+                    <th class="my_th">Отдел</th>
+                    <th class="my_th">Должность</th>
+                    <th class="my_th">Номер моб.</th>
                 </tr>
                 {% for user in users %}
-                <tr class="tr">
-                    <td class="td">{{ user.username }}</td>
-                    <td class="td">{{ user.profile }}</td>
-                    <td class="td">{{ user.profile.department }}</td>
-                    <td class="td">{{ user.profile.role }}</td>
-                    <td class="td">{{ user.profile.mobile }}</td>
+                <tr class="my_tr">
+                    <td class="my_td">{{ user.last_name }} {{ user.first_name|slice:"1" }}.{% if user.profile.patronymic %}{{ user.profile.patronymic|slice:"1" }}.{% endif %}</td>
+                    <td class="my_td">{{ user.profile.department }}</td>
+                    <td class="my_td">{{ user.profile.position }}</td>
+                    <td class="my_td">{{ user.profile.mobile }}</td>
                 </tr>
                 {% endfor %}
         </table>

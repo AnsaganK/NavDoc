@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://www.navistar-asia.com/wp-content/uploads/2020/10/favicon.jpg">
     {% block head %}
 
     {% endblock %}
@@ -21,11 +22,22 @@
             width: 160px;
             list-style-type: none;
             position: absolute;
-            top: 40px;
+            top: 59px;
             right:19px;
             color: white;
             padding: 0px;
         }
+        .profile_ul:after{
+            content: "";
+            position: absolute;
+            left: 45%;
+            top: -7px;
+            width: 0;
+            height: 0;
+            border-left: 7px solid #c16a6a00;
+            border-right: 7px solid transparent;
+            border-bottom: 7px solid #68adff;
+    }
         .profile_ul li{
             background: #fff;
             color: #3a92ff;
@@ -45,9 +57,10 @@
             border-top-right-radius:10px;
             border-top-left-radius:10px;
         }
-        .profile_ul li:last-child{
-            border-bottom-right-radius:10px;
-            border-bottom-left-radius:10px;
+        .profile_ul li:last-child {
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom: 1px solid;
         }
         #profile_menu{
             display:none;
@@ -80,8 +93,8 @@
             </span>
             <ul class="profile_ul" id="profile_menu">
                 <li><a href="{% url 'profile' %}">Профиль</a></li>
-                <li><a href="">Мои СЗ</a></li>
-                <li><a href="">История</a></li>
+                <li><a href="{% url 'my_notes_list' %}">Принятые СЗ</a></li>
+                <li><a href="{% url 'notes_list' %}">Отправленные СЗ</a></li>
                 <li><a href="{% url 'logout' %}">Выйти</a></li>
             </ul>
             {% else %}
@@ -97,7 +110,7 @@
     </div>
 
 </div>
-<img class="background" src="{% static 'img/10.jpg' %}">
+<img class="background" src="{% static 'img/15.jpg' %}">
 <script>
     function show_menu(){
         var menu = document.getElementById("profile_menu");
