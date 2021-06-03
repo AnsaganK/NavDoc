@@ -71,7 +71,8 @@ class NoteUsers(models.Model):
     comment = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=200,choices=statuses, null=True, blank=True)
     date_create = models.DateTimeField(auto_now=True, null=True, blank=True)
-
+    is_read = models.BooleanField(default=False)
+    date_read = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return self.note.title
 

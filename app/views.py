@@ -462,7 +462,7 @@ class CreatePdf(DetailView):
             self.context['top'] = 1200-(60*self.get_object().users.count())
         response=PDFTemplateResponse(request=request,
                                      template=self.template,
-                                     filename=f"{self.get_object().title}.pdf",
+                                     filename=f"{self.get_object().number}.pdf",
                                      context=self.context,
                                      show_content_in_browser=False,
                                      )
@@ -485,7 +485,7 @@ class CreatePdfSignature(DetailView):
             self.context['top'] = 1200-(60*self.get_object().users.count())
         response=PDFTemplateResponse(request=request,
                                      template=self.template,
-                                     filename=f"{self.get_object().title}.pdf",
+                                     filename=f"{self.get_object().number}.pdf",
                                      context=self.context,
                                      show_content_in_browser=False,
                                      )
