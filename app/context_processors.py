@@ -8,7 +8,7 @@ def unReadNotes(request):
     if request.user.is_anonymous:
         return {}
     user = request.user
-    userNotes = NoteUsers.objects.filter(user=user).filter(note__user_index__gte=F('index')).order_by('-pk').filter(is_read=False).count()
+    unReadCount = NoteUsers.objects.filter(user=user).filter(note__user_index__gte=F('index')).order_by('-pk').filter(is_read=False).count()
     return {
-        "unReadCount": userNotes
+        "unReadCount": unReadCount
     }
