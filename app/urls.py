@@ -36,5 +36,8 @@ urlpatterns = [
     path("notes/<int:pk>", note_detail, name="note_detail"),
     path("notes/download/<int:pk>", CreatePdf.as_view(), name="note_download"),
     path("notes/download/isSignature/<int:pk>", CreatePdfSignature.as_view(), name="note_signature_download"),
+
+    path("notes/show/<int:pk>", ShowPdf.as_view(), name="note_show"),
+    path("notes/show/isSignature/<int:pk>", ShowPdfSignature.as_view(), name="note_signature_show"),
     path("all-notes", all_notes, name="all_notes"),
 ]

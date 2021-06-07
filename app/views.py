@@ -491,6 +491,56 @@ class CreatePdfSignature(DetailView):
                                      )
         return response
 
+class ShowPdf(DetailView):
+    template='note_pdf.html'
+    context = {}
+    model = ServiceNote
+
+    def get(self, request, *args, **kwargs):
+        self.context['note'] = self.get_object()
+        self.context['isSignature'] = False
+        text = self.get_object().text
+        self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith(
+            "<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
+
+
+        count = self.get_object().users.count()
+        if count<4:
+            self.context['top'] = 1200-(50*self.get_object().users.count())
+        else:
+            self.context['top'] = 1200-(60*self.get_object().users.count())
+        response=PDFTemplateResponse(request=request,
+                                     template=self.template,
+                                     filename=f"{self.get_object().number}.pdf",
+                                     context=self.context,
+                                     show_content_in_browser=True,
+                                     )
+        return response
+
+class ShowPdfSignature(DetailView):
+    template='note_pdf.html'
+    context = {}
+    model = ServiceNote
+
+    def get(self, request, *args, **kwargs):
+        self.context['note'] = self.get_object()
+        self.context['isSignature'] = True
+        text = self.get_object().text
+        self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith("<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
+        count = self.get_object().users.count()
+        if count<4:
+            self.context['top'] = 1200-(50*self.get_object().users.count())
+        else:
+            self.context['top'] = 1200-(60*self.get_object().users.count())
+        response=PDFTemplateResponse(request=request,
+                                     template=self.template,
+                                     filename=f"{self.get_object().number}.pdf",
+                                     context=self.context,
+                                     show_content_in_browser=True,
+                                     )
+        return response
+
+
 @login_required()
 def note_download(request, pk):
     note = ServiceNote.objects.get(pk=pk)
