@@ -115,6 +115,9 @@ def my_notes_list(request):
 def my_note_detail(request, pk):
     note = ServiceNote.objects.get(pk=pk)
     userNote = NoteUsers.objects.filter(user=request.user).filter(note=note).first()
+    if userNote.is_read == False:
+        userNote.is_read = True
+        userNote.save()
     return render(request, "my_note_detail.html", {"note": note, "userNote": userNote})
 
 

@@ -35,6 +35,28 @@
             margin:1px;
             border:1px solid grey;
         }
+        .comment_block{
+            border: 1px solid #ff000000;
+            padding: 20px;
+            border-radius: 10px;
+            width: 555px;
+            background-color: #ffffffc7;
+            box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+            margin: auto;
+        }
+        .no_comment{
+            color: grey;
+        }
+        .my_comment_block{
+            display: flex;
+            justify-content: flex-end;
+            align-items: end;
+            margin-top: -22px;
+        }
+        .my_comment{
+            padding:10px;
+            box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+        }
 </style>
 {% endblock %}
 
@@ -65,6 +87,16 @@
 <div class="content">
     <h3 class="content_title">Служебная записка №{{ note.number }}</h3>
     {% include 'include/note_detail.html' %}
+    {% if userNote.status %}
+        <div class="comment_block">
+            <!--<div class="my_comment_block"><span class="my_comment">Ваш комментарий</span></div>-->
+                {% if userNote.comment %}
+                    {{ userNote.comment }}
+                {% else %}
+            <i class="no_comment">Без комментариев</i>
+                {% endif %}
+        </div>
+    {% endif %}
     {% if userNote.status == None %}
         <a id="btn_modal_window">
             <div class="circle_add" style="background-color: #ff6500">

@@ -4,8 +4,8 @@
     <div class="note_download"><!--
                 <img src="{% static 'img/pdf.svg' %}" alt="">
                 <img src="{% static 'img/doc.svg' %}" alt="">-->
-        <a href="{% url 'note_signature_download' note.pk %}" class="download_button pdf">PDF</a>
-        <a href="{% url 'note_download' note.pk %}" class="download_button pdf">PDF(без подписей)</a>
+        <a href="{% url 'note_signature_show' note.pk %}" target="_blank" class="download_button pdf">PDF</a>
+        <a href="{% url 'note_show' note.pk %}" target="_blank" class="download_button pdf">PDF(без подписей)</a>
         <!--<a href="" class="download_button doc">Doc</a>
         <a href="" class="download_button doc">Doc(без подписей)</a>-->
     </div>

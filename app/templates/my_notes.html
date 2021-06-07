@@ -32,7 +32,7 @@
         <div class="flex_notes">
         {% for note in notes %}
         <a href="{% url 'my_note_detail' note.note.pk %}" class="flex_note {% if note.note.fast %}fast_note{% endif %}">
-            <div class="note_number">{{ note.note.number }}</div>
+            <div class="note_number">{{ note.note.number }} {% if note.is_read == False %}<span class="unReadCircle"></span>{% endif %}</div>
             <div class="note_title">{{ note.note.title }}</div>
             <div class="note_text">{{ note.note.text|htmlToText }}</div>
             <div class="note_date">{{ note.note.date }}</div>

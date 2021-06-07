@@ -330,6 +330,9 @@ body{
         padding-left: 10px;
         margin-right: 20px;
         width: 60px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
     }
     .note_title{
         width: 150px;
@@ -853,3 +856,34 @@ h1, h2, h3, h4 {
     }
 
 
+.unRead{
+    font-size: 11px;
+    color: #004d9c;
+    margin-left: 12px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.sidebar_item:hover .unRead{
+    color:#60bbfd;
+}
+
+.active_link .unRead{
+    color:#60bbfd;
+}
+.unReadCircle{
+    width:5px;
+    height:5px;
+    transform:rotate(45deg);
+    border:4px solid;
+}
+
+.flex_note .unReadCircle{
+    border-color:#00678c;
+}
+.fast_note .unReadCircle{
+    border-color:#00678c;
+}
+.unReadNote{
+    font-weight:600;
+}
