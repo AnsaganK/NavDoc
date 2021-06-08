@@ -2,6 +2,24 @@ from rest_framework import serializers
 from .models import *
 from bs4 import BeautifulSoup as BS
 
+class DepartmentNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = ('name',)
+
+class ProfileInfoSerializer(serializers.ModelSerializer):
+    department = DepartmentNameSerializer()
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    profile = ProfileInfoSerializer()
+    class Meta:
+        model = User
+        fields = '__all__'
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -38,10 +56,15 @@ class ServiceMyNoteSerializer(serializers.ModelSerializer):
         model = ServiceNote
         fields = ('title', 'date', 'user', 'id', 'fast', 'status','number','users', 'user_index')
 
+class NoteFilesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NoteFiles
+        fields = ('file',)
 
 class ServiceMyNoteDetailSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     users = UserNoteSerializer(many=True)
+    files = NoteFilesSerializer(many=True)
     class Meta:
         model = ServiceNote
         fields = '__all__'

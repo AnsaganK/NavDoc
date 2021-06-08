@@ -3,6 +3,7 @@ from django.db.models import F
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 
+from rest_framework import status
 from django.db.models import Q
 from django.views.generic.base import View
 from wkhtmltopdf.views import PDFTemplateResponse
@@ -23,7 +24,8 @@ from django.http import Http404
 
 from bs4 import BeautifulSoup as BS
 
-from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer
+from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer, \
+    UserInfoSerializer
 
 role_employee_name = 'employee'
 role_chef_name = 'chef'
@@ -594,7 +596,29 @@ def role_detail(request, pk):
     role = Role.objects.get(pk=pk)
     return render(request, "role_detail.html", {"role": role})
 
+class UserLogin(APIView):
+    def post(self, request, format=None):
+        username = request.data['username']
+        password = request.data['password']
 
+        if not username or not password:
+            return Response({'error': 'Нужно заполнить все поля'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = authenticate(username=username, password=password)
+        if user:
+            return Response({
+                "user_id": user.id,
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "error": "Пользователь не найден"
+        }, status=status.HTTP_404_NOT_FOUND)
+
+class UserDetail(APIView):
+    def get(self, request,pk, format=None):
+        user = User.objects.get(pk=pk)
+        if user:
+            serializer = UserInfoSerializer(user)
+            return Response(serializer.data)
 
 class NoteList(APIView):
     def get(self, request, pk, format=None):
