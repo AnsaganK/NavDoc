@@ -1,4 +1,5 @@
-from datetime import datetime
+#from datetime import datetime
+import datetime
 from django.db.models import F
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
@@ -400,10 +401,10 @@ def generate_notes():
         last_note = ServiceNote.objects.last()
         last_number = last_note.pk + 1
         if i % 2 == 0:
-            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что", date=datetime.now(),
+            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что", date=datetime.datetime.now(),
                                               number=last_number, summa=21334, fast=1)
         else:
-            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что", date=datetime.now(),
+            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что", date=datetime.datetime.now(),
                                               number=last_number, summa=21334, fast=0)
         note.user_index = 1
         signer = NoteUsers.objects.create(user=user, index=1, note=note)
@@ -523,7 +524,7 @@ class ShowPdf(DetailView):
         return response
 
 class ShowPdfSignature(DetailView):
-    template='note_pdf.html'
+    template = 'note_pdf.html'
     context = {}
     model = ServiceNote
 
@@ -624,7 +625,14 @@ class NoteList(APIView):
     def get(self, request, pk, format=None):
         user = User.objects.get(pk=pk)
         if user:
-            notes = ServiceNote.objects.filter(user=user).order_by('-pk')
+            days = 7
+            if request.GET:
+                try:
+                    days = int(request.GET.get('days'))
+                except:
+                    days = 7
+            date = datetime.datetime.now()-datetime.timedelta(days=days)
+            notes = ServiceNote.objects.filter(user=user).filter(date__gte=date).order_by('-pk')
             count_all = notes.count()
             count_wait = notes.filter(status=None).count()
             count_fast = notes.filter(status=None).filter(fast=True).count()
@@ -640,8 +648,15 @@ class MyNoteList(APIView):
     def get(self, request, pk, format=None):
         user = User.objects.get(pk=pk)
         if user:
+            days = 7
+            if request.GET:
+                try:
+                    days = int(request.GET.get('days'))
+                except:
+                    days = 7
+            date = datetime.datetime.now() - datetime.timedelta(days=days)
             notes = []
-            userNotes = NoteUsers.objects.filter(user=user).filter(note__user_index__gte=F('index')).order_by('-pk')
+            userNotes = NoteUsers.objects.filter(user=user).filter(note__date__gte=date).filter(note__user_index__gte=F('index')).order_by('-pk')
             for i in userNotes:
                 notes.append(i.note)
             serializer = ServiceMyNoteSerializer(notes, many=True)
