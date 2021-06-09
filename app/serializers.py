@@ -69,7 +69,11 @@ class ServiceMyNoteDetailSerializer(serializers.ModelSerializer):
         model = ServiceNote
         fields = '__all__'
 
-
+class UserNoteDetailSerializer(serializers.ModelSerializer):
+    note = ServiceMyNoteDetailSerializer()
+    class Meta:
+        model = NoteUsers
+        fields = '__all__'
 
 #class MovieDetailSerializer(serializers.ModelSerializer):
 #    genres = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)

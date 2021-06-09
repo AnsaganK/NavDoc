@@ -26,7 +26,7 @@ from django.http import Http404
 from bs4 import BeautifulSoup as BS
 
 from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer, \
-    UserInfoSerializer
+    UserInfoSerializer, UserNoteDetailSerializer
 
 role_employee_name = 'employee'
 role_chef_name = 'chef'
@@ -678,5 +678,48 @@ class MyNoteDetail(APIView):
         data["text"] = text
         return Response(data)
 
-#class Login(APIView):
-#    def post(self, request, pk, format=None):
+class UserNoteDetail(APIView):
+    def get(self, request, user_pk, note_pk, format=None):
+        noteUser = NoteUsers.objects.filter(user__pk=user_pk).filter(note__pk=note_pk).first()
+        if noteUser.note.text.startswith("<"):
+            text = BS(noteUser.note.text)
+            text = text.get_text()
+        else:
+            text = noteUser.note.text
+        if noteUser.note == None:
+            return Http404()
+        serializer = UserNoteDetailSerializer(noteUser)
+        serializer.data["note"]["text"] = text
+        return Response(serializer.data)
+
+
+
+class NoteEditStatus(APIView):
+    def post(self, request, format=None):
+        data = request.data
+        user_id = data['user_id']
+        note_id = data['note_id']
+        comment = data['comment']
+        status = data['status']
+
+        user = User.objects.get(pk=user_id)
+        note = ServiceNote.objects.get(pk=note_id)
+        user_note = NoteUsers.objects.filter(user=user).filter(note=note).first()
+        if status == success:
+            users = note.users.all()
+            user_note.status = success
+            if user_note.index < len(users):
+                note.user_index = user_note.index + 1
+                note.status = None
+            elif user_note.index == len(users):
+                note.status = success
+        elif status == edit:
+            user_note.status = edit
+            note.status = edit
+        elif status == error:
+            user_note.status = error
+            note.status = error
+        user_note.comment = comment
+        note.save()
+        user_note.save()
+        return Response({'status': 'success'})
