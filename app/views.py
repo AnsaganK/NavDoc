@@ -448,6 +448,9 @@ def statistics(request):
     return render(request, "statistics.html")
 
 
+def mobile(request):
+    return render(request, "mobile.html")
+
 class CreatePdf(DetailView):
     template='note_pdf.html'
     context = {}
@@ -723,3 +726,7 @@ class NoteEditStatus(APIView):
         note.save()
         user_note.save()
         return Response({'status': 'success'})
+
+
+
+

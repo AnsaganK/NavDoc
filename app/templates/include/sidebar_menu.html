@@ -47,4 +47,9 @@
         <img src="{% static 'img/statistic.svg' %}" alt="" width="20px" height="20px">
         Статистика
     </a>
+
+    <a href="{% url 'mobile' %}" class="sidebar_item {% if request.path == '/mobile' %}active_link{% endif %}">
+        <img src="{% static 'img/mobile.svg' %}" alt="" width="20px" height="20px">
+        Моб. приложение
+    </a>
 </div>
