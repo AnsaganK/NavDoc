@@ -62,7 +62,18 @@ def home(request):
 
 @login_required()
 def calendar(request):
-    return render(request, 'calendar.html')
+    days = {}
+    notes = ServiceNote.objects.all().order_by("-pk")
+    for i in notes:
+        if i.pk > 50 and i.pk<840:
+            i.delete()
+    date_now = datetime.datetime.now()
+    for i in range(31):
+        date_current = date_now - datetime.timedelta(days=1)
+        date_now = date_current
+        data = notes.filter(date_create__date=date_current.date())
+        days[date_current.date()] = data
+    return render(request, 'calendar.html', {'days': days})
 
 
 @login_required()
@@ -73,7 +84,10 @@ def chat(request):
 @login_required()
 def departments_list(request):
     departments = Department.objects.all()
-    return render(request, 'departments.html', {"departments": departments})
+    my_department_pk = False
+    if request.user.profile.role.code == role_chef_name:
+        my_department_pk = request.user.profile.department.pk
+    return render(request, 'departments.html', {"departments": departments, "my_department_pk": my_department_pk})
 
 
 @login_required()
@@ -237,8 +251,9 @@ def department_archive(request, pk):
 
 @login_required()
 def department_delete(request, pk):
-    department = Department.objects.get(pk=pk)
-    department.delete()
+    if request.user.profile.role.code == role_chef_name or request.user.profile.is_admin:
+        department = Department.objects.get(pk=pk)
+        department.delete()
     return redirect("departments_list")
 
 
@@ -254,7 +269,7 @@ def department_edit(request, pk):
 @login_required()
 def department_add(request):
     if request.method == "POST":
-        form = DepartmentForm(request.POST)
+        form = DepartmentForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
         else:
@@ -268,8 +283,11 @@ def department_detail(request, pk):
     department = Department.objects.get(pk=pk)
     chef_users = User.objects.filter(profile__role__code=role_chef_name).filter(profile__department=department)
     employee_users = User.objects.filter(profile__role__code=role_employee_name).filter(profile__department=department)
+    shef = False
+    if request.user in chef_users or request.user.profile.is_admin:
+        shef = True
     return render(request, "department_detail.html",
-                  {"department": department, 'chef_users': chef_users, 'employee_users': employee_users})
+                  {"department": department, 'chef_users': chef_users, 'employee_users': employee_users, "shef":shef})
 
 
 def userNameValid(username):

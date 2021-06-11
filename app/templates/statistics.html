@@ -1,11 +1,48 @@
 {% extends 'base.html' %}
 
 {% block title %}
+Статистика
+{% endblock %}
 
+{% block head %}
+<style>
+    .statistics{
+
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="content">
-
+    <div class="statistics">
+        <div class="filter_block_1">
+            <div class="filter_item">
+                <input type="radio">
+                <label for="">3 дня</label>
+            </div>
+            <div class="filter_item">
+                <input type="radio">
+                <label for="">7 дней</label>
+            </div>
+            <div class="filter_item">
+                <input type="radio">
+                <label for="">14 дней</label>
+            </div>
+            <div class="filter_item">
+                <input type="radio">
+                <label for="">30 дней</label>
+            </div>
+        </div>
+        <hr>
+        <div class="filter_block_1">
+            <div class="filter_item">
+                <input type="radio">
+                <label for="">По отделам</label>
+            </div>
+            <div class="filter_item">
+                <input type="radio">
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

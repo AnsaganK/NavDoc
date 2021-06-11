@@ -887,3 +887,7 @@ h1, h2, h3, h4 {
 .unReadNote{
     font-weight:600;
 }
+.my_department{
+    background: #e25300 !important;
+    box-shadow: 0 1px 2px 0 rgb(60 64 67 / 60%), 0 1px 3px 1px rgb(60 64 67 / 45%) !important;
+}

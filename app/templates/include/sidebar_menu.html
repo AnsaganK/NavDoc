@@ -33,6 +33,7 @@
         <img src="{% static 'img/calendar.svg' %}" alt="" width="20px" height="20px">
         Календарь
     </a>
+    {% if request.user.profile.is_admin %}
     <div class="menu_line"></div>
     <a href="{% url 'roles' %}" class="sidebar_item {% if '/roles' in request.path  %}active_link{% endif %}">
         <img src="{% static 'img/visit.svg' %}" alt="" width="20px" height="20px">
@@ -47,6 +48,7 @@
         <img src="{% static 'img/statistic.svg' %}" alt="" width="20px" height="20px">
         Статистика
     </a>
+    {% endif %}
 
     <a href="{% url 'mobile' %}" class="sidebar_item {% if request.path == '/mobile' %}active_link{% endif %}">
         <img src="{% static 'img/mobile.svg' %}" alt="" width="20px" height="20px">

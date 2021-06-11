@@ -97,6 +97,17 @@
     font-weight: bold;
     cursor: pointer;
 }
+.delete_confirm_buttons{
+    display:flex;
+
+    justify-content:space-between;
+}
+
+.delete_confirm_buttons a{
+    padding:10px;
+    color:white;
+    margin: 0px 10px;
+}
 </style>
 {% endblock %}
 
@@ -115,6 +126,21 @@
             </form>
         </div>
       </div>
+    <div id="my_modal2" class="modal">
+            <div class="modal_content">
+              <span class="close_modal_window2">×</span>
+                <form action="{% url 'department_edit' department.pk %}" method="post" class="form_box">
+                    {% csrf_token %}
+                    <p style="text-align: center;
+    border-bottom: 1px solid #d8d8d8;
+    padding-bottom: 22px;">Вы уверены что хотите удалить, отменить это действие будет невозможно</p>
+                    <div style="" class="delete_confirm_buttons">
+                        <a href="{% url 'department_delete' department.pk %}" style="background-color:grey;">Отмена</a>
+                        <a href="{% url 'department_delete' department.pk %}" style="background-color:red;">Удалить</a>
+                    </div>
+                </form>
+            </div>
+          </div>
     <div class="content" style="padding-right: 0px;padding-left: 0px">
         <h3 class="content_title">{{ department.name }}</h3>
         <a class="edit_button" id="btn_modal_window">
@@ -125,7 +151,7 @@
             <img src="{% static 'img/archive.svg' %}" alt="" width="15px" height="15px">
             {% if department.archive %}Общий{% else %}Архив{% endif %}
         </a>
-        <a href="{% url 'department_delete' department.pk %}" class="delete_button">
+        <a id="btn_modal_window2" class="delete_button">
             <img src="{% static 'img/remove.svg' %}" alt="" width="15px" height="15px">
             Удалить
         </a>
@@ -155,6 +181,13 @@
                 </tr>
                 {% endfor %}
         </table>
+        {% if shef %}
+        <a href="{% url 'user_add' %}">
+            <div class="circle_add">
+                +
+            </div>
+        </a>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -163,6 +196,10 @@
      var modal = document.getElementById("my_modal");
  var btn = document.getElementById("btn_modal_window");
  var span = document.getElementsByClassName("close_modal_window")[0];
+var modal2 = document.getElementById("my_modal2");
+ var btn2 = document.getElementById("btn_modal_window2");
+ var span2 = document.getElementsByClassName("close_modal_window2")[0];
+
 
  btn.onclick = function () {
     modal.style.opacity = 1;
@@ -174,9 +211,20 @@
  }
 
  window.onclick = function (event) {
-    if (event.target == modal) {
+    if (event.target == modal || event.target == modal2) {
         modal.style.display = "none";
+        modal2.style.display = "none";
     }
 }
+
+btn2.onclick = function () {
+    modal2.style.opacity = 1;
+    modal2.style.display = "block";
+ }
+
+ span2.onclick = function () {
+    modal2.style.display = "none";
+ }
+
 </script>
 {% endblock %}

@@ -158,12 +158,14 @@
         <div class="profile_info_item"><span>Мобильный: </span><span>{{ user.profile.mobile }}</span></div>
         <div class="profile_info_item"><span>Дата рождения: </span><span>{{ user.profile.birth_date }}</span></div>
         <div class="profile_info_item"><span>Подпись: </span>
+            <span>
             {% if user.profile.signature %}
                 <!--{{ signature|safe }}-->
-            <span>
+
                 <img src="{{ user.profile.signature.url }}" alt="" style="background: #ffffff66;border-radius: 12px;" width="120px" height="120px">
-                </span>
+
             {% endif %}
+                </span>
         </div>
         <div class="profile_buttons">
             <div class="profile_delete_button" id="btn_modal_window2">Удалить</div>

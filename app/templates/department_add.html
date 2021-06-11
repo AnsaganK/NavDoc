@@ -66,13 +66,13 @@
     <h3 class="content_title">
         Добавление отдела
     </h3>
-    <form action="{% url 'department_add' %}" class="form_box" method="post" >
+    <form action="{% url 'department_add' %}" class="form_box" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form_item" style="justify-content:center;">
             <label for="department_file" class="department_image_label">
                 +
             </label>
-            <input type="file" id="department_file">
+            <input type="file" name="picture" id="department_file">
         </div>
         <div class="form_item">
             <label for="">Название отдела</label>

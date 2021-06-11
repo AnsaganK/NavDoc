@@ -42,3 +42,8 @@ def htmlToText(data):
         return text.get_text()
     else:
         return data
+
+
+@register.filter(name="getItem")
+def getItem(data, key):
+    return data[key]

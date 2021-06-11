@@ -25,6 +25,7 @@
     align-items:center;
 }
 .department svg, .departments img{
+    border-radius:10px;
     margin-right:20px;
 }
 .department_info{
@@ -58,7 +59,7 @@
     <div class="departments">
         {% for department in departments %}
 
-        <a href="{{ department.get_absolute_url }}" {% if department.archive %}style="background-color:grey;"{% endif %} class="department">
+        <a href="{{ department.get_absolute_url }}" {% if department.archive %}style="background-color:grey;"{% endif %} class="department {% if department.pk == my_department_pk %}my_department{% endif %}">
             {% if department.picture %}
             <img src="{{ department.picture.url }}" alt="" height="80px" width="80px">
             {% else %}
