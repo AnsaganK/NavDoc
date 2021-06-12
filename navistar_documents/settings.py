@@ -31,7 +31,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '192.168.100.55',
     '192.168.43.186',
-    '185.237.165.243'
+    '185.237.165.243',
+    'navdocs.pythonanywhere.com'
 ]
 
 
