@@ -85,7 +85,7 @@ def chat(request):
 def departments_list(request):
     departments = Department.objects.all()
     my_department_pk = False
-    if request.user.profile.role.code == role_chef_name:
+    if request.user.profile.role and request.user.profile.role.code == role_chef_name:
         my_department_pk = request.user.profile.department.pk
     return render(request, 'departments.html', {"departments": departments, "my_department_pk": my_department_pk})
 
@@ -251,7 +251,7 @@ def department_archive(request, pk):
 
 @login_required()
 def department_delete(request, pk):
-    if request.user.profile.role.code == role_chef_name or request.user.profile.is_admin:
+    if request.user.profile.role and request.user.profile.role.code == role_chef_name or request.user.profile.is_admin:
         department = Department.objects.get(pk=pk)
         department.delete()
     return redirect("departments_list")

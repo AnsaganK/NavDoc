@@ -13,6 +13,9 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+from constants import WKHTMLTOPDF_CMD_PATH
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -32,7 +35,6 @@ ALLOWED_HOSTS = [
     '192.168.100.55',
     '192.168.43.186',
     '185.237.165.243',
-    'navdocs.pythonanywhere.com'
 ]
 
 
@@ -93,6 +95,20 @@ DATABASES = {
 }
 
 
+
+
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': '5432',
+    }
+}
+'''
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -140,4 +156,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
+WKHTMLTOPDF_CMD = WKHTMLTOPDF_CMD_PATH
+#WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
