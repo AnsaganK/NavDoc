@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load app_tags %}
-
+{% load tz %}
 {% block title %}
     Календарь
 {% endblock %}
@@ -174,7 +174,9 @@ svg {
           <h3>{{ i }}</h3>
           {% for j in days|getItem:i %}
           <section>
-            <h4>{{ j.date_create.time }}</h4>
+            {% localtime on %}
+              <h4>{{ j.date_create.time }}</h4>
+            {% endlocaltime %}
             <ul>
               <li><a href="{{ j.get_absolute_url }}">{{ j.title }}</a></li>
             </ul>
