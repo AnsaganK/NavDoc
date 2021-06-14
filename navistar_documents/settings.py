@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     '192.168.100.55',
     '192.168.43.186',
     '185.237.165.243',
+    'doc.navistar-asia.com',
 ]
 
 
@@ -155,5 +156,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
+WKHTMLTOPDF_CMD = WKHTMLTOPDF_CMD_PATH
 #WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
