@@ -2,4 +2,5 @@ constants.py
 app/__pycache__/
 navistar_documents/__pycache__/
 __pycache__/
+static/
 db.sqlite3
