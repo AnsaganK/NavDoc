@@ -64,10 +64,8 @@ def home(request):
 def calendar(request):
     days = {}
     notes = ServiceNote.objects.all().order_by("-pk")
-    for i in notes:
-        if i.pk > 50 and i.pk<840:
-            i.delete()
-    date_now = datetime.datetime.now()
+
+    date_now = datetime.datetime.now() + datetime.timedelta(days=1)
     for i in range(31):
         date_current = date_now - datetime.timedelta(days=1)
         date_now = date_current
