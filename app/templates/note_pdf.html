@@ -123,7 +123,7 @@
         шектеулi <br>
         серiктестiгi
     </div>
-    <img src="static/img/navistar.png" alt="" width="320px" style="left: 300px;position: absolute;text-align: center;display: block">
+    <img src="http://doc.navistar-asia.com:81/static/img/navistar.png" alt="" width="320px" style="left: 300px;position: absolute;text-align: center;display: block">
     <div class="header2">
         Товарищество <br>
         с ограниченной <br> ответственностью <br>
@@ -179,7 +179,7 @@
         {% for user in note.users.all %}
         <div class="foot_item">
             <span class="position"><b>{{ user.user.profile.position }}</b></span>
-            <span class="username"><b>{% if user.status == 'success' and isSignature and user.user.profile.signature %}<img style="right: 200px;position: absolute;bottom: 0px" height="50" src="http://127.0.0.1:8000{{ user.user.profile.signature.url }}" alt="">{% endif %}{{ user.user.last_name }} {{ user.user.first_name|slice:"1" }}.{% if user.user.profile.patronymic %}{{ user.user.profile.patronymic|slice:"1" }}.{% endif %}</b></span>
+            <span class="username"><b>{% if user.status == 'success' and isSignature and user.user.profile.signature %}<img style="right: 200px;position: absolute;bottom: 0px" height="50" src="http://doc.navistar-asia.com:81{{ user.user.profile.signature.url }}" alt="">{% endif %}{{ user.user.last_name }} {{ user.user.first_name|slice:"1" }}.{% if user.user.profile.patronymic %}{{ user.user.profile.patronymic|slice:"1" }}.{% endif %}</b></span>
         </div>
         <br>
         {% endfor %}
