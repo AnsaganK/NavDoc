@@ -1,5 +1,8 @@
 #from datetime import datetime
 import datetime
+import json
+
+import requests
 from django.db.models import F
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
@@ -36,6 +39,32 @@ role_admin_name = 'admin'
 success = "success"
 edit = "edit"
 error = "error"
+
+
+def send_push(token, title, data):
+    headers = {'User-Agent': 'Mozilla/5.0',
+               'Content-Length': '33333',
+        "Accept-Encoding":"gzip, deflate, br",
+        "Accept":"*/*",
+        "Connection":"keep-alive",
+        "Authorization": "key=AAAA1_8zEyw:APA91bGoDNunqFMhw9vMzImDqkhT3raBdpjVJkdYmUwkxRt1IpeoTjZHSUe11i2jYvxQQDeCzxRdSp-gCipfUPfVQpHfevAxlpUVYsPYfJ66d_WfDbwQXBRcbzmgygMZtiziwCpV1kTc",
+        "Content-Type": "application/json",
+    }
+    body = {
+        "to":token,
+        "notification":{
+            "title":title,
+            "body": data
+        },
+        "data":{
+            "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        }
+    }
+    data = requests.post("https://fcm.googleapis.com/fcm/send", headers=headers, data=json.dumps(body))
+    print(str(data.text))
+    return data.text
+
+
 
 
 @login_required()
@@ -368,6 +397,12 @@ def service_note_add(request):
                     index = i.split("_")[1]
                     user_id = post[i]
                     user = User.objects.get(pk=user_id)
+                    print(index)
+                    print(user.profile.token)
+                    if index == "1" and user.profile.token:
+                        print(user)
+                        print(index)
+                        print(send_push(token=user.profile.token, title="+1  СЗ", data=post["title"]))
                     signer = NoteUsers.objects.create(user=user, index=index, note=data)
                     signer.save()
             data.save()
@@ -620,12 +655,16 @@ class UserLogin(APIView):
     def post(self, request, format=None):
         username = request.data['username']
         password = request.data['password']
-
+        token = request.data['token']
+        print(token)
         if not username or not password:
             return Response({'error': 'Нужно заполнить все поля'}, status=status.HTTP_400_BAD_REQUEST)
 
         user = authenticate(username=username, password=password)
         if user:
+            if token:
+                user.profile.token = token
+                user.save()
             return Response({
                 "user_id": user.id,
             }, status=status.HTTP_200_OK)
@@ -742,7 +781,3 @@ class NoteEditStatus(APIView):
         note.save()
         user_note.save()
         return Response({'status': 'success'})
-
-
-
-

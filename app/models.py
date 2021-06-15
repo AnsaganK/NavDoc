@@ -121,6 +121,7 @@ class Profile(models.Model):
     mobile = models.CharField(max_length=100, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     blocked = models.BooleanField(default=False)
+    token = models.TextField(null=True, blank=True)
     def __str__(self):
         return self.user.username
 
