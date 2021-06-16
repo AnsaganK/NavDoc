@@ -53,7 +53,7 @@ def send_push(token, title, data):
     body = {
         "to":token,
         "notification":{
-            "title":title,
+            "title": title,
             "body": data
         },
         "data":{
@@ -61,7 +61,6 @@ def send_push(token, title, data):
         }
     }
     data = requests.post("https://fcm.googleapis.com/fcm/send", headers=headers, data=json.dumps(body))
-    print(str(data.text))
     return data.text
 
 
@@ -244,7 +243,11 @@ def edit_status_note(request, pk):
             users = note.users.all()
             user_note.status = success
             if user_note.index < len(users):
-                note.user_index = user_note.index + 1
+                new_index = user_note.index + 1
+                note.user_index = new_index
+                user_next = NoteUsers.objects.filter(note=note).filter(index=new_index).first()
+                if user_next.profile.token:
+                    send_push(user_next.profile.token, f"Поступило СЗ №{note.number}", note.title)
                 note.status = None
             elif user_note.index == len(users):
                 note.status = success
@@ -397,12 +400,8 @@ def service_note_add(request):
                     index = i.split("_")[1]
                     user_id = post[i]
                     user = User.objects.get(pk=user_id)
-                    print(index)
-                    print(user.profile.token)
                     if index == "1" and user.profile.token:
-                        print(user)
-                        print(index)
-                        print(send_push(token=user.profile.token, title="+1  СЗ", data=post["title"]))
+                        send_push(token=user.profile.token, title=f"Поступило СЗ №{post['number']}", data=post["title"])
                     signer = NoteUsers.objects.create(user=user, index=index, note=data)
                     signer.save()
             data.save()
@@ -767,7 +766,11 @@ class NoteEditStatus(APIView):
             users = note.users.all()
             user_note.status = success
             if user_note.index < len(users):
-                note.user_index = user_note.index + 1
+                new_index = user_note.index + 1
+                note.user_index = new_index
+                user_next = NoteUsers.objects.filter(note=note).filter(index=new_index).first()
+                if user_next.profile.token:
+                    send_push(user_next.profile.token, f"Поступило СЗ №{note.number}", note.title)
                 note.status = None
             elif user_note.index == len(users):
                 note.status = success
