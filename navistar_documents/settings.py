@@ -29,12 +29,8 @@ SECRET_KEY = '%##v!zflpr5(6=ir20zavz(z18-l(k%(13!@%_@1p$o^dhy^xn'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '10.0.2.2',
     '127.0.0.1',
     'localhost',
-    '192.168.100.55',
-    '192.168.43.186',
-    '185.237.165.243',
     'doc.navistar-asia.com',
 ]
 

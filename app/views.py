@@ -30,6 +30,7 @@ from bs4 import BeautifulSoup as BS
 
 from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer, \
     UserInfoSerializer, UserNoteDetailSerializer
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 role_employee_name = 'employee'
 role_chef_name = 'chef'
@@ -171,6 +172,8 @@ def notes_list(request):
     last = ServiceNote.objects.last()
     tags = Tags.objects.all()
     notes = ServiceNote.objects.filter(user=request.user).order_by('-pk')
+
+
     count_all = notes.count()
     count_wait = notes.filter(status=None).count()
     count_fast = notes.filter(status=None).filter(fast=True).count()
@@ -194,6 +197,18 @@ def notes_list(request):
         elif q == "files":
             notes = notes.filter(~Q(files=None))
 
+    paginator = Paginator(notes, 20)  # 3 поста на каждой странице
+    page = request.GET.get('page')
+    try:
+        notes = paginator.page(page)
+    except PageNotAnInteger:
+        # Если страница не является целым числом, поставим первую страницу
+        notes = paginator.page(1)
+    except EmptyPage:
+        # Если страница больше максимальной, доставить последнюю страницу результатов
+        notes = paginator.page(paginator.num_pages)
+
+
     users = User.objects.all()
     if last:
         number = last.number + 1 if last.number else 1
@@ -207,6 +222,7 @@ def notes_list(request):
                                           "count_edit": count_edit,
                                           "count_error": count_error,
                                           "count_files": count_files,
+                                          "page":page
                                           })
 
 
