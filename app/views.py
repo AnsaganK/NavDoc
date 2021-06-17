@@ -182,7 +182,10 @@ def notes_list(request):
     count_error = notes.filter(status=error).count()
     count_files = notes.filter(~Q(files = None)).count()
     if request.GET:
-        q = request.GET.get("status")
+        try:
+            q = request.GET.get("status")
+        except:
+            q = "all"
         if q == "wait":
             notes = notes.filter(status=None)
 

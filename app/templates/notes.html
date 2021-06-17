@@ -274,13 +274,13 @@
         Отправленные
     </h3>
     <div class="note_statuses">
-            <a href="{% url 'notes_list' %}" class="note_status {% if request.get_full_path == '/notes' %}note_status_active{% endif %}">Все ({{ count_all }})</a>
-            <a href="?status=wait" class="note_status {% if request.get_full_path == '/notes?status=wait' %}note_status_active{% endif %}">В ожидании ({{ count_wait }})</a>
-            <a href="?status=fast" class="note_status  {% if request.get_full_path == '/notes?status=fast' %}note_status_active{% endif %}">Срочные ({{ count_fast }})</a>
-            <a href="?status=success" class="note_status  {% if request.get_full_path == '/notes?status=success' %}note_status_active{% endif %}">Одобренные ({{ count_success }})</a>
-            <a href="?status=edit" class="note_status  {% if request.get_full_path == '/notes?status=edit' %}note_status_active{% endif %}">На редактировании ({{ count_edit }})</a>
-            <a href="?status=error" class="note_status  {% if request.get_full_path == '/notes?status=error' %}note_status_active{% endif %}">Отказанные ({{ count_error }})</a>
-            <a href="?status=files" class="note_status  {% if request.get_full_path == '/notes?status=files' %}note_status_active{% endif %}">С файлами ({{ count_files }})</a>
+            <a href="{% url 'notes_list' %}" class="note_status {% if '/notes?status=all' in request.get_full_path %}note_status_active{% endif %}">Все ({{ count_all }})</a>
+            <a href="?status=wait" class="note_status {% if '/notes?status=wait' in request.get_full_path %}note_status_active{% endif %}">В ожидании ({{ count_wait }})</a>
+            <a href="?status=fast" class="note_status  {% if '/notes?status=fast' in request.get_full_path %}note_status_active{% endif %}">Срочные ({{ count_fast }})</a>
+            <a href="?status=success" class="note_status  {% if '/notes?status=success' in request.get_full_path %}note_status_active{% endif %}">Одобренные ({{ count_success }})</a>
+            <a href="?status=edit" class="note_status  {% if '/notes?status=edit' in request.get_full_path %}note_status_active{% endif %}">На редактировании ({{ count_edit }})</a>
+            <a href="?status=error" class="note_status  {% if '/notes?status=error' in request.get_full_path %}note_status_active{% endif %}">Отказанные ({{ count_error }})</a>
+            <a href="?status=files" class="note_status  {% if '/notes?status=files' in request.get_full_path %}note_status_active{% endif %}">С файлами ({{ count_files }})</a>
     </div>
     <div class="flex_notes">
         {% for note in notes %}
