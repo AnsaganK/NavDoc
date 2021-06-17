@@ -274,7 +274,7 @@
         Отправленные
     </h3>
     <div class="note_statuses">
-            <a href="{% url 'notes_list' %}" class="note_status {% if '/notes?status=all' in request.get_full_path %}note_status_active{% endif %}">Все ({{ count_all }})</a>
+            <a href="{% url 'notes_list' %}?status=all" class="note_status {% if '/notes?status=all' in request.get_full_path %}note_status_active{% endif %}">Все ({{ count_all }})</a>
             <a href="?status=wait" class="note_status {% if '/notes?status=wait' in request.get_full_path %}note_status_active{% endif %}">В ожидании ({{ count_wait }})</a>
             <a href="?status=fast" class="note_status  {% if '/notes?status=fast' in request.get_full_path %}note_status_active{% endif %}">Срочные ({{ count_fast }})</a>
             <a href="?status=success" class="note_status  {% if '/notes?status=success' in request.get_full_path %}note_status_active{% endif %}">Одобренные ({{ count_success }})</a>
