@@ -9,7 +9,23 @@
 
 {% block head %}
 <style>
-
+.page{
+    padding: 10px 20px;
+    background: #4478ad;
+    color: white;
+    display: flex;
+    border-radius: 3px;
+    margin: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.active_page{
+    background:#4478ad;
+}
+.step-links{
+    display: flex;
+    justify-content: center;
+}
 </style>
 {% endblock %}
 
@@ -21,13 +37,13 @@
 
         <!--<input type="text" class="input_search" placeholder="Поиск...">-->
         <div class="note_statuses">
-            <a href="{% url 'my_notes_list' %}" class="note_status {% if request.get_full_path == '/my-notes' %}note_status_active{% endif %}">Все ({{ count_all }})</a>
-            <a href="?status=wait" class="note_status {% if request.get_full_path == '/my-notes?status=wait' %}note_status_active{% endif %}">В ожидании ({{ count_wait }})</a>
-            <a href="?status=fast" class="note_status  {% if request.get_full_path == '/my-notes?status=fast' %}note_status_active{% endif %}">Срочные ({{ count_fast }})</a>
-            <a href="?status=success" class="note_status  {% if request.get_full_path == '/my-notes?status=success' %}note_status_active{% endif %}">Одобренные ({{ count_success }})</a>
-            <a href="?status=edit" class="note_status  {% if request.get_full_path == '/my-notes?status=edit' %}note_status_active{% endif %}">На редактировании ({{ count_edit }})</a>
-            <a href="?status=error" class="note_status  {% if request.get_full_path == '/my-notes?status=error' %}note_status_active{% endif %}">Отказанные ({{ count_error }})</a>
-            <a href="?status=files" class="note_status  {% if request.get_full_path == '/my-notes?status=files' %}note_status_active{% endif %}">С файлами ({{ count_files }})</a>
+            <a href="{% url 'my_notes_list' %}?status=all" class="note_status {% if '/my-notes?status=all' in request.get_full_path %}note_status_active{% endif %}">Все ({{ count_all }})</a>
+            <a href="?status=wait" class="note_status {% if '/my-notes?status=wait' in request.get_full_path %}note_status_active{% endif %}">В ожидании ({{ count_wait }})</a>
+            <a href="?status=fast" class="note_status  {% if '/my-notes?status=fast' in request.get_full_path %}note_status_active{% endif %}">Срочные ({{ count_fast }})</a>
+            <a href="?status=success" class="note_status  {% if '/my-notes?status=success' in request.get_full_path %}note_status_active{% endif %}">Одобренные ({{ count_success }})</a>
+            <a href="?status=edit" class="note_status  {% if '/my-notes?status=edit' in request.get_full_path %}note_status_active{% endif %}">На редактировании ({{ count_edit }})</a>
+            <a href="?status=error" class="note_status  {% if '/my-notes?status=error' in request.get_full_path %}note_status_active{% endif %}">Отказанные ({{ count_error }})</a>
+            <a href="?status=files" class="note_status  {% if '/my-notes?status=files' in request.get_full_path %}note_status_active{% endif %}">С файлами ({{ count_files }})</a>
         </div>
         <div class="flex_notes">
         {% for note in notes %}
@@ -41,6 +57,21 @@
         <span class="not_found">Служебные записки не найдены</span>
         {% endfor %}
     </div>
-
+        {% if notes %}
+    <div class="pagination">
+         <span class="step-links">
+        {% if notes.has_previous %}
+           <a href="?{% if status_name %}status={{ status_name }}&{% endif %}page={{ notes.previous_page_number }}" class="page"><img
+                   src="{% static 'img/pag_arrow.svg' %}" alt=""></a>
+        {% endif %}
+         <span class="active_page page">{{ notes.number }} из {{ notes.paginator.num_pages }}
+         </span>
+        {% if notes.has_next %}
+             <a href="?{% if status_name %}status={{ status_name }}&{% endif %}page={{ notes.next_page_number }}" class="page"><img
+                    src="{% static 'img/pag_arrow.svg' %}" style="transform:rotate(180deg);" alt=""></a>
+        {% endif %}
+        </span>
+    </div>
+        {% endif %}
     </div>
 {% endblock %}

@@ -171,6 +171,23 @@
     border-color: #47a2ff !important;
 }
 
+.page{
+    padding: 10px 20px;
+    background: #4478ad;
+    color: white;
+    display: flex;
+    border-radius: 3px;
+    margin: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.active_page{
+    background:#4478ad;
+}
+.step-links{
+    display: flex;
+    justify-content: center;
+}
 </style>
 {% endblock %}
 
@@ -294,20 +311,22 @@
         <h4 class="not_found">Вы не создавали служебных записок</h4>
         {% endfor %}
     </div>
-
+{% if notes %}
     <div class="pagination">
      <span class="step-links">
-      {% if page.has_previous %}
-          <a href="?page={{ page.previous_page_number }}">Previous</a>
+      {% if notes.has_previous %}
+          <a href="?{% if status_name %}status={{ status_name }}&{% endif %}page={{ notes.previous_page_number }}" class="page"><img
+                  src="{% static 'img/pag_arrow.svg' %}" alt=""></a>
       {% endif %}
-        <span class="current">
-      Page {{ page.number }} of {{ page.paginator.num_pages }}.
+        <span class="active_page page">{{ notes.number }} из {{ notes.paginator.num_pages }}
         </span>
-      {% if page.has_next %}
-            <a href="?page={{ page.next_page_number }}">Next</a>
+      {% if notes.has_next %}
+            <a href="?{% if status_name %}status={{ status_name }}&{% endif %}page={{ notes.next_page_number }}" class="page"><img
+                    src="{% static 'img/pag_arrow.svg' %}" style="transform:rotate(180deg);" alt=""></a>
       {% endif %}
       </span>
     </div>
+    {% endif %}
 </div>
 <a id="btn_modal_window">
     <div class="circle_add">

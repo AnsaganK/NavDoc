@@ -20,8 +20,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/migrations/0026_auto_20210617_1233.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/migrations/0027_profile_ischef.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/img/arrow.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/my_notes.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/my_notes.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/note_pdf.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/note_pdf.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/notes.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/notes.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templatetags/app_tags.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/templatetags/app_tags.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +62,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\User\Desktop\NavDocs\NavDoc\app\static\img" />
       <recent name="C:\Users\User\Desktop\NavDocs\NavDoc" />
       <recent name="C:\Users\User\Desktop\NavDocs\NavDoc\navistar_documents" />
       <recent name="C:\Users\Ansagan\Desktop\Navistar-Documents\navistar_documents" />

@@ -142,6 +142,8 @@
 </div>
 <div class="date_text">
     {% if note.date.day < 10 %}0{{ note.date.day }}{% else %}{{ note.date.day }}{% endif %}.{% if note.date.month < 10 %}0{{ note.date.month }}{% else %}{{ note.date.month }}{% endif %}.{{ note.date.year }}г. №{{ note.number }}
+    <br>
+    <img src="" alt="">
 </div>
 <div class="director_name">
     <b>
@@ -160,9 +162,9 @@
     <br>
     <br>
 </div>
-<div class="text">
+<div class="text" style="width:100%;">
 
-    <div class="title">
+    <div style="text-align:center" class="title">
         <b>Служебная записка</b>
     </div>
     <span class="p"></span>
@@ -171,12 +173,12 @@
     <br><br><br>
 
 
-    <b>Итого: {{ note.summa }} тенге.</b>
+    <b {% if note.isChef %}style="border:2px solid black;border-radius:100%;padding:20px;"{% endif %}>Итого: {{ note.summa }} тенге. </b>
 </div>
 <div class="footer">
 
     <div class="signature">
-        {% for user in note.users.all %}
+        {% for user in note.users.all reversed %}
         <div class="foot_item">
             <span class="position"><b>{{ user.user.profile.position }}</b></span>
             <span class="username"><b>{% if user.status == 'success' and isSignature and user.user.profile.signature %}<img style="right: 200px;position: absolute;bottom: 0px" height="50" src="http://doc.navistar-asia.com{{ user.user.profile.signature.url }}" alt="">{% endif %}{{ user.user.last_name }} {{ user.user.first_name|slice:"1" }}.{% if user.user.profile.patronymic %}{{ user.user.profile.patronymic|slice:"1" }}.{% endif %}</b></span>

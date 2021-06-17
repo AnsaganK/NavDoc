@@ -38,7 +38,7 @@ def isSignature(note, user):
 @register.filter(name="htmlToText")
 def htmlToText(data):
     if data.startswith("<"):
-        text = BS(data)
+        text = BS(data, "lxml")
         return text.get_text()
     else:
         return data

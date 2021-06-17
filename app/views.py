@@ -128,9 +128,12 @@ def my_notes_list(request):
     count_edit = notes.filter(status=edit).count()
     count_error = notes.filter(status=error).count()
     count_files = notes.filter(~Q(note__files = None)).count()
-
+    q = "all"
     if request.GET:
-        q = request.GET.get("status")
+        try:
+            q = request.GET.get("status")
+        except:
+            q = "all"
         if q == "wait":
             notes = notes.filter(status=None)
         elif q == "fast":
@@ -144,6 +147,17 @@ def my_notes_list(request):
         elif q == "files":
             notes = notes.filter(~Q(note__files=None))
 
+    paginator = Paginator(notes, 15)  # 3 поста на каждой странице
+    page = request.GET.get('page')
+    try:
+        notes = paginator.page(page)
+    except PageNotAnInteger:
+        # Если страница не является целым числом, поставим первую страницу
+        notes = paginator.page(1)
+    except EmptyPage:
+        # Если страница больше максимальной, доставить последнюю страницу результатов
+        notes = paginator.page(paginator.num_pages)
+
     return render(request, 'my_notes.html', {"notes": notes,
                                           "count_all": count_all,
                                           "count_wait": count_wait,
@@ -152,6 +166,8 @@ def my_notes_list(request):
                                           "count_edit": count_edit,
                                           "count_error": count_error,
                                           "count_files": count_files,
+                                             "page": page,
+                                             "status_name": q
                                              })
 
 
@@ -181,6 +197,8 @@ def notes_list(request):
     count_edit = notes.filter(status=edit).count()
     count_error = notes.filter(status=error).count()
     count_files = notes.filter(~Q(files = None)).count()
+    q = "all"
+
     if request.GET:
         try:
             q = request.GET.get("status")
@@ -200,7 +218,7 @@ def notes_list(request):
         elif q == "files":
             notes = notes.filter(~Q(files=None))
 
-    paginator = Paginator(notes, 20)  # 3 поста на каждой странице
+    paginator = Paginator(notes, 15)  # 3 поста на каждой странице
     page = request.GET.get('page')
     try:
         notes = paginator.page(page)
@@ -212,7 +230,7 @@ def notes_list(request):
         notes = paginator.page(paginator.num_pages)
 
 
-    users = User.objects.all()
+    users = User.objects.exclude(profile__isChef=True)
     if last:
         number = last.number + 1 if last.number else 1
     else:
@@ -225,7 +243,8 @@ def notes_list(request):
                                           "count_edit": count_edit,
                                           "count_error": count_error,
                                           "count_files": count_files,
-                                          "page":page
+                                          "page":page,
+                                          "status_name":q,
                                           })
 
 
@@ -246,7 +265,7 @@ def tag_add(request):
 @login_required()
 def note_detail(request, pk):
     note = ServiceNote.objects.get(pk=pk)
-    users = User.objects.all()
+    users = User.objects.exclude(profile__isChef=True)
     tags = Tags.objects.all()
     return render(request, "note_detail.html", {"note": note, "users": users, "tags": tags})
 
@@ -681,8 +700,9 @@ class UserLogin(APIView):
         if user:
             if token:
                 old_user = Profile.objects.filter(token=token).first()
-                old_user.token = None
-                old_user.save()
+                if old_user:
+                    old_user.token = None
+                    old_user.save()
                 user.profile.token = token
                 user.save()
             return Response({

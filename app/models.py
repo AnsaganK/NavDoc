@@ -51,6 +51,8 @@ class ServiceNote(models.Model):
     user_index = models.IntegerField(default=1, null=True, blank=True)
     status = models.CharField(max_length=200, choices=statuses, null=True, blank=True)
 
+    isChef = models.BooleanField(default=False)
+
     def __str__(self):
         return self.title
 
@@ -122,6 +124,8 @@ class Profile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     blocked = models.BooleanField(default=False)
     token = models.TextField(null=True, blank=True)
+
+    isChef = models.BooleanField(default=False)
     def __str__(self):
         return self.user.username
 
