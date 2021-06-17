@@ -79,7 +79,7 @@ class NoteUsers(models.Model):
     class Meta:
         verbose_name = "Подписывающий"
         verbose_name_plural = "Подписывающие"
-
+        ordering = ['index']
 
 class Department(models.Model):
     picture = models.FileField(upload_to='department_pictures', null=True, blank=True)
