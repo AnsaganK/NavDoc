@@ -9,11 +9,11 @@
         <img src="{% static 'img/users.svg' %}" alt="" width="20px" height="20px">
         Пользователи
     </a>
-    <a href="{% url 'my_notes_list' %}" class="sidebar_item {% if '/my-notes' in request.path  %}active_link{% endif %}">
+    <a href="{% url 'my_notes_list' %}?status=all" class="sidebar_item {% if '/my-notes' in request.path  %}active_link{% endif %}">
         <img src="{% static 'img/letter.svg' %}" alt="" width="20px" height="20px">
         Принятые СЗ {% if unReadCount %}<span class="unRead">+{{ unReadCount }}</span>{% endif %}
     </a>
-    <a href="{% url 'notes_list' %}" class="sidebar_item {% if '/notes?status=all' in request.path  %}active_link{% endif %}">
+    <a href="{% url 'notes_list' %}?status=all" class="sidebar_item {% if '/notes' in request.path  %}active_link{% endif %}">
         <img src="{% static 'img/send.svg' %}" alt="" width="20px" height="20px">
         Отправленные СЗ
     </a>
