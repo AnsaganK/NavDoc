@@ -13,7 +13,7 @@ from django.views.generic.base import View
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from .forms import DepartmentForm, UserForm, ServiceNoteForm, TagForm, UserEditForm, ProfileForm, ServiceNoteEditForm
-from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers
+from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers, Profile
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -655,13 +655,15 @@ class UserLogin(APIView):
         username = request.data['username']
         password = request.data['password']
         token = request.data['token']
-        print(token)
         if not username or not password:
             return Response({'error': 'Нужно заполнить все поля'}, status=status.HTTP_400_BAD_REQUEST)
 
         user = authenticate(username=username, password=password)
         if user:
             if token:
+                old_user = Profile.objects.filter(token=token).first()
+                old_user.token = None
+                old_user.save()
                 user.profile.token = token
                 user.save()
             return Response({
