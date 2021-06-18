@@ -53,6 +53,7 @@ class ServiceNote(models.Model):
 
     isChef = models.BooleanField(default=False)
     isBuh = models.BooleanField(default=False)
+    buh = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="service_notes")
 
     def __str__(self):
         return self.title
