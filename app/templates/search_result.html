@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Результаты поиска
+{% endblock %}
+
+
+{% block content %}
+<div class="content">
+    <h3>Результаты поиска: {{ q }}</h3>
+    <form action="/search" style="
+    /* position: absolute; */
+    display: flex;
+    align-items: center;
+    margin-right:40px;
+">
+        <input type="text" name="q" required value="{{ q }}" style="
+    height: 23px;
+    width: 230px;
+    border-radius: 5px;
+">
+        <button type="submit" style="
+    background: #f5deb300;
+    border: 0px;
+    margin-left: -32px;
+    /* position: absolute; */
+    /* margin-right: 168px; */
+">
+            <img src="/static/img/search.svg" alt="" style="
+    width: 20px;
+    height: 20px;
+    margin-left: 0px;
+">
+        </button>
+        </form>
+</div>
+{% endblock %}
+

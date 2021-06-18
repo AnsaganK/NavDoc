@@ -35,6 +35,7 @@ urlpatterns = [
     path("notes/add", service_note_add, name="service_note_add"),
     path("notes/edit/<int:pk>", service_note_edit, name="service_note_edit"),
     path("notes/<int:pk>", note_detail, name="note_detail"),
+    path("search", search_result, name="search_result"),
     path("notes/download/<int:pk>", CreatePdf.as_view(), name="note_download"),
     path("notes/download/isSignature/<int:pk>", CreatePdfSignature.as_view(), name="note_signature_download"),
 

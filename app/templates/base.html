@@ -79,6 +79,32 @@
 
     <div class="header">
         <img src="{% static 'img/navistar.png' %}" height="100%">
+        <div style="display:flex;">
+        <form action="{% url 'search_result' %}" style="
+    /* position: absolute; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right:40px;
+">
+        <input type="text" required name="q" style="
+    height: 23px;
+    width: 230px;
+    border-radius: 20px;
+">
+        <button type="submit" style="
+    background: #f5deb300;
+    border: 0px;
+    position: absolute;
+    margin-right: -200px;
+">
+            <img src="/static/img/search.svg" alt="" style="
+    width: 20px;
+    height: 20px;
+    margin-left: 0px;
+">
+        </button>    
+        </form>
         <button class="profile_button">
             {% if request.user.is_authenticated %}
             <img src="{% static 'img/profile.svg' %}" alt="" width="17px" height="17px">
@@ -101,6 +127,7 @@
             <span>Войти</span>
             {% endif %}
         </button>
+        </div>
     </div>
     <div class="main">
         {% include 'include/sidebar_menu.html' %}

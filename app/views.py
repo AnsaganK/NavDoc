@@ -288,6 +288,7 @@ def edit_status_note(request, pk):
                     send_push(user_next.user.profile.token, f"Поступило СЗ №{note.number}", note.title)
                 note.status = None
             elif user_note.index == len(users):
+                note.isChef = True
                 note.status = success
         elif status == edit:
             user_note.status = edit
@@ -433,8 +434,10 @@ def service_note_add(request):
                     tag_id = i.split("_")[-1]
                     tag = Tags.objects.get(pk=tag_id)
                     data.tags.add(tag)
+            user_count = 0
             for i in post:
                 if "user" in i:
+                    user_count += 1
                     index = i.split("_")[1]
                     user_id = post[i]
                     user = User.objects.get(pk=user_id)
@@ -442,6 +445,13 @@ def service_note_add(request):
                         send_push(token=user.profile.token, title=f"Поступило СЗ №{post['number']}", data=post["title"])
                     signer = NoteUsers.objects.create(user=user, index=index, note=data)
                     signer.save()
+
+            chef_user = Profile.objects.filter(isChef=True).first()
+            if chef_user:
+                user = chef_user.user
+                user_count += 1
+                signer = NoteUsers.objects.create(user=user, index=user_count, note=data)
+                signer.save()
             data.save()
         else:
             print(form.errors)
@@ -622,6 +632,7 @@ class ShowPdfSignature(DetailView):
     def get(self, request, *args, **kwargs):
         self.context['note'] = self.get_object()
         self.context['isSignature'] = True
+        self.context['chef_signature'] = Profile.objects.filter(isChef=True).first().signature.url if  Profile.objects.filter(isChef=True).first() else None
         text = self.get_object().text
         self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith("<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
         count = self.get_object().users.count()
@@ -687,6 +698,23 @@ def roles(request):
 def role_detail(request, pk):
     role = Role.objects.get(pk=pk)
     return render(request, "role_detail.html", {"role": role})
+
+@login_required()
+def search_result(request):
+    days = 7
+    try:
+        q = request.GET.get("q")
+    except:
+        q = ""
+
+    my_notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).filter(Q(note__title__icontains=q) | Q(note__text__icontains=q)).order_by('-pk')
+    notes = ServiceNote.objects.filter(user=request.user).filter(Q(title__icontains=q) | Q(text__icontains=q)).order_by('-pk')
+
+    print(notes)
+    print(my_notes)
+
+    return render(request, 'search_result.html', {"my_notes": my_notes, "notes": notes, "q": q})
+
 
 class UserLogin(APIView):
     def post(self, request, format=None):
