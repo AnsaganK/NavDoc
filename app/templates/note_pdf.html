@@ -143,7 +143,7 @@
 <div class="date_text">
     {% if note.date.day < 10 %}0{{ note.date.day }}{% else %}{{ note.date.day }}{% endif %}.{% if note.date.month < 10 %}0{{ note.date.month }}{% else %}{{ note.date.month }}{% endif %}.{{ note.date.year }}г. №{{ note.number }}
     <br>
-    {% if note.isChef %}<img src="http://doc.navistar-asia.com{{ chef_signature }}" style="position:absolute;" width="75" height="75" alt="">{% endif %}
+    {% if note.isChef and isSignature %}<img src="http://doc.navistar-asia.com{{ chef_signature }}" style="position:absolute;" width="75" height="75" alt="">{% endif %}
 </div>
 <div class="director_name">
     <b>
@@ -173,7 +173,7 @@
     <br><br><br>
 
 
-    <b {% if note.isChef %}style="border:2px solid black;border-radius:100%;padding:20px;"{% endif %}>Итого: {{ note.summa }} тенге. </b>
+    <b {% if note.isChef and isSignature %}style="border:2px solid black;border-radius:100%;padding:20px;"{% endif %}>Итого: {{ note.summa }} тенге. </b>
 </div>
 <div class="footer">
 
