@@ -143,7 +143,7 @@
 <div class="date_text">
     {% if note.date.day < 10 %}0{{ note.date.day }}{% else %}{{ note.date.day }}{% endif %}.{% if note.date.month < 10 %}0{{ note.date.month }}{% else %}{{ note.date.month }}{% endif %}.{{ note.date.year }}г. №{{ note.number }}
     <br>
-    {% if note.isChef %}<img src="http://doc.navistar-asia.com{{ chef_signature }}" alt="">{% endif %}
+    {% if note.isChef %}<img src="http://doc.navistar-asia.com{{ chef_signature }}" style="position:absolute;" width="75" height="75" alt="">{% endif %}
 </div>
 <div class="director_name">
     <b>
