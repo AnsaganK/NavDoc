@@ -671,7 +671,7 @@ def profile_edit(request, pk):
         if form.is_valid():
             form.save()
 
-        form2 = ProfileForm(request.POST,request.FILES, instance=user.profile)
+        form2 = ProfileForm(request.POST, request.FILES, instance=user.profile)
         if form2.is_valid():
             form2.save()
 

@@ -126,6 +126,8 @@ class Profile(models.Model):
     token = models.TextField(null=True, blank=True)
 
     isChef = models.BooleanField(default=False)
+    isBuh = models.BooleanField(default=False)
+
     def __str__(self):
         return self.user.username
 

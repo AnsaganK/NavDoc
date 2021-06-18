@@ -35,7 +35,7 @@ class TagForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ("patronymic","position","mobile","birth_date","signature")
+        fields = ("picture", "patronymic","position","mobile","birth_date","signature")
 
 
 class UserEditForm(forms.ModelForm):
