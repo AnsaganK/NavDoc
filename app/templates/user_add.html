@@ -45,6 +45,8 @@
             <input type="text" name="password2">
         </div>
         <select name="department" id="" class="form_select">
+
+            <option> --- </option>
             {% for department in departments %}
             <option value="{{ department.id }}">{{ department.name }}</option>
             {% endfor %}
