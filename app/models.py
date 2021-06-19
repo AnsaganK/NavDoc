@@ -51,9 +51,9 @@ class ServiceNote(models.Model):
     user_index = models.IntegerField(default=1, null=True, blank=True)
     status = models.CharField(max_length=200, choices=statuses, null=True, blank=True)
 
-    isChef = models.BooleanField(default=False)
-    isBuh = models.BooleanField(default=False)
-    buh = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="service_notes")
+    isChef = models.BooleanField(default=False, null=True, blank=True)
+    isBuh = models.BooleanField(default=False, null=True, blank=True)
+    buh = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.title
