@@ -47,7 +47,7 @@ class ServiceNote(models.Model):
     date_create = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
     date = models.DateField(null=True, blank=True)
-    tags = models.ManyToManyField(Tags, null=True, blank=True, related_name="notes")
+    tags = models.ManyToManyField(Tags, related_name="notes")
     user_index = models.IntegerField(default=1, null=True, blank=True)
     status = models.CharField(max_length=200, choices=statuses, null=True, blank=True)
 
@@ -127,8 +127,8 @@ class Profile(models.Model):
     blocked = models.BooleanField(default=False)
     token = models.TextField(null=True, blank=True)
 
-    isChef = models.BooleanField(default=False)
-    isBuh = models.BooleanField(default=False)
+    isChef = models.BooleanField(default=False, null=True, blank=True)
+    isBuh = models.BooleanField(default=False, null=True, blank=True)
 
     def __str__(self):
         return self.user.username
