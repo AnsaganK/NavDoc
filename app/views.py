@@ -710,10 +710,19 @@ def search_result(request):
     my_notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).filter(Q(note__title__icontains=q) | Q(note__text__icontains=q)).order_by('-pk')
     notes = ServiceNote.objects.filter(user=request.user).filter(Q(title__icontains=q) | Q(text__icontains=q)).order_by('-pk')
 
-    print(notes)
-    print(my_notes)
+    count = notes.count
+    paginator = Paginator(notes, 15)  # 3 поста на каждой странице
+    page = request.GET.get('page')
+    try:
+        notes = paginator.page(page)
+    except PageNotAnInteger:
+        # Если страница не является целым числом, поставим первую страницу
+        notes = paginator.page(1)
+    except EmptyPage:
+        # Если страница больше максимальной, доставить последнюю страницу результатов
+        notes = paginator.page(paginator.num_pages)
 
-    return render(request, 'search_result.html', {"my_notes": my_notes, "notes": notes, "q": q})
+    return render(request, 'search_result.html', {"my_notes": my_notes, "notes": notes, "q": q, "page": page, "count": count})
 
 
 class UserLogin(APIView):

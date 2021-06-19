@@ -1,18 +1,42 @@
 {% extends 'base.html' %}
+{% load app_tags %}
+{% load static %}
 
 {% block title %}
 Результаты поиска
 {% endblock %}
 
+{% block head %}
+<style>
+    .page{
+    padding: 10px 20px;
+    background: #4478ad;
+    color: white;
+    display: flex;
+    border-radius: 3px;
+    margin: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.active_page{
+    background:#4478ad;
+}
+.step-links{
+    display: flex;
+    justify-content: center;
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="content">
-    <h3>Результаты поиска: {{ q }}</h3>
+<div class="content" style="padding:10px 0px;">
+    <h3 style="margin-left:20px;">Найдено документов: {{ count }} </h3>
     <form action="/search" style="
     /* position: absolute; */
     display: flex;
     align-items: center;
     margin-right:40px;
+    margin-left:20px;
 ">
         <input type="text" name="q" required value="{{ q }}" style="
     height: 23px;
@@ -33,6 +57,34 @@
 ">
         </button>
         </form>
+    <div class="flex_notes">
+        {% for note in notes %}
+        <a href="{{ note.get_absolute_url }}" class="flex_note {% if note.fast %}fast_note{% endif %}">
+            <div class="note_number">{{ note.number }}</div>
+            <div class="note_title">{{ note.title }}</div>
+            <div class="note_text">{{ note.text|htmlToText }}</div>
+            <div class="note_date">{{ note.date }}</div>
+        </a>
+        {% empty %}
+        <h4 class="not_found">Служебные записки не найдены</h4>
+        {% endfor %}
+    </div>
+    {% if notes %}
+    <div class="pagination">
+     <span class="step-links">
+      {% if notes.has_previous %}
+          <a href="?{% if q %}status={{ q }}&{% endif %}page={{ notes.previous_page_number }}" class="page"><img
+                  src="{% static 'img/pag_arrow.svg' %}" alt=""></a>
+      {% endif %}
+        <span class="active_page page">{{ notes.number }} из {{ notes.paginator.num_pages }}
+        </span>
+      {% if notes.has_next %}
+            <a href="?{% if q %}q={{ q }}&{% endif %}page={{ notes.next_page_number }}" class="page"><img
+                    src="{% static 'img/pag_arrow.svg' %}" style="transform:rotate(180deg);" alt=""></a>
+      {% endif %}
+      </span>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
 
