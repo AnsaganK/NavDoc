@@ -20,8 +20,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0002_notefiles.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0003_department_picture.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0004_auto_20210524_0912.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0005_auto_20210524_0912.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0006_auto_20210524_0924.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0007_profile_picture.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0008_role_code.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0009_auto_20210524_1452.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0010_auto_20210524_1525.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0011_noteusers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0012_servicenote_summa.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0013_auto_20210526_0941.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0014_auto_20210526_0942.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0015_servicenote_fast.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0016_profile_signature.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0017_remove_servicenote_signers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0018_servicenote_user_index.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0019_servicenote_status.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0020_noteusers_date_create.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0021_auto_20210529_1941.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0022_profile_patronymic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0023_profile_blocked.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0024_auto_20210603_1752.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0025_profile_token.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0026_auto_20210617_1233.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0027_profile_ischef.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0028_profile_isbuh.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0029_auto_20210618_1536.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/0030_auto_20210619_2028.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/migrations/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
