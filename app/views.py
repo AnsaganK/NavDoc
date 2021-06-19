@@ -306,7 +306,7 @@ def edit_status_note(request, pk):
 
 @login_required()
 def users_list(request):
-    users = User.objects.order_by("pk").all()
+    users = User.objects.order_by("-pk").all()
     return render(request, 'users.html', {'users': users})
 
 
