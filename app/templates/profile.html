@@ -158,8 +158,8 @@
         <div class="profile_info_item"><span>Фамилия: </span><span>{{ user.last_name }}</span></div>
         <div class="profile_info_item"><span>Отчество: </span><span>{{ user.profile.patronymic }}</span></div>
         <div class="profile_info_item"><span>Почта: </span><span>{{ user.email }}</span></div>
-        <div class="profile_info_item"><span>Должность: </span><span>{{ user.profile.position }}</span></div>
-        <div class="profile_info_item"><span>Отдел: </span><span>{{ user.profile.department }}</span></div>
+        <div class="profile_info_item"><span>Должность: </span><span>{% if user.profile.position %}{{ user.profile.position }}{% endif %}</span></div>
+        <div class="profile_info_item"><span>Отдел: </span><span>{% if user.profile.department %}{{ user.profile.department }}{% endif %}</span></div>
         <div class="profile_info_item"><span>Мобильный: </span><span>{{ user.profile.mobile }}</span></div>
         <div class="profile_info_item"><span>Дата рождения: </span><span>{{ user.profile.birth_date }}</span></div>
         <div class="profile_info_item"><span>Подпись: </span>

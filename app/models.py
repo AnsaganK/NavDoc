@@ -115,14 +115,14 @@ class NoteFiles(models.Model):
 
 class Profile(models.Model):
     picture = models.FileField(upload_to="users_avatar", null=True, blank=True)
-    position = models.CharField(max_length=300, null=True, blank=True)
+    position = models.CharField(max_length=300, default="-", null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    patronymic = models.CharField(max_length=120, null=True, blank=True)
+    patronymic = models.CharField(max_length=120, default="", null=True, blank=True)
     signature = models.FileField(upload_to='user_signatures', null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     role = models.ForeignKey(Role, on_delete=models.PROTECT, null=True, blank=True, related_name="users")
     department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True, blank=True, related_name="profiles")
-    mobile = models.CharField(max_length=100, null=True, blank=True)
+    mobile = models.CharField(max_length=100, default="-", null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     blocked = models.BooleanField(default=False)
     token = models.TextField(null=True, blank=True)

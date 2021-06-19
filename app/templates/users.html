@@ -23,7 +23,7 @@
 
                 <tr class="my_tr">
                     <td class="my_td"><a href="{% url 'user_detail' user.pk %}">{{ user.last_name }} {{ user.first_name|slice:"1" }}.{% if user.profile.patronymic %}{{ user.profile.patronymic|slice:"1" }}.{% endif %}</a></td>
-                    <td class="my_td">{{ user.profile.department }}</td>
+                    <td class="my_td">{% if user.profile.department %}{{ user.profile.department }}{% else %} - {% endif %}</td>
                     <td class="my_td">{{ user.profile.position }}</td>
                     <td class="my_td">{{ user.profile.mobile }}</td>
                 </tr>
