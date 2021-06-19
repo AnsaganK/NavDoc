@@ -99,7 +99,7 @@ class Department(models.Model):
     class Meta:
         verbose_name = "Отдел"
         verbose_name_plural = "Отделы"
-
+        ordering = ['-pk']
 
 class NoteFiles(models.Model):
     note = models.ForeignKey(ServiceNote, on_delete=models.CASCADE, related_name="files")
