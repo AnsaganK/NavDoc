@@ -701,14 +701,22 @@ def role_detail(request, pk):
 
 @login_required()
 def search_result(request):
-    days = 7
     try:
         q = request.GET.get("q")
     except:
         q = ""
+    try:
+        send = request.GET.get("send")
+    except:
+        send = ""
 
-    my_notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).filter(Q(note__title__icontains=q) | Q(note__text__icontains=q)).order_by('-pk')
-    notes = ServiceNote.objects.filter(user=request.user).filter(Q(title__icontains=q) | Q(text__icontains=q)).order_by('-pk')
+    if send == "on":
+        notes = ServiceNote.objects.filter(users__user=request.user).filter(user_index__gte=F('users__index')).filter(
+            Q(title__icontains=q) | Q(text__icontains=q)).order_by('-pk')
+    else:
+        notes = ServiceNote.objects.filter(user=request.user).filter(
+            Q(title__icontains=q) | Q(text__icontains=q)).order_by('-pk')
+        #my_notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).filter(Q(note__title__icontains=q) | Q(note__text__icontains=q)).order_by('-pk')
 
     count = notes.count
     paginator = Paginator(notes, 1)  # 3 поста на каждой странице
@@ -722,7 +730,7 @@ def search_result(request):
         # Если страница больше максимальной, доставить последнюю страницу результатов
         notes = paginator.page(paginator.num_pages)
 
-    return render(request, 'search_result.html', {"my_notes": my_notes, "notes": notes, "q": q, "page": page, "count": count})
+    return render(request, 'search_result.html', {"notes": notes, "q": q, "page": page, "count": count, "send": send})
 
 
 class UserLogin(APIView):
