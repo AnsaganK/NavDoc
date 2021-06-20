@@ -19,6 +19,7 @@ urlpatterns = [
     path("roles", roles, name="roles"),
     path("roles/<int:pk>", role_detail, name="role_detail"),
     path("statistics", statistics, name="statistics"),
+    path("counting", counting, name="counting"),
     path("mobile", mobile, name="mobile"),
     path("departments/add", department_add, name="department_add"),
     path("departments/edit/<int:pk>", department_edit, name="department_edit"),

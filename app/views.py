@@ -545,6 +545,8 @@ def all_notes(request):
 def statistics(request):
     return render(request, "statistics.html")
 
+def counting(request):
+    return render(request, "counting.html")
 
 def mobile(request):
     return render(request, "mobile.html")
