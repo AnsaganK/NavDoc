@@ -545,8 +545,23 @@ def all_notes(request):
 def statistics(request):
     return render(request, "statistics.html")
 
+
 def counting(request):
-    return render(request, "counting.html")
+    notes = ServiceNote.objects.filter(isBuh=False)
+
+    paginator = Paginator(notes, 15)  # 3 поста на каждой странице
+    page = request.GET.get('page')
+    try:
+        notes = paginator.page(page)
+    except PageNotAnInteger:
+        # Если страница не является целым числом, поставим первую страницу
+        notes = paginator.page(1)
+    except EmptyPage:
+        # Если страница больше максимальной, доставить последнюю страницу результатов
+        notes = paginator.page(paginator.num_pages)
+
+    return render(request, "counting.html", {"notes": notes, "page": page})
+
 
 def mobile(request):
     return render(request, "mobile.html")
