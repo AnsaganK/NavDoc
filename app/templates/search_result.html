@@ -73,7 +73,7 @@
     <div class="pagination">
      <span class="step-links">
       {% if notes.has_previous %}
-          <a href="?{% if q %}status={{ q }}&{% endif %}page={{ notes.previous_page_number }}" class="page"><img
+          <a href="?{% if q %}q={{ q }}&{% endif %}page={{ notes.previous_page_number }}" class="page"><img
                   src="{% static 'img/pag_arrow.svg' %}" alt=""></a>
       {% endif %}
         <span class="active_page page">{{ notes.number }} из {{ notes.paginator.num_pages }}

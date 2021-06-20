@@ -711,7 +711,7 @@ def search_result(request):
     notes = ServiceNote.objects.filter(user=request.user).filter(Q(title__icontains=q) | Q(text__icontains=q)).order_by('-pk')
 
     count = notes.count
-    paginator = Paginator(notes, 15)  # 3 поста на каждой странице
+    paginator = Paginator(notes, 1)  # 3 поста на каждой странице
     page = request.GET.get('page')
     try:
         notes = paginator.page(page)
