@@ -13,7 +13,7 @@
 </span>
     <div class="flex_notes">
         {% for note in notes %}
-        <a href="{{ note.get_absolute_url }}" class="flex_note {% if note.fast %}fast_note{% endif %}">
+        <a href="{% url 'counting_detail' note.pk %}" class="flex_note {% if note.fast %}fast_note{% endif %}">
             <div class="note_number">{{ note.number }}</div>
             <div class="note_title">{{ note.title }}</div>
             <div class="note_text">{{ note.text|htmlToText }}</div>

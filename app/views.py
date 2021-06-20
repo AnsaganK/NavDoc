@@ -563,6 +563,10 @@ def counting(request):
     return render(request, "counting.html", {"notes": notes, "page": page})
 
 
+def counting_detail(request, pk):
+    note = ServiceNote.objects.get(pk=pk)
+    return render(request, "buh_note_detail.html", {"note": note})
+
 def mobile(request):
     return render(request, "mobile.html")
 
