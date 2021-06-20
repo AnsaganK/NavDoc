@@ -124,27 +124,30 @@
         </form>
     <div class="flex_notes">
         {% if send == "on" %}
-        {% for note in notes %}
-        <a href="{% url 'my_note_detail' note.note.pk %}" class="flex_note {% if note.note.fast %}fast_note{% endif %}">
-            <div class="note_number">{{ note.note.number }}</div>
-            <div class="note_title">{{ note.note.title }}</div>
-            <div class="note_text">{{ note.note.text|htmlToText }}</div>
-            <div class="note_date">{{ note.note.date }}</div>
-        </a>
-        {% empty %}
-        <h4 class="not_found">Служебные записки не найдены</h4>
-        {% endfor %}
+
+            {% for note in notes %}
+            <a href="{{ note.get_absolute_url }}" class="flex_note {% if note.fast %}fast_note{% endif %}">
+                <div class="note_number">{{ note.number }}</div>
+                <div class="note_title">{{ note.title }}</div>
+                <div class="note_text">{{ note.text|htmlToText }}</div>
+                <div class="note_date">{{ note.date }}</div>
+            </a>
+            {% empty %}
+            <h4 class="not_found">Служебные записки не найдены</h4>
+            {% endfor %}
+
+
         {% else %}
-        {% for note in notes %}
-        <a href="{{ note.get_absolute_url }}" class="flex_note {% if note.fast %}fast_note{% endif %}">
-            <div class="note_number">{{ note.number }}</div>
-            <div class="note_title">{{ note.title }}</div>
-            <div class="note_text">{{ note.text|htmlToText }}</div>
-            <div class="note_date">{{ note.date }}</div>
-        </a>
-        {% empty %}
-        <h4 class="not_found">Служебные записки не найдены</h4>
-        {% endfor %}
+            {% for note in notes %}
+            <a href="{% url 'my_note_detail' note.note.pk %}" class="flex_note {% if note.note.fast %}fast_note{% endif %}">
+                <div class="note_number">{{ note.note.number }}</div>
+                <div class="note_title">{{ note.note.title }}</div>
+                <div class="note_text">{{ note.note.text|htmlToText }}</div>
+                <div class="note_date">{{ note.note.date }}</div>
+            </a>
+            {% empty %}
+            <h4 class="not_found">Служебные записки не найдены</h4>
+            {% endfor %}
         {% endif %}
     </div>
     {% if notes %}
