@@ -21,6 +21,7 @@ urlpatterns = [
     path("statistics", statistics, name="statistics"),
     path("counting", counting, name="counting"),
     path("counting/<int:pk>", counting_detail, name="counting_detail"),
+    path("counting/status", counting_status, name="counting_status"),
     path("mobile", mobile, name="mobile"),
     path("departments/add", department_add, name="department_add"),
     path("departments/edit/<int:pk>", department_edit, name="department_edit"),

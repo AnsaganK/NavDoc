@@ -4,9 +4,52 @@
 {{ note.title }}
 {% endblock %}
 
+{% block head %}
+<style>
+    .buh_access{
+        padding:14px;
+        font-size:14px;
+        background-color:#43a047;
+        margin:10px auto;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        width:230px;
+        color:white;
+        border-radius:5px;
+        box-shadow:0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+        border:0px;
+        cursor:pointer;
+        margin:20px;
+    }
+    .buh_error{
+        background-color:#e74b4b;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="content">
     <h3 class="content_title">Служебная записка №{{ note.number }}</h3>
     {% include 'include/note_detail.html' %}
+    {% if note.isBuh %}
+    Вы уже подписали
+    {% else %}
+    {% if request.user.profile.signature %}
+    <div style="display:flex;justify-content:center;align-items:center;">
+        <form action="{% url 'counting_status' %}" method="post">
+            {% csrf_token %}
+            <input type="text" style="display:none;" name="status" value="success">
+            <input type="text" style="display:none;" name="note" value="{{ note.pk }}">
+        <button type="submit" class="buh_access">
+            Подтвердить сумму
+        </button>
+        </form>
+    </div>
+    {% else %}
+    <p style="color:grey;text-align:center;">У вас нет персональной подписи</p>
+    {% endif %}
+
+    {% endif %}
 </div>
 {% endblock %}

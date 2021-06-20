@@ -37,6 +37,8 @@ statuses = (
     ("error", "Отказать"),
 )
 
+
+
 class ServiceNote(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="notes")
     number = models.IntegerField(null=True, blank=True)

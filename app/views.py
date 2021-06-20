@@ -567,6 +567,20 @@ def counting_detail(request, pk):
     note = ServiceNote.objects.get(pk=pk)
     return render(request, "buh_note_detail.html", {"note": note})
 
+def counting_status(request):
+    if request.method == "POST":
+        note_id = request.POST["note"]
+        status = request.POST["status"]
+        note = ServiceNote.objects.get(pk=int(note_id))
+        if status == "success":
+            note.isBuh = True
+            note.buh = request.user
+        elif status == "error":
+            note.isBuh = False
+            note.buh = request.user
+            note.status = error
+        return redirect("counting")
+
 def mobile(request):
     return render(request, "mobile.html")
 
