@@ -127,8 +127,8 @@ class Profile(models.Model):
     blocked = models.BooleanField(default=False)
     token = models.TextField(null=True, blank=True)
 
-    isChef = models.BooleanField(default=False, null=True, blank=True)
-    isBuh = models.BooleanField(default=False, null=True, blank=True)
+    isChef = models.BooleanField(default=False, null=True, blank=True, verbose_name="это шеф")
+    isBuh = models.BooleanField(default=False, null=True, blank=True, verbose_name="это бухгалтер")
 
     def __str__(self):
         return self.user.username
