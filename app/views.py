@@ -650,6 +650,11 @@ class ShowPdfSignature(DetailView):
         self.context['note'] = self.get_object()
         self.context['isSignature'] = True
         self.context['chef_signature'] = Profile.objects.filter(isChef=True).first().signature.url if Profile.objects.filter(isChef=True).first() else None
+        buh = self.get_object().buh
+        if buh:
+            self.context['buh_signature'] = buh.signature.url
+        else:
+            self.context['buh_signature'] = None
         text = self.get_object().text
         self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith("<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
         count = self.get_object().users.count()
