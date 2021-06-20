@@ -733,10 +733,11 @@ def search_result(request):
         send = ""
 
     if send == "on":
-        notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).filter(Q(note__title__icontains=q) | Q(note__text__icontains=q)).order_by('-pk')
-    else:
         notes = ServiceNote.objects.filter(user=request.user).filter(
             Q(title__icontains=q) | Q(text__icontains=q)).order_by('-pk')
+    else:
+        notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).filter(
+            Q(note__title__icontains=q) | Q(note__text__icontains=q)).order_by('-pk')
 
     count = notes.count
     paginator = Paginator(notes, 1)  # 3 поста на каждой странице

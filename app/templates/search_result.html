@@ -109,7 +109,7 @@
     <div style="width:100%;display:flex;align-items:center;justify-content:flex-end;">
         <input type="checkbox" id="slider_input" name="send" onchange="location.href='http://doc.navistar-asia.com/search?q={{ q }}{% if send == 'on' %}{% else %}&send=on{% endif %}'" {% if send %} checked {% endif %} style="display: none">
             <span class="slider_text" style="margin-left:20px;">
-                Отправленные
+                Принятые
             </span>
             <label for="slider_input">
                 <div class="slider_wrap">
@@ -117,7 +117,7 @@
                 </div>
             </label>
             <span class="slider_text">
-                Принятые
+                Отправленные
             </span>
     </div>
 
