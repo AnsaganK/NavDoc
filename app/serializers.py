@@ -65,6 +65,7 @@ class ServiceMyNoteDetailSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     users = UserNoteSerializer(many=True)
     files = NoteFilesSerializer(many=True)
+    buh = UserSerializer()
     class Meta:
         model = ServiceNote
         fields = '__all__'
