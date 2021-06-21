@@ -930,6 +930,7 @@ class NoteEditStatus(APIView):
                 note.status = None
             elif user_note.index == len(users):
                 note.status = success
+                note.isChef = True
         elif status == edit:
             user_note.status = edit
             note.status = edit
