@@ -67,6 +67,7 @@
             text-align: justify;
             font-size: 22px;
             line-height: 1.5;
+            margin-right:20px;
         }
 
         .p {
@@ -112,6 +113,9 @@
             padding:1px;
             margin:1px;
             border:1px solid grey;
+        }
+        .content_text{
+            padding-right:15px;
         }
     </style>
 </head>
@@ -167,8 +171,11 @@
     <div style="text-align:center" class="title">
         <b>Служебная записка</b>
     </div>
+
+          <div class="content_text">
     <span class="p"></span>
-          В связи с производственной необходимостью, {{ text|safe }}
+              В связи с производственной необходимостью, {{ text|safe }}
+          </div>
     <br>
     <br>
 
