@@ -871,7 +871,7 @@ class MyNoteList(APIView):
             notes = []
             userNotes = NoteUsers.objects.filter(user=user).filter(note__date__gte=date).filter(note__user_index__gte=F('index')).order_by('-pk')
             if user.profile.isChef:
-                userNotes = NoteUsers.objects.filter(note__isBuh=True)
+                userNotes = userNotes.filter(note__isBuh=True)
             for i in userNotes:
                 notes.append(i.note)
             serializer = ServiceMyNoteSerializer(notes, many=True)
