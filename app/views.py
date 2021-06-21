@@ -293,8 +293,12 @@ def edit_status_note(request, pk):
                 new_index = user_note.index + 1
                 note.user_index = new_index
                 user_next = NoteUsers.objects.filter(note=note).filter(index=new_index).first()
-                if user_next.user.profile.token:
-                    send_push(user_next.user.profile.token, f"Поступило СЗ №{note.number}", note.title)
+                if user_next.user.profile.isChef:
+                    if new_index == len(users) and note.isBuh and user_next.user.profile.token:
+                        send_push(user_next.user.profile.token, f"Поступило СЗ №{note.number}", note.title)
+                else:
+                    if user_next.user.profile.token:
+                        send_push(user_next.user.profile.token, f"Поступило СЗ №{note.number}", note.title)
                 note.status = None
             elif user_note.index == len(users):
                 note.isChef = True
@@ -593,6 +597,10 @@ def counting_status(request):
         if status == "success":
             note.isBuh = True
             note.buh = request.user
+            if note.user_index == len(note.users):
+                chef_user = Profile.objects.filter(isChef=True).first()
+                if chef_user.token:
+                    send_push(chef_user.token, f"Поступило СЗ №{note.number}", note.title)
         elif status == "error":
             note.isBuh = False
             note.buh = request.user
