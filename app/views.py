@@ -242,7 +242,11 @@ def notes_list(request):
         # Если страница больше максимальной, доставить последнюю страницу результатов
         notes = paginator.page(paginator.num_pages)
 
-
+    date = datetime.datetime.now()
+    year = date.year
+    month = date.month if date.month>9 else "0"+str(date.month)
+    day = date.day if date.day>9 else "0"+str(date.day)
+    current_date = f"{year}-{month}-{day}"
     users = User.objects.exclude(profile__isChef=True).order_by("-pk")
     if last:
         number = last.number + 1 if last.number else 1
@@ -258,6 +262,7 @@ def notes_list(request):
                                           "count_files": count_files,
                                           "page":page,
                                           "status_name":q,
+                                          "current_date": current_date
                                           })
 
 
