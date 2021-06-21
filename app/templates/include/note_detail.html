@@ -22,6 +22,7 @@
         <div class="note_info_item"><span>Дата создания:</span> <span>{{ note.date_create }}</span></div>
         <div class="note_info_item"><span>Текст:</span> <span>{{ note.text|safe }}</span></div>
         <div class="note_info_item"><span>Итого:</span> <span>{{ note.summa }}</span></div>
+        <div class="note_info_item"><span>Бухгалтер:</span> <span>{% if note.buh %}{{ note.buh.first_name|slice:"1" }}.{{ note.buh.last_name }}{% else %} <span style="color:grey;">В ожидании</span> {% endif %}{% if note.isBuh %}<span style="color:green;">(подписал)</span>{% endif %}</span></div>
         {% if note.files.all %}
         <div class="note_info_item"><span>Файлы:</span> <span>{% for file in note.files.all %}<a href="{{ file.file.url }}" target="_blank" style="margin-left: 10px" title="{{ file.file.name }}"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg fill="#1b61a9" id="Layer_1" width="30" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

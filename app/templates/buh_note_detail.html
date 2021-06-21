@@ -7,20 +7,21 @@
 {% block head %}
 <style>
     .buh_access{
-        padding:14px;
-        font-size:14px;
-        background-color:#43a047;
-        margin:10px auto;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        width:230px;
-        color:white;
-        border-radius:5px;
-        box-shadow:0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
-        border:0px;
-        cursor:pointer;
-        margin:20px;
+            padding: 14px;
+            font-size: 14px;
+            /* background-color: #019e85; */
+            border: 1px solid #019e85;
+            margin: 10px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 230px;
+            color: #019e85;
+            border-radius: 5px;
+            box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+            /* border: 0px; */
+            cursor: pointer;
+            margin: 20px;
     }
     .buh_error{
         background-color:#e74b4b;
@@ -33,7 +34,7 @@
     <h3 class="content_title">Служебная записка №{{ note.number }}</h3>
     {% include 'include/note_detail.html' %}
     {% if note.isBuh %}
-    Вы уже подписали
+    <p style="margin:auto; color:#43a047;padding:10px;border:1px solid #43a047;width:230px;display:flex;justify-content:center;align-items:center;border-radius:5px;">Вы уже подписали</p>
     {% else %}
     {% if request.user.profile.signature %}
     <div style="display:flex;justify-content:center;align-items:center;">

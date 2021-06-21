@@ -120,6 +120,8 @@ def departments_list(request):
 @login_required()
 def my_notes_list(request):
     notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).order_by('-pk')
+    if request.user.profile.isChef:
+        notes = notes.filter(note__isBuh=True)
 
     count_all = notes.count()
     count_wait = notes.filter(status=None).count()
@@ -128,6 +130,12 @@ def my_notes_list(request):
     count_edit = notes.filter(status=edit).count()
     count_error = notes.filter(status=error).count()
     count_files = notes.filter(~Q(note__files = None)).count()
+
+    if request.user.profile.isChef:
+        count_wait = notes.filter(status=None).filter(note__isBuh=True).count()
+        count_fast = notes.filter(status=None).filter(note__fast=True).filter(note__isBuh=True).count()
+
+
     q = "all"
     if request.GET:
         try:
@@ -146,6 +154,7 @@ def my_notes_list(request):
             notes = notes.filter(status=error)
         elif q == "files":
             notes = notes.filter(~Q(note__files=None))
+
 
     paginator = Paginator(notes, 15)  # 3 поста на каждой странице
     page = request.GET.get('page')
@@ -410,9 +419,8 @@ def profile(request):
     user = request.user
 
     signature = user.profile.signature
-    sign = signature.read() if signature else None
 
-    return render(request, "profile.html", {"user": user, "signature": sign})
+    return render(request, "profile.html", {"user": user})
 
 
 @login_required()
@@ -552,11 +560,11 @@ def counting(request):
         status = request.GET.get("status")
 
         if status == "success":
-            notes = ServiceNote.objects.filter(isBuh=True)
+            notes = ServiceNote.objects.filter(isBuh=True).order_by("-pk")
         else:
-            notes = ServiceNote.objects.filter(isBuh=False)
+            notes = ServiceNote.objects.filter(isBuh=False).order_by("-pk")
     else:
-        notes = ServiceNote.objects.filter(isBuh=False)
+        notes = ServiceNote.objects.filter(isBuh=False).order_by("-pk")
     count_wait = ServiceNote.objects.filter(isBuh=False).count()
     count_success = ServiceNote.objects.filter(isBuh=True).count()
     paginator = Paginator(notes, 15)  # 3 поста на каждой странице
@@ -589,6 +597,7 @@ def counting_status(request):
             note.isBuh = False
             note.buh = request.user
             note.status = error
+        note.save()
         return redirect("counting")
 
 def mobile(request):
@@ -680,7 +689,7 @@ class ShowPdfSignature(DetailView):
         self.context['chef_signature'] = Profile.objects.filter(isChef=True).first().signature.url if Profile.objects.filter(isChef=True).first() else None
         buh = self.get_object().buh
         if buh:
-            self.context['buh_signature'] = buh.signature.url
+            self.context['buh_signature'] = buh.profile.signature.url
         else:
             self.context['buh_signature'] = None
         text = self.get_object().text
