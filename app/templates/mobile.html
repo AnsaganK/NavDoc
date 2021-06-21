@@ -4,6 +4,8 @@
 Мобильное приложение
 {% endblock %}
 
+{% load static %}
+
 {% block head %}
 <style>
     /* Media Queries */
@@ -205,9 +207,10 @@
   line-height: 18px;
   margin-bottom: 15px;
 }
-#timeline .demo-card .body img {
+#timeline .demo-card .body div img {
   display: block;
-  width: 100%;
+  width: auto;
+  height:86%;
 }
 #timeline .demo-card--step1 {
   background-color: #46b8e9;
@@ -257,6 +260,10 @@
 			</div>
 			<div class="body">
 				<p>Скачиваем файл и даем согласия на все разрешения</p>
+				<div style="display:flex;justify-content:space-between;height:100%;">
+					<img src="{% static 'img/0m.jpg' %}" alt="">
+					<img src="{% static 'img/1m.jpg' %}"  alt="">
+				</div>
 			</div>
 		</div>
 
