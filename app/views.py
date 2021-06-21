@@ -597,7 +597,7 @@ def counting_status(request):
         if status == "success":
             note.isBuh = True
             note.buh = request.user
-            if note.user_index == len(note.users):
+            if note.user_index == len(note.users.all()):
                 chef_user = Profile.objects.filter(isChef=True).first()
                 if chef_user.token:
                     send_push(chef_user.token, f"Поступило СЗ №{note.number}", note.title)
