@@ -243,7 +243,7 @@ def notes_list(request):
         notes = paginator.page(paginator.num_pages)
 
 
-    users = User.objects.exclude(profile__isChef=True)
+    users = User.objects.exclude(profile__isChef=True).order_by("-pk")
     if last:
         number = last.number + 1 if last.number else 1
     else:
