@@ -91,6 +91,7 @@
             font-size: 22px;
             margin-bottom: 10px;
             height: 30px;
+            padding-left:20px;
         }
         .position {
             position: absolute;
@@ -189,7 +190,7 @@
         {% if user.user.profile.isChef == False %}
         <div class="foot_item">
             <span class="position"><b>{{ user.user.profile.position }}</b></span>
-            <span class="username"><b>{% if user.status == 'success' and isSignature and user.user.profile.signature %}<img style="right: 200px;position: absolute;bottom: 0px" height="50" src="http://doc.navistar-asia.com{{ user.user.profile.signature.url }}" alt="">{% endif %}{{ user.user.last_name }} {{ user.user.first_name|slice:"1" }}.{% if user.user.profile.patronymic %}{{ user.user.profile.patronymic|slice:"1" }}.{% endif %}</b></span>
+            <span class="username" style="padding-right:20px;"><b>{% if user.status == 'success' and isSignature and user.user.profile.signature %}<img style="right: 200px;position: absolute;bottom: 0px" height="50" src="http://doc.navistar-asia.com{{ user.user.profile.signature.url }}" alt="">{% endif %}{{ user.user.last_name }} {{ user.user.first_name|slice:"1" }}.{% if user.user.profile.patronymic %}{{ user.user.profile.patronymic|slice:"1" }}.{% endif %}</b></span>
         </div>
         <br>
         {% endif %}
