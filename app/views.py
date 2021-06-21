@@ -921,8 +921,12 @@ class NoteEditStatus(APIView):
                 new_index = user_note.index + 1
                 note.user_index = new_index
                 user_next = NoteUsers.objects.filter(note=note).filter(index=new_index).first()
-                if user_next.user.profile.token:
-                    send_push(user_next.user.profile.token, f"Поступило СЗ №{note.number}", note.title)
+                if user_next.user.profile.isChef:
+                    if new_index == len(users) and note.isBuh and user_next.user.profile.token:
+                        send_push(user_next.user.profile.token, f"Поступило СЗ №{note.number}", note.title)
+                else:
+                    if user_next.user.profile.token:
+                        send_push(user_next.user.profile.token, f"Поступило СЗ №{note.number}", note.title)
                 note.status = None
             elif user_note.index == len(users):
                 note.status = success
