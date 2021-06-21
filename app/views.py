@@ -75,6 +75,9 @@ def home(request):
     editStatus = []
     errorStatus = []
     notes = NoteUsers.objects.filter(user=user).filter(note__user_index__gte=F('index')).order_by("-pk")
+    if request.user.profile.isChef:
+        notes = notes.filter(note__isBuh=True)
+
     for note in notes:
         if note.status == None:
             notStatus.append(note.note)
@@ -120,6 +123,7 @@ def departments_list(request):
 @login_required()
 def my_notes_list(request):
     notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).order_by('-pk')
+
     if request.user.profile.isChef:
         notes = notes.filter(note__isBuh=True)
 
