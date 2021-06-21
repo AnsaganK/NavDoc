@@ -547,8 +547,18 @@ def statistics(request):
 
 
 def counting(request):
-    notes = ServiceNote.objects.filter(isBuh=False)
+    status = "wait"
+    if request.GET:
+        status = request.GET.get("status")
 
+        if status == "success":
+            notes = ServiceNote.objects.filter(isBuh=True)
+        else:
+            notes = ServiceNote.objects.filter(isBuh=False)
+    else:
+        notes = ServiceNote.objects.filter(isBuh=False)
+    count_wait = ServiceNote.objects.filter(isBuh=False).count()
+    count_success = ServiceNote.objects.filter(isBuh=True).count()
     paginator = Paginator(notes, 15)  # 3 поста на каждой странице
     page = request.GET.get('page')
     try:
@@ -560,7 +570,7 @@ def counting(request):
         # Если страница больше максимальной, доставить последнюю страницу результатов
         notes = paginator.page(paginator.num_pages)
 
-    return render(request, "counting.html", {"notes": notes, "page": page})
+    return render(request, "counting.html", {"notes": notes, "page": page, "count_wait": count_wait, "count_success": count_success, "status": status})
 
 
 def counting_detail(request, pk):

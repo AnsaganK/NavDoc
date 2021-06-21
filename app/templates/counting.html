@@ -11,6 +11,10 @@
 <span class="content_title">
     Бухгалтерия
 </span>
+    <div class="note_statuses">
+            <a href="?status=wait" class="note_status {% if '/counting?status=wait' in request.get_full_path %}note_status_active{% endif %}">На подтверждение ({{ count_wait }})</a>
+            <a href="?status=success" class="note_status {% if '/counting?status=success' in request.get_full_path %}note_status_active{% endif %}">Подтвержденные ({{ count_success }})</a>
+    </div>
     <div class="flex_notes">
         {% for note in notes %}
         <a href="{% url 'counting_detail' note.pk %}" class="flex_note {% if note.fast %}fast_note{% endif %}">
@@ -28,13 +32,13 @@
     <div class="pagination">
      <span class="step-links">
       {% if notes.has_previous %}
-          <a href="?page={{ notes.previous_page_number }}" class="page"><img
+          <a href="?{% if status %}status={{ status }}&{% endif %}page={{ notes.previous_page_number }}" class="page"><img
                   src="{% static 'img/pag_arrow.svg' %}" alt=""></a>
       {% endif %}
         <span class="active_page page">{{ notes.number }} из {{ notes.paginator.num_pages }}
         </span>
       {% if notes.has_next %}
-            <a href="?page={{ notes.next_page_number }}" class="page"><img
+            <a href="?{% if status %}status={{ status }}&{% endif %}page={{ notes.next_page_number }}" class="page"><img
                     src="{% static 'img/pag_arrow.svg' %}" style="transform:rotate(180deg);" alt=""></a>
       {% endif %}
       </span>

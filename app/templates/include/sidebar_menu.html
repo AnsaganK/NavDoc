@@ -10,7 +10,7 @@
         Пользователи
     </a>
     {% if request.user.profile.isBuh %}
-    <a href="{% url 'counting' %}"  class="sidebar_item {% if '/counting' in request.path  %}active_link{% endif %}">
+    <a href="{% url 'counting' %}?status=wait"  class="sidebar_item {% if '/counting' in request.path  %}active_link{% endif %}">
         <img src="{% static 'img/calculator.svg' %}" alt="" width="20px" height="20px">
         Бухгалтерия
     </a>
