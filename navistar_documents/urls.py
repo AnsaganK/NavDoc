@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 
 from django.contrib.auth import views as acc
 
+from app.views import home
 
 urlpatterns = [
     url(r'^api/', include('app.url_api')),
@@ -34,7 +35,7 @@ urlpatterns += [
     path('accounts/login/', acc.LoginView.as_view(), name='login'),
     path('accounts/logout/', acc.LogoutView.as_view(), name='logout'),
     path('accounts/password-reset', acc.PasswordResetView.as_view(), name='password_reset'),
-    path('accounts/password-change/done/', acc.PasswordChangeDoneView.as_view(), name='password_change_done'),
+    path('', home, name='password_change_done'),
     path('accounts/password-change', acc.PasswordChangeView.as_view(), name='password_change'),
 ]
 

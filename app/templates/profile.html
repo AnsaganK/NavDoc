@@ -172,12 +172,26 @@
             {% endif %}
                 </span>
         </div>
+
         <div class="profile_buttons">
             <div class="profile_delete_button" id="btn_modal_window2">Удалить</div>
             <div class="profile_edit_button" id="btn_modal_window">Изменить</div>
         </div>
     </div>
-
+    {% if user == request.user %}
+            <a href="{% url 'password_change' %}" style="
+                    border: 2px solid #1b61a9;
+                    text-align: center;
+                    margin: auto;
+                    width: 230px;
+                    display: flex;
+                    justify-content: center;
+                    color: #1b61a9;
+                    align-items: center;
+                    padding: 5px;
+                    border-radius: 10px;
+                ">Изменить пароль</a>
+    {% endif %}
 </div>
 {% endblock %}
 
