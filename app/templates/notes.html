@@ -198,7 +198,7 @@
         <span class="close_modal_window">×</span>
         <form action="{% url 'service_note_add' %}" method="post" class="form_box" enctype="multipart/form-data">
             {% csrf_token %}
-            <h3 class="form_title" style="margin-left: 20px">Служебная записка №<input type="number" class="note_number_input" name="number" value="{{number}}"></h3>
+            <h3 class="form_title" style="margin-left: 20px">Служебная записка №<input type="number" class="note_number_input" name="number" min="1" value="{{number}}"></h3>
 
             <div class="form_item">
                 <label for="">Название</label>
@@ -210,7 +210,7 @@
             </div>
             <div class="form_item" style="flex-direction:column;">
                 <label for="">Текст</label>
-                <textarea type="text" id="editor1" name="text" rows="4"></textarea>
+                <textarea type="text" id="editor1" required name="text" rows="4"></textarea>
             </div>
             <div class="form_item">
                 <label for="">Итого</label>
