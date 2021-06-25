@@ -50,9 +50,9 @@
         Все СЗ
     </a>
 
-    <a href="{% url 'statistics' %}" class="sidebar_item {% if request.path == '/statistics' %}active_link{% endif %}">
+    <a href="{% url 'new_send' %}" class="sidebar_item {% if '/new/send' in request.path %}active_link{% endif %}">
         <img src="{% static 'img/statistic.svg' %}" alt="" width="20px" height="20px">
-        Статистика
+        Новый дизайн
     </a>
     {% endif %}
 
