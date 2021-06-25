@@ -348,8 +348,11 @@
               } else {
                 throw new Error(response.status);
               }
+            }).catch((error)=>{
+              console.log(error);
+              let modal = document.getElementById("modal1");
+              modal.innerHTML = "<div class='connection_error'>Ошибка<br>Нет связи с сервером</div>";
             });
-          console.log(url);
         }
 
 
