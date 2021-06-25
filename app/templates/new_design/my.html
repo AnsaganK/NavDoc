@@ -298,12 +298,8 @@
                         <rect x="6" y="7" width="5" height="2"/>
                     </svg></a>`;
           }):"";
-          files = `<div class="note_info_item">
-                    <span>Файлы:</span>
-                    <span>
-                    ${files}
-                    </span>
-                   </div>`
+          files !== ''? files = `<div class="note_info_item"><span>Файлы:</span><span>${files}</span></div>` : ''
+
 
           let tags = '';
           data.tags.length>0?data.tags.forEach((i)=>{tags+=`<li class="note_detail_tag">${i.name}</li>`}):"";
