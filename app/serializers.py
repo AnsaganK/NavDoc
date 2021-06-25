@@ -2,6 +2,13 @@ from rest_framework import serializers
 from .models import *
 from bs4 import BeautifulSoup as BS
 
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tags
+        fields = ('name',)
+
+
 class DepartmentNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
@@ -66,6 +73,7 @@ class ServiceMyNoteDetailSerializer(serializers.ModelSerializer):
     users = UserNoteSerializer(many=True)
     files = NoteFilesSerializer(many=True)
     buh = UserSerializer()
+    tags = TagSerializer(many=True)
     class Meta:
         model = ServiceNote
         fields = '__all__'
