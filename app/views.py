@@ -1,4 +1,4 @@
-#from datetime import datetime
+# from datetime import datetime
 import datetime
 import json
 
@@ -17,7 +17,6 @@ from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers, P
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-
 
 from rest_framework import viewsets, generics
 from rest_framework.views import APIView
@@ -45,26 +44,24 @@ error = "error"
 def send_push(token, title, data):
     headers = {'User-Agent': 'Mozilla/5.0',
                'Content-Length': '33333',
-        "Accept-Encoding":"gzip, deflate, br",
-        "Accept":"*/*",
-        "Connection":"keep-alive",
-        "Authorization": "key=AAAA1_8zEyw:APA91bGoDNunqFMhw9vMzImDqkhT3raBdpjVJkdYmUwkxRt1IpeoTjZHSUe11i2jYvxQQDeCzxRdSp-gCipfUPfVQpHfevAxlpUVYsPYfJ66d_WfDbwQXBRcbzmgygMZtiziwCpV1kTc",
-        "Content-Type": "application/json",
-    }
+               "Accept-Encoding": "gzip, deflate, br",
+               "Accept": "*/*",
+               "Connection": "keep-alive",
+               "Authorization": "key=AAAA1_8zEyw:APA91bGoDNunqFMhw9vMzImDqkhT3raBdpjVJkdYmUwkxRt1IpeoTjZHSUe11i2jYvxQQDeCzxRdSp-gCipfUPfVQpHfevAxlpUVYsPYfJ66d_WfDbwQXBRcbzmgygMZtiziwCpV1kTc",
+               "Content-Type": "application/json",
+               }
     body = {
-        "to":token,
-        "notification":{
+        "to": token,
+        "notification": {
             "title": title,
             "body": data
         },
-        "data":{
+        "data": {
             "click_action": "FLUTTER_NOTIFICATION_CLICK",
         }
     }
     data = requests.post("https://fcm.googleapis.com/fcm/send", headers=headers, data=json.dumps(body))
     return data.text
-
-
 
 
 @login_required()
@@ -133,12 +130,11 @@ def my_notes_list(request):
     count_success = notes.filter(status=success).count()
     count_edit = notes.filter(status=edit).count()
     count_error = notes.filter(status=error).count()
-    count_files = notes.filter(~Q(note__files = None)).count()
+    count_files = notes.filter(~Q(note__files=None)).count()
 
     if request.user.profile.isChef:
         count_wait = notes.filter(status=None).filter(note__isBuh=True).count()
         count_fast = notes.filter(status=None).filter(note__fast=True).filter(note__isBuh=True).count()
-
 
     q = "all"
     if request.GET:
@@ -159,7 +155,6 @@ def my_notes_list(request):
         elif q == "files":
             notes = notes.filter(~Q(note__files=None))
 
-
     paginator = Paginator(notes, 15)  # 3 поста на каждой странице
     page = request.GET.get('page')
     try:
@@ -172,13 +167,13 @@ def my_notes_list(request):
         notes = paginator.page(paginator.num_pages)
 
     return render(request, 'my_notes.html', {"notes": notes,
-                                          "count_all": count_all,
-                                          "count_wait": count_wait,
-                                          "count_fast": count_fast,
-                                          "count_success": count_success,
-                                          "count_edit": count_edit,
-                                          "count_error": count_error,
-                                          "count_files": count_files,
+                                             "count_all": count_all,
+                                             "count_wait": count_wait,
+                                             "count_fast": count_fast,
+                                             "count_success": count_success,
+                                             "count_edit": count_edit,
+                                             "count_error": count_error,
+                                             "count_files": count_files,
                                              "page": page,
                                              "status_name": q
                                              })
@@ -202,14 +197,13 @@ def notes_list(request):
     tags = Tags.objects.all()
     notes = ServiceNote.objects.filter(user=request.user).order_by('-pk')
 
-
     count_all = notes.count()
     count_wait = notes.filter(status=None).count()
     count_fast = notes.filter(status=None).filter(fast=True).count()
     count_success = notes.filter(status=success).count()
     count_edit = notes.filter(status=edit).count()
     count_error = notes.filter(status=error).count()
-    count_files = notes.filter(~Q(files = None)).count()
+    count_files = notes.filter(~Q(files=None)).count()
     q = "all"
 
     if request.GET:
@@ -244,8 +238,8 @@ def notes_list(request):
 
     date = datetime.datetime.now()
     year = date.year
-    month = date.month if date.month>9 else "0"+str(date.month)
-    day = date.day if date.day>9 else "0"+str(date.day)
+    month = date.month if date.month > 9 else "0" + str(date.month)
+    day = date.day if date.day > 9 else "0" + str(date.day)
     current_date = f"{year}-{month}-{day}"
     users = User.objects.exclude(profile__isChef=True).order_by("-pk")
     if last:
@@ -260,8 +254,8 @@ def notes_list(request):
                                           "count_edit": count_edit,
                                           "count_error": count_error,
                                           "count_files": count_files,
-                                          "page":page,
-                                          "status_name":q,
+                                          "page": page,
+                                          "status_name": q,
                                           "current_date": current_date
                                           })
 
@@ -279,6 +273,7 @@ def tag_add(request):
         if form.is_valid():
             form.save()
     return redirect('tags_list')
+
 
 @login_required()
 def note_detail(request, pk):
@@ -378,7 +373,7 @@ def department_detail(request, pk):
     if request.user in chef_users or request.user.profile.is_admin:
         shef = True
     return render(request, "department_detail.html",
-                  {"department": department, 'chef_users': chef_users, 'employee_users': employee_users, "shef":shef})
+                  {"department": department, 'chef_users': chef_users, 'employee_users': employee_users, "shef": shef})
 
 
 def userNameValid(username):
@@ -421,8 +416,8 @@ def user_add(request):
     return render(request, "user_add.html", {"roles": roles, "departments": departments})
 
 
-#@login_required()
-#def user_detail(request, pk):
+# @login_required()
+# def user_detail(request, pk):
 #    user = User.objects.get(pk=pk)
 #    return render(request, "user_detail.html", {"user": user})
 
@@ -502,7 +497,7 @@ def service_note_edit(request, pk):
 
             note.save()
             userNote.save()
-            #for i in post:
+            # for i in post:
             #    if "user" in i:
             #        index = i.split("_")[1]
             #        user_id = post[i]
@@ -512,6 +507,7 @@ def service_note_edit(request, pk):
 
     return redirect(note.get_absolute_url())
 
+
 def generate_notes():
     user = User.objects.get(pk=5)
     user1 = User.objects.get(pk=1)
@@ -520,10 +516,12 @@ def generate_notes():
         last_note = ServiceNote.objects.last()
         last_number = last_note.pk + 1
         if i % 2 == 0:
-            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что", date=datetime.datetime.now(),
+            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что",
+                                              date=datetime.datetime.now(),
                                               number=last_number, summa=21334, fast=1)
         else:
-            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что", date=datetime.datetime.now(),
+            note = ServiceNote.objects.create(title="12", user=user, text="Потому что потому что",
+                                              date=datetime.datetime.now(),
                                               number=last_number, summa=21334, fast=0)
         note.user_index = 1
         signer = NoteUsers.objects.create(user=user, index=1, note=note)
@@ -555,12 +553,12 @@ def all_notes(request):
             notes = notes.filter(status=error)
 
     return render(request, "all_notes.html", {"notes": notes,
-                                          "count_all": count_all,
-                                          "count_wait": count_wait,
-                                          "count_fast": count_fast,
-                                          "count_success": count_success,
-                                          "count_edit": count_edit,
-                                          "count_error": count_error,})
+                                              "count_all": count_all,
+                                              "count_wait": count_wait,
+                                              "count_fast": count_fast,
+                                              "count_success": count_success,
+                                              "count_edit": count_edit,
+                                              "count_error": count_error, })
 
 
 def statistics(request):
@@ -591,12 +589,15 @@ def counting(request):
         # Если страница больше максимальной, доставить последнюю страницу результатов
         notes = paginator.page(paginator.num_pages)
 
-    return render(request, "counting.html", {"notes": notes, "page": page, "count_wait": count_wait, "count_success": count_success, "status": status})
+    return render(request, "counting.html",
+                  {"notes": notes, "page": page, "count_wait": count_wait, "count_success": count_success,
+                   "status": status})
 
 
 def counting_detail(request, pk):
     note = ServiceNote.objects.get(pk=pk)
     return render(request, "buh_note_detail.html", {"note": note})
+
 
 def counting_status(request):
     if request.method == "POST":
@@ -617,11 +618,13 @@ def counting_status(request):
         note.save()
         return redirect("counting")
 
+
 def mobile(request):
     return render(request, "mobile.html")
 
+
 class CreatePdf(DetailView):
-    template='note_pdf.html'
+    template = 'note_pdf.html'
     context = {}
     model = ServiceNote
 
@@ -632,22 +635,22 @@ class CreatePdf(DetailView):
         self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith(
             "<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
 
-
         count = self.get_object().users.count()
-        if count<4:
-            self.context['top'] = 1200-(50*self.get_object().users.count())
+        if count < 4:
+            self.context['top'] = 1200 - (50 * self.get_object().users.count())
         else:
-            self.context['top'] = 1200-(60*self.get_object().users.count())
-        response=PDFTemplateResponse(request=request,
-                                     template=self.template,
-                                     filename=f"{self.get_object().number}.pdf",
-                                     context=self.context,
-                                     show_content_in_browser=False,
-                                     )
+            self.context['top'] = 1200 - (60 * self.get_object().users.count())
+        response = PDFTemplateResponse(request=request,
+                                       template=self.template,
+                                       filename=f"{self.get_object().number}.pdf",
+                                       context=self.context,
+                                       show_content_in_browser=False,
+                                       )
         return response
 
+
 class CreatePdfSignature(DetailView):
-    template='note_pdf.html'
+    template = 'note_pdf.html'
     context = {}
     model = ServiceNote
 
@@ -655,22 +658,24 @@ class CreatePdfSignature(DetailView):
         self.context['note'] = self.get_object()
         self.context['isSignature'] = True
         text = self.get_object().text
-        self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith("<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
+        self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith(
+            "<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
         count = self.get_object().users.count()
-        if count<4:
-            self.context['top'] = 1200-(50*self.get_object().users.count())
+        if count < 4:
+            self.context['top'] = 1200 - (50 * self.get_object().users.count())
         else:
-            self.context['top'] = 1200-(60*self.get_object().users.count())
-        response=PDFTemplateResponse(request=request,
-                                     template=self.template,
-                                     filename=f"{self.get_object().number}.pdf",
-                                     context=self.context,
-                                     show_content_in_browser=False,
-                                     )
+            self.context['top'] = 1200 - (60 * self.get_object().users.count())
+        response = PDFTemplateResponse(request=request,
+                                       template=self.template,
+                                       filename=f"{self.get_object().number}.pdf",
+                                       context=self.context,
+                                       show_content_in_browser=False,
+                                       )
         return response
 
+
 class ShowPdf(DetailView):
-    template='note_pdf.html'
+    template = 'note_pdf.html'
     context = {}
     model = ServiceNote
 
@@ -681,19 +686,19 @@ class ShowPdf(DetailView):
         self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith(
             "<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
 
-
         count = self.get_object().users.count()
-        if count<4:
-            self.context['top'] = 1200-(50*self.get_object().users.count())
+        if count < 4:
+            self.context['top'] = 1200 - (50 * self.get_object().users.count())
         else:
-            self.context['top'] = 1200-(60*self.get_object().users.count())
-        response=PDFTemplateResponse(request=request,
-                                     template=self.template,
-                                     filename=f"{self.get_object().number}.pdf",
-                                     context=self.context,
-                                     show_content_in_browser=True,
-                                     )
+            self.context['top'] = 1200 - (60 * self.get_object().users.count())
+        response = PDFTemplateResponse(request=request,
+                                       template=self.template,
+                                       filename=f"{self.get_object().number}.pdf",
+                                       context=self.context,
+                                       show_content_in_browser=True,
+                                       )
         return response
+
 
 class ShowPdfSignature(DetailView):
     template = 'note_pdf.html'
@@ -703,25 +708,27 @@ class ShowPdfSignature(DetailView):
     def get(self, request, *args, **kwargs):
         self.context['note'] = self.get_object()
         self.context['isSignature'] = True
-        self.context['chef_signature'] = Profile.objects.filter(isChef=True).first().signature.url if Profile.objects.filter(isChef=True).first() else None
+        self.context['chef_signature'] = Profile.objects.filter(
+            isChef=True).first().signature.url if Profile.objects.filter(isChef=True).first() else None
         buh = self.get_object().buh
         if buh:
             self.context['buh_signature'] = buh.profile.signature.url
         else:
             self.context['buh_signature'] = None
         text = self.get_object().text
-        self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith("<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
+        self.context['text'] = text.replace(">", " class='p_first'>", 1) if text.startswith("<p>") or text.startswith(
+            "<h1>") or text.startswith("<h2>") or text.startswith("<h3>") else text
         count = self.get_object().users.count()
-        if count<4:
-            self.context['top'] = 1200-(50*self.get_object().users.count())
+        if count < 4:
+            self.context['top'] = 1200 - (50 * self.get_object().users.count())
         else:
-            self.context['top'] = 1200-(60*self.get_object().users.count())
-        response=PDFTemplateResponse(request=request,
-                                     template=self.template,
-                                     filename=f"{self.get_object().number}.pdf",
-                                     context=self.context,
-                                     show_content_in_browser=True,
-                                     )
+            self.context['top'] = 1200 - (60 * self.get_object().users.count())
+        response = PDFTemplateResponse(request=request,
+                                       template=self.template,
+                                       filename=f"{self.get_object().number}.pdf",
+                                       context=self.context,
+                                       show_content_in_browser=True,
+                                       )
         return response
 
 
@@ -764,6 +771,7 @@ def user_detail(request, pk):
     user = User.objects.get(pk=pk)
     return render(request, "profile.html", {"user": user})
 
+
 @login_required()
 def roles(request):
     roles = Role.objects.all()
@@ -774,6 +782,7 @@ def roles(request):
 def role_detail(request, pk):
     role = Role.objects.get(pk=pk)
     return render(request, "role_detail.html", {"role": role})
+
 
 @login_required()
 def search_result(request):
@@ -832,12 +841,14 @@ class UserLogin(APIView):
             "error": "Пользователь не найден"
         }, status=status.HTTP_404_NOT_FOUND)
 
+
 class UserDetail(APIView):
-    def get(self, request,pk, format=None):
+    def get(self, request, pk, format=None):
         user = User.objects.get(pk=pk)
         if user:
             serializer = UserInfoSerializer(user)
             return Response(serializer.data)
+
 
 class NoteList(APIView):
     def get(self, request, pk, format=None):
@@ -849,7 +860,7 @@ class NoteList(APIView):
                     days = int(request.GET.get('days'))
                 except:
                     days = 7
-            date = datetime.datetime.now()-datetime.timedelta(days=days)
+            date = datetime.datetime.now() - datetime.timedelta(days=days)
             notes = ServiceNote.objects.filter(user=user).filter(date__gte=date).order_by('-pk')
             count_all = notes.count()
             count_wait = notes.filter(status=None).count()
@@ -858,8 +869,8 @@ class NoteList(APIView):
             count_edit = notes.filter(status=edit).count()
             count_error = notes.filter(status=error).count()
             serializer = ServiceNoteSerializer(notes, many=True)
-            #serializer.data["count_all"] = count_all
-            return Response({"notes":serializer.data})
+            # serializer.data["count_all"] = count_all
+            return Response({"notes": serializer.data})
 
 
 class MyNoteList(APIView):
@@ -874,7 +885,8 @@ class MyNoteList(APIView):
                     days = 7
             date = datetime.datetime.now() - datetime.timedelta(days=days)
             notes = []
-            userNotes = NoteUsers.objects.filter(user=user).filter(note__date__gte=date).filter(note__user_index__gte=F('index')).order_by('-pk')
+            userNotes = NoteUsers.objects.filter(user=user).filter(note__date__gte=date).filter(
+                note__user_index__gte=F('index')).order_by('-pk')
             if user.profile.isChef:
                 userNotes = userNotes.filter(note__isBuh=True)
             for i in userNotes:
@@ -898,6 +910,7 @@ class MyNoteDetail(APIView):
         data["text"] = text
         return Response(data)
 
+
 class UserNoteDetail(APIView):
     def get(self, request, user_pk, note_pk, format=None):
         noteUser = NoteUsers.objects.filter(user__pk=user_pk).filter(note__pk=note_pk).first()
@@ -911,7 +924,6 @@ class UserNoteDetail(APIView):
         serializer = UserNoteDetailSerializer(noteUser)
         serializer.data["note"]["text"] = text
         return Response(serializer.data)
-
 
 
 class NoteEditStatus(APIView):
@@ -952,3 +964,146 @@ class NoteEditStatus(APIView):
         note.save()
         user_note.save()
         return Response({'status': 'success'})
+
+
+
+class FetchNotesList(APIView):
+    def get(self, request, format=None):
+        last = ServiceNote.objects.last()
+        tags = Tags.objects.all()
+        notes = ServiceNote.objects.filter(user=request.user).order_by('-pk')
+
+        count_all = notes.count()
+        count_wait = notes.filter(status=None).count()
+        count_fast = notes.filter(status=None).filter(fast=True).count()
+        count_success = notes.filter(status=success).count()
+        count_edit = notes.filter(status=edit).count()
+        count_error = notes.filter(status=error).count()
+        count_files = notes.filter(~Q(files=None)).count()
+        q = "all"
+
+        if request.GET:
+            try:
+                q = request.GET.get("status")
+            except:
+                q = "all"
+            if q == "wait":
+                notes = notes.filter(status=None)
+
+            elif q == "fast":
+                notes = notes.filter(status=None).filter(fast=True)
+            elif q == "success":
+                notes = notes.filter(status=success)
+            elif q == "edit":
+                notes = notes.filter(status=edit)
+            elif q == "error":
+                notes = notes.filter(status=error)
+            elif q == "files":
+                notes = notes.filter(~Q(files=None))
+
+        paginator = Paginator(notes, 15)  # 3 поста на каждой странице
+        page = request.GET.get('page')
+        try:
+            notes = paginator.page(page)
+        except PageNotAnInteger:
+            # Если страница не является целым числом, поставим первую страницу
+            notes = paginator.page(1)
+        except EmptyPage:
+            # Если страница больше максимальной, доставить последнюю страницу результатов
+            notes = paginator.page(paginator.num_pages)
+
+        date = datetime.datetime.now()
+        year = date.year
+        month = date.month if date.month > 9 else "0" + str(date.month)
+        day = date.day if date.day > 9 else "0" + str(date.day)
+        current_date = f"{year}-{month}-{day}"
+        users = User.objects.exclude(profile__isChef=True).order_by("-pk")
+        if last:
+            number = last.number + 1 if last.number else 1
+        else:
+            number = 1
+        serializer = ServiceMyNoteDetailSerializer(notes, many=True)
+        return Response({"data": serializer.data, "page": notes.number, "isPrevious": notes.has_previous(),
+                         "isNext": notes.has_next()})
+        # return render(request, 'notes.html', {"users": users, "notes": notes, "tags": tags, "number": number,
+        #                                      "count_all": count_all,
+        #                                      "count_wait": count_wait,
+        #                                      "count_fast": count_fast,
+        #                                      "count_success": count_success,
+        #                                      "count_edit": count_edit,
+        #                                      "count_error": count_error,
+        #                                      "count_files": count_files,
+        #                                      "page": page,
+        #                                      "status_name": q,
+        #                                      "current_date": current_date
+        #                                      })
+
+
+class FetchMyNotesList(APIView):
+    def get(self, request, format=None):
+        notes = NoteUsers.objects.filter(user=request.user).filter(note__user_index__gte=F('index')).order_by('-pk')
+
+        if request.user.profile.isChef:
+            notes = notes.filter(note__isBuh=True)
+
+        count_all = notes.count()
+        count_wait = notes.filter(status=None).count()
+        count_fast = notes.filter(status=None).filter(note__fast=True).count()
+        count_success = notes.filter(status=success).count()
+        count_edit = notes.filter(status=edit).count()
+        count_error = notes.filter(status=error).count()
+        count_files = notes.filter(~Q(note__files=None)).count()
+
+        if request.user.profile.isChef:
+            count_wait = notes.filter(status=None).filter(note__isBuh=True).count()
+            count_fast = notes.filter(status=None).filter(note__fast=True).filter(note__isBuh=True).count()
+
+        q = "all"
+        if request.GET:
+            try:
+                q = request.GET.get("status")
+            except:
+                q = "all"
+            if q == "wait":
+                notes = notes.filter(status=None)
+            elif q == "fast":
+                notes = notes.filter(status=None).filter(note__fast=True)
+            elif q == "success":
+                notes = notes.filter(status=success)
+            elif q == "edit":
+                notes = notes.filter(status=edit)
+            elif q == "error":
+                notes = notes.filter(status=error)
+            elif q == "files":
+                notes = notes.filter(~Q(note__files=None))
+
+        paginator = Paginator(notes, 15)  # 3 поста на каждой странице
+        page = request.GET.get('page')
+        try:
+            notes = paginator.page(page)
+        except PageNotAnInteger:
+            # Если страница не является целым числом, поставим первую страницу
+            notes = paginator.page(1)
+        except EmptyPage:
+            # Если страница больше максимальной, доставить последнюю страницу результатов
+            notes = paginator.page(paginator.num_pages)
+
+
+        serializer = UserNoteDetailSerializer(notes, many=True)
+        return Response({"data": serializer.data, "page": notes.number, "isPrevious": notes.has_previous(),
+                         "isNext": notes.has_next()})
+
+
+class FetchNoteDetail(APIView):
+    def get(self, request, pk, format=None):
+        note = ServiceNote.objects.filter(pk=pk).first()
+        serializer = ServiceMyNoteDetailSerializer(note)
+        return Response(serializer.data)
+
+
+def new_send(request):
+    return render(request, "new_design/send.html", )
+
+
+def new_my(request):
+    return render(request, "new_design/my.html")

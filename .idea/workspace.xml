@@ -20,7 +20,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/static/img/new_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/static/img/user.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/static/materialize/css/materialize.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/static/materialize/css/materialize.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/static/materialize/js/materialize.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/static/materialize/js/materialize.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/new_design/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/new_design/my.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/new_design/send.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +60,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../NavDoc(new templarte)" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -68,8 +79,12 @@
       <option name="presentableId" value="Default" />
       <updated>1622494705832</updated>
       <workItem from="1622622996815" duration="109000" />
+      <workItem from="1624599766762" duration="560000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}doc.navistar-asia.com{% endblock %}</title>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'materialize/css/materialize.min.css' %}">
+    <!--<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style>
+
+    	.background{
+    		background-image: url("{% static 'img/back.jpg' %}");
+    		background-size: cover;
+    	}
+        body{
+    		background:#f3f3f3;
+    	}
+    	.nav-wrapper a{
+    		color: #58A5FF;
+    	}
+    	.user-view a span{
+    		color:#5d5d5d !important;
+    	}
+    	span.badge.new:after {
+    		content: " новых";
+		}
+        .sidenav_active_link{
+            background-color: rgba(0,0,0,0.05);
+        }
+        .collection .new-collection-item {
+            background-color: #546e7a !important;
+            color: white !important;
+        }
+        .collection a.new-collection-item:not(.active):hover {
+            background-color: #546e7aab !important;
+        }
+    </style>
+    {% block style %}
+
+    {% endblock %}
+    <script
+	  src="https://code.jquery.com/jquery-3.6.0.min.js"
+	  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	  crossorigin="anonymous"></script>
+</head>
+<body>
+	<nav>
+	  <div class="nav-wrapper" style="background-color:white ">
+	    <a href="#" class="brand-logo center" style="height:64px;"><img src="{% static 'img/new_logo.png' %}" height="64spx"></a>
+		<ul class="left hide-on-med-and-down" style="display: block !important">
+			<li>
+  				<a href="#" data-target="slide-out" class="sidenav-trigger" style="display: block;"><i class="material-icons">menu</i></a>
+			</li>
+		</ul>
+	    <ul id="dropdown1" class="dropdown-content">
+		  <li><a href="#!"><i class="material-icons left">person</i>Профиль</a></li>
+		  <li><a href="#!"><i class="material-icons left">settings</i>Настройки</a></li>
+		  <li class="divider"></li>
+		  <li><a href="#!"><i class="material-icons left">exit_to_app</i>Выход</a></li>
+		</ul>
+	    <ul class="right hide-on-med-and-down">
+        	<li><a href="sass.html">Уведомления<span class="new badge">+4</span></a></li>
+
+		    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><i class="material-icons left">person</i>Профиль<i class="material-icons right">arrow_drop_down</i></a></li>
+
+      	</ul>
+	  </div>
+	</nav>
+
+  <ul id="slide-out" class="sidenav">
+    <li>
+    	<div class="user-view">
+      <div class="background">
+
+      </div>
+      <a href="#user"><img class="circle" src="{% static 'img/user.png' %}"></a>
+      <a href="#name"><span class="white-text name">{{ request.user.first_name }} {{ request.user.last_name }}</span></a>
+      <a href="#email"><span class="white-text email">{{ request.user.email }}</span></a>
+    </div><span class="new badge" style="margin-right: 10px">{{ unReadCount }}</span></li>
+    <li><a href="{% url 'new_my' %}" class="{% if '/new/my' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">mark_email_unread</i>Принятые</a></li>
+    <li><a href="{% url 'new_send' %}" class="{% if '/new/send' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">mail</i>Отправленные</a></li>
+    <li><a href="#!"><i class="material-icons">calculate</i>Бухгалтерия</a></li>
+    <li><a href="#!"><i class="material-icons">business</i>Отделы</a></li>
+    <li><a href="#!"><i class="material-icons">group</i>Пользователи</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">Дополнительно</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">group</i>Все СЗ</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">tag</i>Тэги</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">contacts</i>Роли</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">date_range</i>Календарь</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">stacked_bar_chart</i>Статистика</a></li>
+    <li><a class="waves-effect" href="/"><i class="material-icons">imagesearch_roller</i>Сменить обстановку</a></li>
+  </ul>
+  <div class="content">
+    {% block content %}
+
+      {% endblock %}
+
+  </div>
+    <script src="{% static 'materialize/js/materialize.min.js' %}"></script>
+    {% block script %}
+
+    {% endblock %}
+    <script type="text/javascript">
+
+
+        $(document).ready(function(){
+          $('.modal').modal();
+        });
+    	$(document).ready(function(){
+		    $('.sidenav').sidenav();
+		  });
+    	$(document).ready(function(){
+    	$(".dropdown-trigger").dropdown();
+    	  });
+    	$(document).ready(function(){
+		    $('.tabs').tabs();
+		  });
+    	$(document).ready(function(){
+            $('.collapsible').collapsible();
+          });
+    	$(document).ready(function(){
+            $('.fixed-action-btn').floatingActionButton();
+          });
+    </script>
+</body>
+</html>

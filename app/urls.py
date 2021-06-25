@@ -46,3 +46,13 @@ urlpatterns = [
     path("notes/show/isSignature/<int:pk>", ShowPdfSignature.as_view(), name="note_signature_show"),
     path("all-notes", all_notes, name="all_notes"),
 ]
+
+urlpatterns+=[
+    path("new/send", new_send, name="new_send"),
+    path("new/my", new_my, name="new_my"),
+
+
+    path("fetch/notes", FetchNotesList.as_view(), name="FetchNotesList"),
+    path("fetch/my/notes", FetchMyNotesList.as_view(), name="FetchMyNotesList"),
+    path("fetch/notes/<int:pk>", FetchNoteDetail.as_view(), name="FetchNoteDetail")
+]
