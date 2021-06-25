@@ -10,9 +10,9 @@ def unReadNotes(request):
     user = request.user
     if request.user.profile.isChef:
         unReadCount = NoteUsers.objects.filter(user=user).filter(note__user_index__gte=F('index')).order_by(
-            '-pk').filter(is_read=False).filter(note__isBuh=True).count()
+            '-pk').filter(is_read=False).filter(status=None).filter(note__isBuh=True).count()
     else:
-        unReadCount = NoteUsers.objects.filter(user=user).filter(note__user_index__gte=F('index')).order_by(
+        unReadCount = NoteUsers.objects.filter(user=user).filter(note__user_index__gte=F('index')).filter(status=None).order_by(
             '-pk').filter(is_read=False).count()
     return {
         "unReadCount": unReadCount
