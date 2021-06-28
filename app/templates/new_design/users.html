@@ -108,6 +108,7 @@
                     throw new Error(response.status);
                   }
                 }).catch((error)=>{
+                    console.log(error);
                   setBlock(block, "<div class='connection_error'>Ошибка <br> Нет связи с сервером</div>");
             }) :
             setBlock(block, "");
@@ -124,17 +125,26 @@
         }
 
      function generateUserData(id, data) {
-         let picture = data.profile.picture !== null ? data.profile.picture : '{% static "img/user.png" %}';
-         console.log(picture);
-         return  data !== 'error' ? `
-                <img src="${picture}" width="240px" height="240px" alt="">
+         //let picture = data.profile.picture !== null ? data.profile.picture : '{% static "img/user.png" %}';
+         //console.log(picture);//<img src="${picture}" width="240px" height="240px" alt="">
+         let signature = '';
+         let picture = '';
+         let position = '';
+         let mobile = '';
+         if (data.profile !== null){
+            signature = data.profile.signature !== null ? `<img src="${data.profile.signature}" width="200px" height="200px" alt="">` : '';
+            mobile = data.profile.mobile !== null ? data.profile.mobile : '';
+            position = data.profile.position !== null ? data.profile.position : '';
+            picture = data.profile.picture !== null ? data.profile.picture : '';
+         }
+         return data !== 'error' ? `
                 <div class="profileBlockItem">
                     <span>ФИО:</span>
                     <span>${data.first_name} ${data.last_name}</span>
                 </div>
                 <div class="profileBlockItem">
                     <span>Должность:</span>
-                    <span>${data.profile.position}</span>
+                    <span>${position}</span>
                 </div>
                 <div class="profileBlockItem">
                     <span>Почта:</span>
@@ -142,8 +152,9 @@
                 </div>
                 <div class="profileBlockItem">
                     <span>Мобильный:</span>
-                    <span>${data.profile.mobile}</span>
+                    <span>${mobile}</span>
                 </div>
+                ${signature}
         ` : `<div>Ошибка</div>`;
 
     }
