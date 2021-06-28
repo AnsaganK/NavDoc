@@ -64,8 +64,7 @@
         </thead>
         <tbody>
         {% for i in users %}
-        <tr onmouseover="getUserForApi(id={{i.pk}}, count={{forloop.counter}}, 'show')"
-            onmouseout="getUserForApi(id={{i.pk}}, count={{forloop.counter}}, 'hide')">
+        <tr onclick="getUserForApi(id={{i.pk}}, count={{forloop.counter}}, 'show')">
             <td>{{ i.last_name }} {{ i.first_name }} {{ i.username }}</td>
             <td>{{ i.profile.position }}</td>
             <td>{{ i.profile.mobile }}</td>
@@ -98,6 +97,12 @@
 
      async function getUserForApi(id, count, visible){
         let url = `/fetch/users/${id}`;
+        let openBlocks = document.querySelectorAll(".profileBlock");
+        openBlocks.forEach(
+            block => {
+                block.style.display = 'none';
+            }
+        );
         let block = getBlock(id, visible);
         visible === 'show' ?
                 await fetch(url).then(async response => {
