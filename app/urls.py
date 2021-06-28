@@ -50,9 +50,17 @@ urlpatterns = [
 urlpatterns+=[
     path("new/send", new_send, name="new_send"),
     path("new/my", new_my, name="new_my"),
+    path("new/counting", new_counting, name="new_counting"),
+    path("new/departments", new_departments, name="new_departments"),
+    path("new/users", new_users, name="new_users"),
+    path("new/tags", new_tags, name="new_tags"),
+    path("new/roles", new_roles, name="new_roles"),
 
 
     path("fetch/notes", FetchNotesList.as_view(), name="FetchNotesList"),
     path("fetch/my/notes", FetchMyNotesList.as_view(), name="FetchMyNotesList"),
-    path("fetch/notes/<int:pk>", FetchNoteDetail.as_view(), name="FetchNoteDetail")
+    path("fetch/notes/<int:pk>", FetchNoteDetail.as_view(), name="FetchNoteDetail"),
+    path("fetch/counting", FetchCountingList.as_view(), name="FetchCountingList"),
+    path("fetch/departments", FetchDepartmentList.as_view(), name="FetchDepartmentList"),
+    path("fetch/users/<int:pk>", FetchUserDetail.as_view(), name="FetchUserDetail"),
 ]

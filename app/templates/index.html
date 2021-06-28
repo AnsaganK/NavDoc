@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Главная</title>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      
+    <link rel="stylesheet" href="{% static 'materialize/css/materialize.min.css' %}">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style type="text/css">
+    	body{
+    		background:#f3f3f3;
+    	}
+    	.nav-wrapper a{
+    		color: #58A5FF;
+    	}
+    	.background{
+    		background-image: url("{% static 'img/back.jpg' %}");
+    		background-size: cover;
+    	}
+    	.user-view a span{
+    		color:#5d5d5d !important;
+    	}
+    	span.badge.new:after {
+    		content: " новых";
+		}
+		.row .col{
+			padding:0px;
+		}
+		.row .col.s3{
+			width:20%;
+		}
+        #wait, #fast, #success, #edit, #error{
+
+        }
+        .row_card{
+            margin:auto 10px !important;
+        }
+        .dropdown-content li>a, .dropdown-content li>span{
+            color: #58A5FF;
+        }
+    </style>
+    <script
+	  src="https://code.jquery.com/jquery-3.6.0.min.js"
+	  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	  crossorigin="anonymous"></script>
+</head>
+<body>
+	<nav>
+	  <div class="nav-wrapper" style="background-color:white ">
+	    <a href="#" class="brand-logo center" style="height:64px;"><img src="{% static 'img/new_logo.png' %}" height="64spx"></a>
+		<ul class="left hide-on-med-and-down">
+			<li>
+  				<a href="#" data-target="slide-out" class="sidenav-trigger" style="display: block;"><i class="material-icons">menu</i></a>
+			</li>
+		</ul>
+	    <ul id="dropdown1" class="dropdown-content">
+		  <li><a href="#!"><i class="material-icons left">person</i>Профиль</a></li>
+		  <li><a href="#!"><i class="material-icons left">settings</i>Настройки</a></li>
+		  <li class="divider"></li>
+		  <li><a href="#!"><i class="material-icons left">exit_to_app</i>Выход</a></li>
+		</ul>
+	    <ul class="right hide-on-med-and-down">
+        	<li><a href="sass.html">Уведомления<span class="new badge">+4</span></a></li>
+
+		    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><i class="material-icons left">person</i>Профиль<i class="material-icons right">arrow_drop_down</i></a></li>
+		   
+      	</ul>
+	  </div>
+	</nav>
+
+  <ul id="slide-out" class="sidenav">
+    <li>
+    	<div class="user-view">
+      <div class="background">
+
+      </div>
+      <a href="#user"><img class="circle" src="{% static 'img/user.png' %}"></a>
+      <a href="#name"><span class="white-text name">Ansagan Kabdolla</span></a>
+      <a href="#email"><span class="white-text email">ansagankabdolla@gmail.com</span></a>
+    </div></li>
+    <li><a href="#!"><i class="material-icons">mark_email_unread</i>Принятые</a></li>
+    <li><a href="#!"><i class="material-icons">mail</i>Отправленные</a></li>
+    <li><a href="#!"><i class="material-icons">calculate</i>Бухгалтерия</a></li>
+    <li><a href="#!"><i class="material-icons">business</i>Отделы</a></li>
+    <li><a href="#!"><i class="material-icons">group</i>Пользователи</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">Дополнительно</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">group</i>Все СЗ</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">tag</i>Тэги</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">contacts</i>Роли</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">date_range</i>Календарь</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">stacked_bar_chart</i>Статистика</a></li>
+    <li><a class="waves-effect" href="/"><i class="material-icons">imagesearch_roller</i>Сменить обстановку</a></li>
+  </ul>
+  <div class="content">
+  	<div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s3"><a href="#test1" onclick="loadNotesList(q='wait')">В ожидании</a></li>
+        <li class="tab col s3"><a class="active" onclick="loadNotesList(q='fast')" href="#test2">Срочные</a></li>
+        <li class="tab col s3"><a href="#test3" onclick="loadNotesList(q='success')">Одобренные</a></li>
+        <li class="tab col s3"><a href="#test4" onclick="loadNotesList(q='edit')">Редактирование</a></li>
+        <li class="tab col s3"><a href="#test5" onclick="loadNotesList(q='error')">Отказано</a></li>
+      </ul>
+    </div>
+    <div id="test1" class="col s12"><div id="wait">
+        <div class="preloader-wrapper big active" style="
+    margin: 150px auto;
+    display: block;
+">
+        <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+    </div></div></div>
+    <div id="test2" class="col s12"><div id="fast">
+        <div class="preloader-wrapper big active" style="
+    margin: 150px auto;
+    display: block;
+">
+        <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+    </div></div></div>
+    <div id="test3" class="col s12"><div id="success">
+        <div class="preloader-wrapper big active" style="
+    margin: 150px auto;
+    display: block;
+">
+        <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+    </div></div></div>
+    <div id="test4" class="col s12"><div id="edit">
+        <div class="preloader-wrapper big active" style="
+    margin: 150px auto;
+    display: block;
+">
+        <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+    </div></div></div>
+    <div id="test5" class="col s12"><div id="error">
+        <div class="preloader-wrapper big active" style="
+    margin: 150px auto;
+    display: block;
+">
+        <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+        </div></div></div>
+  </div>
+  </div>
+    <script src="{% static 'materialize/js/materialize.min.js' %}"></script>
+    <script type="text/javascript">
+        loadNotesList(q="fast")
+        async function createList(data, list_id){
+            let ul = document.createElement("ul");
+            ul.classList.add("collection");
+            let empty = '';
+            data.forEach(
+                (i) => {
+                    console.log(i.fast);
+                let fast = i["fast"] ? ' <i class="material-icons">offline_bolt</i>' : '';
+                let file = i["files"].length>0 ? ' <i class="material-icons right">attachment</i>' : '';
+                empty+= '<div class="col s12 m4">' +
+                    '<div class="row row_card"> ' +
+                    '<div class="col s12 m12">' +
+                    '<div class="card blue-grey darken-1"> ' +
+                    '<div class="card-content white-text">' +
+                    '<span class="card-title activator grey-text text-darken-4">'
+                    +i["title"] +
+                    '<i class="material-icons right">more_vert</i>\n' +
+                    '</span> ' +
+                    '<p>'+i["text"]+
+                    '</p>' +
+                    ' </div> ' +
+                    '<div class="card-action"> ' +
+                    '<a href="/notes/show/isSignature/'+i["id"]+'" target="_blank">PDF</a> ' +
+                    '<a href="#">Подробнее</a> ' +
+                    '<a href="#">' +
+                    file +
+                    '</a> ' +
+                    '</div> ' +
+                    '<div class="card-reveal">' +
+                    '<span class="card-title grey-text text-darken-4">'+
+                    'Дата создания: '+ i["date"] +
+                    '<br>'+
+                    'Текст: '+ i["text"] +
+                    '</span>'+
+                    '</div>' +
+                    '</div> ' +
+                    '</div> ' +
+                    '</div> ' +
+                    '</div>';
+                }
+            );
+            let list = document.getElementById(list_id);
+            if (empty == ""){
+                empty = "<span style='color: grey;justify-content: center;display: flex;align-items: center;margin: 20px auto;'>Не найдено</span>"
+            }else {
+                ul.innerHTML = empty;
+                list.innerHTML = ul;
+            }
+
+            list.innerHTML = empty;
+        }
+    	 async function loadNotesList(q="all"){
+    	     let url = '/fetch/notes?status='+q;
+    	     let page = document.getElementById(q);
+    	     page.innerHTML = '<div class="preloader-wrapper big active" style="\n' +
+                 '    margin: 150px auto;\n' +
+                 '    display: block;\n' +
+                 '">\n' +
+                 '        <div class="spinner-layer spinner-blue-only">\n' +
+                 '      <div class="circle-clipper left">\n' +
+                 '        <div class="circle"></div>\n' +
+                 '      </div><div class="gap-patch">\n' +
+                 '        <div class="circle"></div>\n' +
+                 '      </div><div class="circle-clipper right">\n' +
+                 '        <div class="circle"></div>\n' +
+                 '      </div>\n' +
+                 '    </div>\n' +
+                 '    </div>';
+    		 await fetch(url).then(async response => {
+              if (response.status === 200) {
+                 createList(await response.json(), q)
+              } else {
+                throw new Error(response.status);
+              }
+            });
+		}
+    </script>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+		    $('.sidenav').sidenav();
+		  });
+    	$(document).ready(function(){
+    	$(".dropdown-trigger").dropdown();
+    	  });
+    	$(document).ready(function(){
+		    $('.tabs').tabs();
+		  });
+    </script>
+</body>
+</html>

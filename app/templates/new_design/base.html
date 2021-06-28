@@ -32,6 +32,9 @@
         .sidenav_active_link{
             background-color: rgba(0,0,0,0.05);
         }
+         .dropdown-content li>a, .dropdown-content li>span{
+            color: #58A5FF;
+        }
         .collection .new-collection-item {
             background-color: #546e7a !important;
             color: white !important;
@@ -87,17 +90,17 @@
     </div><span class="new badge" style="margin-right: 10px">{{ unReadCount }}</span></li>
     <li><a href="{% url 'new_my' %}" class="{% if '/new/my' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">mark_email_unread</i>Принятые</a></li>
     <li><a href="{% url 'new_send' %}" class="{% if '/new/send' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">mail</i>Отправленные</a></li>
-    <li><a href="#!"><i class="material-icons">calculate</i>Бухгалтерия</a></li>
-    <li><a href="#!"><i class="material-icons">business</i>Отделы</a></li>
-    <li><a href="#!"><i class="material-icons">group</i>Пользователи</a></li>
+    <li><a href="{% url 'new_counting' %}" class="{% if '/new/counting' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">calculate</i>Бухгалтерия</a></li>
+    <li><a href="{% url 'new_departments' %}" class="{% if '/new/departments' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">business</i>Отделы</a></li>
+    <li><a href="{% url 'new_users' %}" class="{% if '/new/users' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">group</i>Пользователи</a></li>
     <li><div class="divider"></div></li>
     <li><a class="subheader">Дополнительно</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">group</i>Все СЗ</a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">tag</i>Тэги</a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">contacts</i>Роли</a></li>
+    <li><a class="waves-effect" href="{% url 'new_tags' %}" class="{% if '/new/tags' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">tag</i>Тэги</a></li>
+    <li><a class="waves-effect" href="{% url 'new_roles' %}" class="{% if '/new/roles' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">contacts</i>Роли</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">date_range</i>Календарь</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">stacked_bar_chart</i>Статистика</a></li>
-    <li><a class="waves-effect" href="/"><i class="material-icons">imagesearch_roller</i>Сменить обстановку</a></li>
+    <li><a class="waves-effect" href="/" onclick="setDesign()"><i class="material-icons">imagesearch_roller</i>Сменить обстановку</a></li>
   </ul>
   <div class="content">
     {% block content %}
@@ -110,7 +113,9 @@
 
     {% endblock %}
     <script type="text/javascript">
-
+        function setDesign(){
+            document.cookie = "design=old";
+        }
 
         $(document).ready(function(){
           $('.modal').modal();

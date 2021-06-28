@@ -84,6 +84,13 @@ class UserNoteDetailSerializer(serializers.ModelSerializer):
         model = NoteUsers
         fields = '__all__'
 
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = "__all__"
+
 #class MovieDetailSerializer(serializers.ModelSerializer):
 #    genres = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
 #    category = serializers.SlugRelatedField(slug_field='name', read_only=True)

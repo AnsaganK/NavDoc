@@ -1,0 +1,503 @@
+{% extends 'new_design/base.html' %}
+{% load static %}
+
+{% block title %}
+Бухгалтерия
+{% endblock %}
+
+{% block style %}
+<style>
+    .row .col{
+			padding:0px;
+		}
+		.row .col.s3{
+			width:50%;
+		}
+        #wait, #fast, #success, #edit, #error{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+        .row_card{
+            margin:auto 10px !important;
+        }
+        .note_detail_div{
+          padding:20px;
+        }
+        .tabs{
+                box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 0%);
+          }
+        .note_info_item{
+        border-bottom: 1px solid grey;
+        display: flex;
+        margin-bottom:10px;
+        padding:15px;
+        justify-content: space-between;
+        border-bottom: 1px solid #d7d7d7;
+    }
+        .note_info{
+        display: flex;
+        max-width: 750px;
+        width: 90%;
+        margin: auto;
+        margin-top: 27px;
+        border-radius: 10px;
+        padding:22px;
+        background: white;
+        flex-direction: column;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+    }
+    .note_info_item span:last-child{
+        width: 60%;
+        text-align: end;
+    }
+    ul{
+        list-style-type: none;
+    }
+    .note_detail_tags{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .note_detail_tag{
+        margin: 5px 10px;
+        padding:7px;
+        border-radius: 5px;
+        color: white;
+        background: #628bb591;
+    }
+    .note_detail_users{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .note_detail_user{
+        padding:10px;
+        background-color: grey;
+        border-radius:5px;
+        color: white;
+        margin:7px;
+    }
+    .current_user{
+        background-color: cornflowerblue;
+    }
+    .success_user{
+        background-color:#25AE88;
+    }
+    .edit_user{
+        background-color: #ffc800;
+    }
+    .error_user{
+        background-color: #D75A4A;
+    }
+    .user_line{
+        width: 30px;
+        height: 1px;
+        background-color: #3a92ff;
+    }
+    .user_line:last-child{
+        display: none;
+    }
+    .note_info_status{
+        background: #00a93c;
+        width: fit-content;
+        padding: 11px;
+        font-size: 11px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 10px;
+        margin-top: -35px;
+        margin-right: -35px;
+        align-self: flex-end;
+        color: white;
+    }
+    .note_info_img{
+        background-color: white;
+        margin-top: -38px;
+        margin-right: 5px;
+        border-radius: 3px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+        align-self: flex-end;
+    }
+    .note_info_item svg:hover {
+    fill: #7cb342;
+    }
+    .connection_error{
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 23px;
+      color: #ff6600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="modal1" class="modal">
+  </div>
+
+  	<div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s3"><a href="#test1" class="active" onclick="loadCounting(q='wait')">В ожидании</a></li>
+        <li class="tab col s3"><a onclick="loadCounting(q='success')" href="#test2">Подтвежденные</a></li>
+      </ul>
+    </div>
+
+
+    <div id="test1" class="col s12"><div id="wait">
+        <div class="preloader-wrapper big active" style="
+    margin: 150px auto;
+    display: block;
+">
+        <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+    </div></div></div>
+    <div id="test2" class="col s12"><div id="success">
+        <div class="preloader-wrapper big active" style="
+    margin: 150px auto;
+    display: block;
+">
+        <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+    </div></div></div>
+
+  </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    loadCounting(q="wait");
+
+var preloader = '<div class="preloader-wrapper big active" style="\n' +
+                 '    margin: 150px auto;\n' +
+                 '    display: block;\n' +
+                 '">\n' +
+                 '        <div class="spinner-layer spinner-blue-only">\n' +
+                 '      <div class="circle-clipper left">\n' +
+                 '        <div class="circle"></div>\n' +
+                 '      </div><div class="gap-patch">\n' +
+                 '        <div class="circle"></div>\n' +
+                 '      </div><div class="circle-clipper right">\n' +
+                 '        <div class="circle"></div>\n' +
+                 '      </div>\n' +
+                 '    </div>\n' +
+                 '    </div>';
+
+
+    async function createList(data, list_id, display="card"){
+            let previous_number = "";
+            let next_number = "";
+            let empty = '';
+
+            data["data"].forEach(
+                (i) => {
+                  let note = i;
+                let fast = note["fast"] ? ' <i class="material-icons" style="color: #ffbd29;margin-top: 4px;position: absolute;margin-left: 20px;">offline_bolt</i>' : '';
+                let file = note["files"].length>0 ? ' <i class="material-icons right">attachment</i>' : '';
+                let card_color = "";
+                let card_status_text = "";
+                if (i["status"] == null){
+                  //card_color = "grey !important";
+                  card_status_text = "(В ожидании)";
+                }else if(i.status == "success"){
+                  //card_color = "#689f38 !important";
+                  card_status_text = "(Подписано)";
+                }else if(i.status == "edit"){
+                  //card_color = "#ffc107 !important";
+                  card_status_text = "(Редактирование)";
+                }else if(i.status == "error"){
+                  //card_color = "#ef5350 !important";
+                  card_status_text = "(Отказано)";
+                }
+                if (display === 'card'){
+                empty+= '<div class="col s12 m4">' +
+                    '<div class="row row_card"> ' +
+                    '<div class="col s12 m12">' +
+                    '<div class="card blue-grey darken-1"> ' +
+                    '<div class="card-content white-text">' +
+                    '<span class="card-title activator grey-text text-darken-4" style="color:#fff !important;">СЗ №'
+                    +note["number"] +
+                     card_status_text+
+                    fast +
+                        '<i class="material-icons right">more_vert</i>\n' +
+                    '</span> ' +
+                    '<p>'+note["title"]+
+                    '</p>' +
+                    ' </div> ' +
+                    '<div class="card-action"> ' +
+                    '<a href="/notes/show/isSignature/'+note["id"]+'" target="_blank">PDF</a> ' +
+                    '<a class="waves-effect waves-light modal-trigger" href="#modal1" onclick="getDetailNote('+note.id+')">Подробнее</a> ' +
+                    '<a href="#">' +
+                    file +
+                    '</a> ' +
+                    '</div> ' +
+                    '<div class="card-reveal" style="background-color: #546e7ab8;">' +
+                        '<span class="card-title white-text text-darken-4" style="margin-top:-1px">СЗ №'+
+                        note["number"]+
+                        '<i class="material-icons right">close</i></span>'+
+                    '<span class="card-content grey-text text-darken-4" style="color:#ffffff !important">'+
+                    ''+ note["text"] +
+                    '</span>'+
+                    '</div>' +
+                    '</div> ' +
+                    '</div> ' +
+                    '</div> ' +
+                    '</div>';
+                }else{
+                 empty+=`<a class="waves-effect waves-light modal-trigger new-collection-item collection-item" href="#modal1" onclick="getDetailNote(${note.id})">СЗ №${note["number"]} - ${note["title"]}</a>`;
+                }}
+            );
+
+          let previous_number_page = '<li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>';
+          let next_number_page = '<li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>'
+            if (data["isPrevious"]){
+              previous_number = data["page"]-1;
+              let new_list_id = '"'+list_id+'"'
+              previous_number_page = "<li class='waves-effect'><a href='#' onclick='loadCounting(q="+new_list_id+",page="+previous_number+")'><i class=\"material-icons\">chevron_left</i></a></li>\n" +
+                      "<li class='waves-effect'><a href='#' onclick='loadCounting(q="+new_list_id+",page="+previous_number+")'>"+
+                      previous_number+
+                      '</a></li>\n';
+            }
+            if (data["isNext"]){
+              next_number = data["page"]+1;
+              let new_list_id = '"'+list_id+'"'
+              next_number_page =
+                    "<li class='waves-effect'><a href='#' onclick='loadCounting(q="+new_list_id+",page="+next_number+")'>"+
+                      next_number+
+              '</a></li>\n' +
+                    "<li class='waves-effect'><a href='#' onclick='loadCounting(q="+new_list_id+",page="+next_number+")'><i class='material-icons'>chevron_right</i></a></li>\n";
+            }
+
+                    let display_card_color = getCookie('display') === 'card'? '#ff985f' : '#546e7a';
+                    let display_list_color = getCookie('display') === 'list'? '#ff985f' : '#546e7a';
+                    console.log(display_list_color);
+                    console.log(display_card_color);
+            let pagination = '' +
+                    '<ul class="pagination">\n' +
+                    previous_number_page+
+                    '    <li class="active"><a href="#!">'+
+                    data["page"]+
+                    '</a></li>\n' +
+                    next_number_page+
+                    '  </ul>\n' +
+                    '<i class="material-icons" onclick="setDisplay(1,'+"'"+list_id+"'"+','+data["page"]+')" style="\n' +
+                    '                    float: right;\n' +
+                    '                    cursor: pointer;\n' +
+                    '                    position: absolute;\n' +
+                    '                    left: 10px;\n' +
+                    '                    top: 120px;\n' +
+                    '                    font-size: 33px;\n' +
+                    '                    color: '+
+                    display_card_color+
+                    ';\n' +
+                    '                ">apps</i>'+
+                    '<i class="material-icons" onclick="setDisplay(2,'+"'"+list_id+"'"+','+data["page"]+')" style="\n' +
+                    '                    float: right;\n' +
+                    '                    cursor: pointer;\n' +
+                    '                    position: absolute;\n' +
+                    '                    left: 50px;\n' +
+                    '                    top: 120px;\n' +
+                    '                    font-size: 33px;\n' +
+                    '                    color: '+
+                    display_list_color+
+                    ';\n' +
+                    '                ">reorder</i>'+
+                    '<i class="material-icons" style="\n' +
+                    '    float: right;\n' +
+                    '    cursor: pointer;\n' +
+                    '    position: absolute;\n' +
+                    '    right: 10px;\n' +
+                    '    display: block;\n' +
+                    '    top: 120px;\n' +
+                    '    font-size: 33px;\n' +
+                    '    color: #546e7a;\n' +
+                    '">filter_list</i>'
+            let list = document.getElementById(list_id);
+            if (empty === ""){
+                empty = "<span style='color: grey;justify-content: center;display: flex;align-items: center;margin: 20px auto;'>Не найдено</span>"
+            }else{
+              if (display === 'card'){
+                if(data["data"].length>10){
+                  empty=pagination+"<div style='width:100%'>"+empty+"</div>"+pagination;
+                }else{
+                  empty=pagination+"<div style='width:100%'>"+empty+"</div>";
+                }}else{
+                if(data["data"].length>10){
+                  empty=pagination+"<div class='collection' style='width:100%'>"+empty+"</div>"+pagination;
+                }else{
+                  empty=pagination+"<div class='collection' style='width:100%'>"+empty+"</div>";
+                }
+              }
+            }
+
+            list.innerHTML = empty;
+        }
+
+    async function loadCounting(q="all", paginator=1){
+    	     let url = '/fetch/counting?status='+q+'&page='+paginator;
+    	     let display = getCookie("display");
+    	     let page = document.getElementById(q);
+    	     page.innerHTML = preloader;
+    		 await fetch(url).then(async response => {
+              if (response.status === 200) {
+                 createList(await response.json(), q, display)
+              } else {
+                throw new Error(response.status);
+              }
+            });
+		}
+
+
+
+
+		function createDetail(data){
+          let modal = document.getElementById("modal1");
+          modal.classList.add("note_info");
+          let buh = data.buh !== null ? `${data.buh.first_name} ${data.buh.last_name}(подписано)`: 'в ожидании';
+
+          let file_count = 0;
+          let files = ''
+          data.files.length>0?data.files.forEach((i)=>{
+            file_count++;
+            files+=`<a href="${i.file }" target="_blank" style="margin-left: 10px"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                    <svg fill="#1b61a9" id="Layer_1" width="30" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <title>file, document, office, work, letter</title>
+                        <path d="M16.17,0H2V24H22V6.8ZM20,22H4V2h9V9h7ZM15,7V2h.25l4.29,5Z"/>
+                        <rect x="6" y="12" width="12" height="2"/>
+                        <rect x="6" y="15" width="12" height="2"/>
+                        <rect x="6" y="18" width="12" height="2"/>
+                        <rect x="6" y="7" width="5" height="2"/>
+                    </svg></a>`;
+          }):"";
+          files !== ''? files = `<div class="note_info_item"><span>Файлы:</span><span>${files}</span></div>` : ''
+
+
+          let tags = '';
+          data.tags.length>0?data.tags.forEach((i)=>{tags+=`<li class="note_detail_tag">${i.name}</li>`}):"";
+
+          let status = data.status;
+          let status_image = '';
+          if (status === null){
+            status_image = 'wait';
+          }else if(status === 'success'){
+            status_image = 'success';
+          }else if(status === 'edit'){
+            status_image = 'warning';
+          }else if(status === 'error'){
+            status_image = 'error';
+          }
+
+          let user_count = 0;
+          let users = '';
+          data.users.forEach((i)=>{
+            let user_status = '';
+            user_count++;
+            if(user_count === data.user_index){
+              console.log(i);
+              if (status == null){
+                user_status = 'current_user';
+              }else if(status === 'success'){
+                user_status = 'success_user';
+              }else if(status === 'edit'){
+                user_status = 'edit_user';
+              }else if(status === 'error') {
+                user_status = 'error_user';
+              }
+            }else if(user_count < data.user_index){
+                user_status = 'success_user';
+              }
+            users+=`<li class="note_detail_user ${user_status}">${i.user.first_name} ${i.user.last_name}</li><span class="user_line"></span>`
+          });
+          users = `<ul class="note_detail_users">${users}</ul>`
+
+          modal.innerHTML = `<div class="note_detail">
+                <div style="display: flex;
+                margin-top: 14px;
+                border-radius: 10px;
+                flex-direction: column;">
+                    <img src="/static/img/${status_image}.svg" class="note_info_img" width="60" height="60">
+                    <div class="note_info_item"><span>Создал:</span>
+                        <span>${data.user.first_name} ${data.user.last_name}</span></div>
+                    <div class="note_info_item"><span>Название:</span> <span>${data.title}</span></div>
+                    <div class="note_info_item"><span>Дата СЗ:</span> <span>${data.date}</span></div>
+                    <div class="note_info_item"><span>Дата создания:</span> <span>22 июня 2021 г. 11:18</span></div>
+                    <div class="note_info_item"><span>Текст:</span> <span><p>${data.text}</p></span></div>
+                    <div class="note_info_item"><span>Итого:</span> <span>${data.summa}</span></div>
+                    <div class="note_info_item"><span>Бухгалтер:</span> <span> <span style="color:grey;">${buh}</span> </span></div>
+                    ${files}
+                    <ul class="note_detail_tags">
+                        ${tags}
+                    </ul>
+                </div>
+                ${users}
+
+            </div>`;
+
+        }
+
+
+
+        async function getDetailNote(id){
+          let modal = document.getElementById("modal1");
+          modal.innerHTML = preloader;
+          let url = '/fetch/notes/'+id;
+          await fetch(url).then(async response => {
+              if (response.status === 200) {
+                 createDetail(await response.json())
+              } else {
+                throw new Error(response.status);
+              }
+            }).catch((error)=>{
+              console.log(error);
+              let modal = document.getElementById("modal1");
+              modal.innerHTML = "<div class='connection_error'>Ошибка<br>Нет связи с сервером</div>";
+            });
+        }
+
+
+
+
+
+
+		function getCookie(name) {
+          let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+          ));
+          return matches ? decodeURIComponent(matches[1]) : undefined;
+        }
+
+		function setDisplay(display,q,paginator){
+          if (display === 1){
+            document.cookie = "display=card";
+
+          }else{
+            document.cookie = "display=list"
+          }
+          loadCounting(q,paginator)
+        }
+
+</script>
+{% endblock %}

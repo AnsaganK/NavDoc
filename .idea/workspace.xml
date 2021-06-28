@@ -20,9 +20,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/templates/new_design/counting.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/new_design/departments.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/new_design/roles.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/new_design/tags.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/new_design/users.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/include/sidebar_menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/include/sidebar_menu.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/new_design/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/my.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/my.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/new_design/send.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/send.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +44,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="JavaScript File" />
         <option value="HTML File" />
       </list>
     </option>
@@ -85,6 +97,22 @@
       <workItem from="1624608240816" duration="980000" />
       <workItem from="1624612407239" duration="2034000" />
       <workItem from="1624614633642" duration="658000" />
+      <workItem from="1624644356395" duration="907000" />
+      <workItem from="1624724073390" duration="639000" />
+      <workItem from="1624777840093" duration="643000" />
+      <workItem from="1624783499151" duration="973000" />
+      <workItem from="1624785402432" duration="604000" />
+      <workItem from="1624786536630" duration="1692000" />
+      <workItem from="1624788369490" duration="1788000" />
+      <workItem from="1624790187699" duration="790000" />
+      <workItem from="1624792264193" duration="948000" />
+      <workItem from="1624794478348" duration="1781000" />
+      <workItem from="1624796287722" duration="1097000" />
+      <workItem from="1624798331205" duration="1780000" />
+      <workItem from="1624800141651" duration="1550000" />
+      <workItem from="1624801951776" duration="555000" />
+      <workItem from="1624809573388" duration="1776000" />
+      <workItem from="1624811377631" duration="724000" />
     </task>
     <servers />
   </component>

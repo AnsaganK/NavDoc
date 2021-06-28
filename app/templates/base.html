@@ -142,6 +142,9 @@
 </div>
 <img class="background" src="{% static 'img/15.jpg' %}">
 <script>
+    function setDesign(){
+            document.cookie = "design=new";
+    }
     function show_menu(){
         var menu = document.getElementById("profile_menu");
         menu.classList.toggle("show_menu");

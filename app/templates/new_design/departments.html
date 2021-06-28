@@ -1,0 +1,148 @@
+{% extends 'new_design/base.html' %}
+{% load static %}
+
+{% block title %}
+Отделы
+{% endblock %}
+
+{% block style %}
+<style>
+    .row .col{
+			padding:0px;
+		}
+		.row .col.s3{
+			width:50%;
+		}
+        #wait, #fast, #success, #edit, #error{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+        .row_card{
+            margin:auto 10px !important;
+        }
+        .note_detail_div{
+          padding:20px;
+        }
+        .tabs{
+                box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 0%);
+          }
+        .note_info_item{
+        border-bottom: 1px solid grey;
+        display: flex;
+        margin-bottom:10px;
+        padding:15px;
+        justify-content: space-between;
+        border-bottom: 1px solid #d7d7d7;
+    }
+        .note_info{
+        display: flex;
+        max-width: 750px;
+        width: 90%;
+        margin: auto;
+        margin-top: 27px;
+        border-radius: 10px;
+        padding:22px;
+        background: white;
+        flex-direction: column;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+    }
+    .note_info_item span:last-child{
+        width: 60%;
+        text-align: end;
+    }
+    ul{
+        list-style-type: none;
+    }
+    .note_detail_tags{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .note_detail_tag{
+        margin: 5px 10px;
+        padding:7px;
+        border-radius: 5px;
+        color: white;
+        background: #628bb591;
+    }
+    .note_detail_users{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .note_detail_user{
+        padding:10px;
+        background-color: grey;
+        border-radius:5px;
+        color: white;
+        margin:7px;
+    }
+    .current_user{
+        background-color: cornflowerblue;
+    }
+    .success_user{
+        background-color:#25AE88;
+    }
+    .edit_user{
+        background-color: #ffc800;
+    }
+    .error_user{
+        background-color: #D75A4A;
+    }
+    .user_line{
+        width: 30px;
+        height: 1px;
+        background-color: #3a92ff;
+    }
+    .user_line:last-child{
+        display: none;
+    }
+    .note_info_status{
+        background: #00a93c;
+        width: fit-content;
+        padding: 11px;
+        font-size: 11px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 10px;
+        margin-top: -35px;
+        margin-right: -35px;
+        align-self: flex-end;
+        color: white;
+    }
+    .note_info_img{
+        background-color: white;
+        margin-top: -38px;
+        margin-right: 5px;
+        border-radius: 3px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+        align-self: flex-end;
+    }
+    .note_info_item svg:hover {
+    fill: #7cb342;
+    }
+    .connection_error{
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 23px;
+      color: #ff6600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}

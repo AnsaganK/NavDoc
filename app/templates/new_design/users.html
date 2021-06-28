@@ -1,0 +1,114 @@
+{% extends 'new_design/base.html' %}
+{% load static %}
+
+{% block title %}
+Пользователи
+{% endblock %}
+
+{% block style %}
+<style>
+    table {
+        margin-top: 20px;
+    }
+
+    tr, td {
+        padding: 15px 30px;
+        height: 50px;
+    }
+
+    .profileBlock {
+        display: none;
+        position: absolute;
+        width: 230px;
+        min-height: 230px;
+        background: white;
+        right: 120px;
+        margin: auto;
+        border-radius: 10px;
+        box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+        padding:10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="">
+    <table class="table-striped">
+        <thead>
+        <tr>
+            <td>ФИО</td>
+            <td>Должность</td>
+            <td>Номер</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in users %}
+        <tr onmouseover="showProfile(id={{i.pk}}, count={{forloop.counter}})"
+            onmouseout="hideProfile(id={{i.pk}}, count={{forloop.counter}})">
+            <td>{{ i.last_name }} {{ i.first_name }} {{ i.username }}</td>
+            <td>{{ i.profile.position }}</td>
+            <td>{{ i.profile.mobile }}</td>
+            <div class="profileBlock" id="profileBlock_{{i.pk}}"></div>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function showProfile(id, count) {
+        let block = getBlock(id, count, "show");
+    }
+
+    function hideProfile(id) {
+        let block = getBlock(id, count, "hide");
+    }
+
+    function getBlock(id, count, visible) {
+        let style = visible === "show" ? `display:block;top:${count * 54 + 10}px;` : "display:none;"
+        let block = document.getElementById(`profileBlock_${id}`);
+
+        block.style = style;
+        let user = generateUserData(id);
+        block.innerHTML = user;
+
+        return block;
+    }
+
+    async function generateUserData(id){
+        let user = await getUserForApi(id);
+        let data = user !== 'error' ? `
+        <div>
+            ${user.first_name} ${user.last_name}
+        </div>
+        <div>
+            ${user.profile}
+        </div>
+        <div>
+            ${user.email}
+        </div>
+        `: `
+        <div>
+            Ошибка
+        </div>
+        `
+        return data;
+    }
+
+    async function getUserForApi(id){
+        let url = `/fetch/users/${id}`;
+
+        await fetch(url).then(async response => {
+              if (response.status === 200) {
+                 return await response.json();
+              } else {
+                throw new Error(response.status);
+              }
+            }).catch((error)=>{
+              return "error";
+            });
+    }
+</script>
+{% endblock %}

@@ -28,7 +28,7 @@ from django.http import Http404
 from bs4 import BeautifulSoup as BS
 
 from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer, \
-    UserInfoSerializer, UserNoteDetailSerializer
+    UserInfoSerializer, UserNoteDetailSerializer, DepartmentSerializer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 role_employee_name = 'employee'
@@ -66,6 +66,9 @@ def send_push(token, title, data):
 
 @login_required()
 def home(request):
+    if "design" in request.COOKIES and request.COOKIES["design"] == "new":
+        return redirect("/new/send")
+
     user = request.user
     notStatus = []
     successStatus = []
@@ -1094,10 +1097,58 @@ class FetchMyNotesList(APIView):
                          "isNext": notes.has_next()})
 
 
+class FetchCountingList(APIView):
+    def get(self, request, format=None):
+        if request.GET:
+            status = request.GET.get("status")
+
+            if status == "success":
+                notes = ServiceNote.objects.filter(isBuh=True).order_by("-pk")
+            else:
+                notes = ServiceNote.objects.filter(isBuh=False).order_by("-pk")
+        else:
+            notes = ServiceNote.objects.filter(isBuh=False).order_by("-pk")
+        count_wait = ServiceNote.objects.filter(isBuh=False).count()
+        count_success = ServiceNote.objects.filter(isBuh=True).count()
+        paginator = Paginator(notes, 15)  # 3 поста на каждой странице
+        page = request.GET.get('page')
+        try:
+            notes = paginator.page(page)
+        except PageNotAnInteger:
+            # Если страница не является целым числом, поставим первую страницу
+            notes = paginator.page(1)
+        except EmptyPage:
+            # Если страница больше максимальной, доставить последнюю страницу результатов
+            notes = paginator.page(paginator.num_pages)
+        serializer = ServiceMyNoteDetailSerializer(notes, many=True)
+        return Response({"data":serializer.data, "page": notes.number, "isPrevious": notes.has_previous(),
+                         "isNext": notes.has_next()})
+        #return render(request, "counting.html",
+        #              {"notes": notes, "page": page, "count_wait": count_wait, "count_success": count_success,
+        #               "status": status})
+
+class FetchDepartmentList(APIView):
+    def get(self, request, format=None):
+        departments = Department.objects.all()
+        my_department_pk = False
+        if request.user.profile.role and request.user.profile.role.code == role_chef_name:
+            my_department_pk = request.user.profile.department.pk
+        serializer = DepartmentSerializer(departments, many=True)
+        return Response({"data":serializer.data, "my_department_pk": my_department_pk})
+        #return render(request, 'departments.html', {"departments": departments, "my_department_pk": my_department_pk})
+
+
 class FetchNoteDetail(APIView):
     def get(self, request, pk, format=None):
         note = ServiceNote.objects.filter(pk=pk).first()
         serializer = ServiceMyNoteDetailSerializer(note)
+        return Response(serializer.data)
+
+
+class FetchUserDetail(APIView):
+    def get(self, request,  pk, format=None):
+        user = User.objects.get(pk=pk)
+        serializer = UserInfoSerializer(user)
         return Response(serializer.data)
 
 
@@ -1107,3 +1158,27 @@ def new_send(request):
 
 def new_my(request):
     return render(request, "new_design/my.html")
+
+
+def new_counting(request):
+    return render(request, "new_design/counting.html")
+
+
+def new_departments(request):
+    departments = Department.objects.all()
+    return render(request, "new_design/departments.html", {"departments": departments})
+
+
+def new_users(request):
+    users = User.objects.all()
+    return render(request, "new_design/users.html", {"users": users})
+
+
+def new_tags(request):
+    tags = Tags.objects.all()
+    return render(request, "new_design/tags.html", {"tags": tags})
+
+
+def new_roles(request):
+    roles = Role.objects.all()
+    return render(request, "new_design/roles.html", {"roles": roles})
