@@ -50,7 +50,7 @@
         Все СЗ
     </a>
 
-    <a href="{% url 'new_send' %}" onclick="setDesign()" class="sidebar_item {% if '/new/send' in request.path %}active_link{% endif %}">
+    <a href="{% url 'new_send' %}" class="sidebar_item {% if '/new/send' in request.path %}active_link{% endif %}">
         <img src="{% static 'img/statistic.svg' %}" alt="" width="20px" height="20px">
         Новый дизайн
     </a>
