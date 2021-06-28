@@ -55,6 +55,7 @@ urlpatterns+=[
     path("new/users", new_users, name="new_users"),
     path("new/tags", new_tags, name="new_tags"),
     path("new/roles", new_roles, name="new_roles"),
+    path("new/profile", new_profile, name="new_profile"),
 
 
     path("fetch/notes", FetchNotesList.as_view(), name="FetchNotesList"),

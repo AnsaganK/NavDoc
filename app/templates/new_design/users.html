@@ -19,7 +19,7 @@
     .profileBlock {
         display: none;
         position: absolute;
-        width: 230px;
+        width: 300px;
         min-height: 230px;
         background: white;
         right: 120px;
@@ -27,6 +27,20 @@
         border-radius: 10px;
         box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
         padding:10px;
+        justify-content: start;
+        flex-direction: column;
+    }
+    .profileBlockItem{
+        display: flex;
+        justify-content: space-between;
+    }
+    .profileBlock img{
+        border-radius: 3px;
+        display: block;
+        margin: 3px auto;
+    }
+    .profileBlockItem span:last-child{
+        text-align: right;
     }
 </style>
 {% endblock %}
@@ -43,8 +57,8 @@
         </thead>
         <tbody>
         {% for i in users %}
-        <tr onmouseover="showProfile(id={{i.pk}}, count={{forloop.counter}})"
-            onmouseout="hideProfile(id={{i.pk}}, count={{forloop.counter}})">
+        <tr onmouseover="getUserForApi(id={{i.pk}}, count={{forloop.counter}}, 'show')"
+            onmouseout="getUserForApi(id={{i.pk}}, count={{forloop.counter}}, 'hide')">
             <td>{{ i.last_name }} {{ i.first_name }} {{ i.username }}</td>
             <td>{{ i.profile.position }}</td>
             <td>{{ i.profile.mobile }}</td>
@@ -58,57 +72,76 @@
 
 {% block script %}
 <script>
-    function showProfile(id, count) {
-        let block = getBlock(id, count, "show");
-    }
+     var preloader = '<div class="preloader-wrapper big active" style="\n' +
+                 '    margin: 150px auto;\n' +
+                 '    display: block;\n' +
+                 '">\n' +
+                 '        <div class="spinner-layer spinner-blue-only">\n' +
+                 '      <div class="circle-clipper left">\n' +
+                 '        <div class="circle"></div>\n' +
+                 '      </div><div class="gap-patch">\n' +
+                 '        <div class="circle"></div>\n' +
+                 '      </div><div class="circle-clipper right">\n' +
+                 '        <div class="circle"></div>\n' +
+                 '      </div>\n' +
+                 '    </div>\n' +
+                 '    </div>';
 
-    function hideProfile(id) {
-        let block = getBlock(id, count, "hide");
-    }
 
-    function getBlock(id, count, visible) {
-        let style = visible === "show" ? `display:block;top:${count * 54 + 10}px;` : "display:none;"
-        let block = document.getElementById(`profileBlock_${id}`);
 
-        block.style = style;
-        let user = generateUserData(id);
-        block.innerHTML = user;
-
-        return block;
-    }
-
-    async function generateUserData(id){
-        let user = await getUserForApi(id);
-        let data = user !== 'error' ? `
-        <div>
-            ${user.first_name} ${user.last_name}
-        </div>
-        <div>
-            ${user.profile}
-        </div>
-        <div>
-            ${user.email}
-        </div>
-        `: `
-        <div>
-            Ошибка
-        </div>
-        `
-        return data;
-    }
-
-    async function getUserForApi(id){
+     async function getUserForApi(id, count, visible){
         let url = `/fetch/users/${id}`;
-
-        await fetch(url).then(async response => {
-              if (response.status === 200) {
-                 return await response.json();
-              } else {
-                throw new Error(response.status);
-              }
-            }).catch((error)=>{
-              return "error";
-            });
+        let block = getBlock(id, visible);
+        visible === 'show' ?
+                await fetch(url).then(async response => {
+                  if (response.status === 200) {
+                      let dataAPI = await response.json();
+                      setBlock(block, await generateUserData(id, dataAPI));
+                  } else {
+                    throw new Error(response.status);
+                  }
+                }).catch((error)=>{
+                  return "error";
+            }) :
+            setBlock(block, "Ничего нет");
     }
+
+      function getBlock(id, visible) {
+            let style = visible === "show" ? `display:flex;top:${count * 54 + 10}px;` : "display:none;"
+            let block = document.getElementById(`profileBlock_${id}`);
+
+            block.style = style;
+            block.innerHTML = preloader;
+
+            return block;
+        }
+
+     function generateUserData(id, data) {
+         let picture = data.profile.picture !== null ? data.profile.picture : '{% static "img/user.png" %}';
+         console.log(picture);
+         return  data !== 'error' ? `
+                <img src="${picture}" width="240px" height="240px" alt="">
+                <div class="profileBlockItem">
+                    <span>ФИО:</span>
+                    <span>${data.first_name} ${data.last_name}</span>
+                </div>
+                <div class="profileBlockItem">
+                    <span>Должность:</span>
+                    <span>${data.profile.position}</span>
+                </div>
+                <div class="profileBlockItem">
+                    <span>Почта:</span>
+                    <span>${data.email}</span>
+                </div>
+        ` : `<div>Ошибка</div>`;
+
+    }
+
+    function setBlock(elem, text){
+        elem.innerHTML = text;
+    }
+
+
+
 </script>
 {% endblock %}

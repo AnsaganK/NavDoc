@@ -64,10 +64,10 @@
 			</li>
 		</ul>
 	    <ul id="dropdown1" class="dropdown-content">
-		  <li><a href="#!"><i class="material-icons left">person</i>Профиль</a></li>
-		  <li><a href="#!"><i class="material-icons left">settings</i>Настройки</a></li>
+		  <li><a href="{% url 'new_profile' %}"><i class="material-icons left">person</i>Профиль</a></li>
+		  <li><a href=""><i class="material-icons left">settings</i>Настройки</a></li>
 		  <li class="divider"></li>
-		  <li><a href="#!"><i class="material-icons left">exit_to_app</i>Выход</a></li>
+		  <li><a href="{% url 'logout' %}"><i class="material-icons left">exit_to_app</i>Выход</a></li>
 		</ul>
 	    <ul class="right hide-on-med-and-down">
         	<li><a href="sass.html">Уведомления<span class="new badge">+4</span></a></li>

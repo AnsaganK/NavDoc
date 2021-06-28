@@ -1,0 +1,17 @@
+{%  extends 'new_design/base.html' %}
+{% load static %}
+
+{% block title %}
+Профиль
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block content %}
+<div class="content">
+{{ user.first_name }}
+{{ user.last_name }}
+</div>
+{% endblock %}

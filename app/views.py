@@ -1182,3 +1182,8 @@ def new_tags(request):
 def new_roles(request):
     roles = Role.objects.all()
     return render(request, "new_design/roles.html", {"roles": roles})
+
+
+def new_profile(request):
+    user = request.user
+    return render(request, "new_design/profile.html", {"user": user})
