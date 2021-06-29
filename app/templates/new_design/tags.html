@@ -63,14 +63,15 @@
     .listItemNumber {
         margin-right: 120px;
         border-radius: 100%;
-        background: #58a5ff;
+        background: #ffffff;
         text-align: center;
         width: 33px;
+        border: 1px solid #58adff;
         display: flex;
         justify-content: center;
         height: 30px;
         align-items: center;
-        color: white;
+        color: #9ed4ff;
     }
     .listItemContent{
         display: inline-flex;
@@ -108,6 +109,7 @@
         border-bottom: 1px solid #e0e0e0;
         align-items: center;
         transition: .25s;
+        cursor: pointer;
     }
     .tags-item:hover{
         background-color: #f3f3f3;
@@ -117,44 +119,225 @@
         justify-content: center;
         align-items: center;
     }
-    .tagIconList i{
+    .tagIconList a{
         border-right: 1px solid #e0e0e0;
         padding:0px 5px;
     }
-    .tagIconList i:last-child{
+    .tagIconList a:last-child{
         border-right: 0px;
     }
-    .more_icon{
+    .more_icon, .createModalTitle{
         color: #00bfa5;
     }
-    .edit_icon{
+    .edit_icon, .editModalTitle{
         color: orange;
     }
-    .delete_icon{
+    .delete_icon, .deleteModalTitle{
         color: orangered;
+    }
+    .tagModal{
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        width: 500px;
+        border-top:1px solid #e0e0e0;
+    }
+    .toastSuccess{
+        background: #00bfa5;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="content">
-    <div class="tags">
+    <div id="modal_create" class="modal tagModal">
+        <div class="modal-content">
+          <h5 class="createModalTitle">Создание</h5>
+          <p><input type="text" id="createModalInput"></p>
+            <a href="#" class="btn waves-effect" onclick="createTag()">создать</a>
+        </div>
+    </div>
+
+    <div id="modal_more" class="modal tagModal">
+        Загрузить
+    </div>
+    <div id="modal_edit" class="modal tagModal">
+        <div class="modal-content">
+          <h5 class="editModalTitle">Редактирование</h5>
+          <p>
+            <input id="editModalInput" type="text" value=""></p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-grey btn-flat">Нет</a>
+          <a href="#!" id="editModalButton" class="modal-close waves-effect waves-green btn-flat" data-pk="" data-name="" onclick="editModalButton(this)">Да</a>
+        </div>
+    </div>
+    <div id="modal_delete" class="modal tagModal">
+        <div class="modal-content">
+          <h5 class="deleteModalTitle">Удаление</h5>
+          <p>
+            Вы действительно хотите удалить данный тег, отменить это действе будет невозможно</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-grey btn-flat">Нет</a>
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat" data-pk="" id="deleteModalButton" onclick="deleteTag(this)">Да</a>
+        </div>
+    </div>
+        {% csrf_token %}
+    <ul class="tags" id="tags">
         {% for i in tags %}
-            <a href="#!" class="tags-item">
+            <li href="#!" class="tags-item" data-counter="{{ forloop.counter }}" id="tagItem_{{ i.pk }}">
                 <span class="listItemNumber">{{ forloop.counter }}</span>
                 <div class="listItemContent">
-                    <span>{{ i.name }}</span>
+                    <span id="tag_{{ i.pk }}">{{ i.name }}</span>
                     <span class="tagIconList">
-                        <i class="material-icons more_icon">menu</i>
-                        <i class="material-icons edit_icon">edit</i>
-                        <i class="material-icons delete_icon">delete</i>
+                        <a href="#modal_more" class="modal-trigger"><i class="material-icons more_icon">menu</i></a>
+                        <a href="#modal_edit" class="modal-trigger" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
+                        <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
                     </span>
                 </div>
-            </a>
+            </li>
         {% endfor %}
+      </ul>
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large pulse modal-trigger" href="#modal_create" style="background: #58a5ff !important">
+          <i class="large material-icons">add</i>
+        </a>
       </div>
-</div>
 {% endblock %}
 
 {% block script %}
+<script>
+    function selectTag(pk){
+        let name = document.getElementById(`tag_${pk}`).textContent;
+        let input = document.getElementById("editModalInput");
+        let button = document.getElementById("editModalButton");
+        input.value = name;
+        button.setAttribute("data-pk", pk);
+    }
+
+    function editModalButton(elem){
+        let pk = elem.getAttribute("data-pk");
+        let name = document.getElementById("editModalInput").value;
+        editTag(pk,name);
+    }
+
+
+    async function editTag(pk, name){
+        let url = "/fetch/tag/edit";
+        await fetch(url, {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "pk": pk,
+                "name": name,
+            })
+        }).then(async response => {
+            if (response.status === 200) {
+                successEditToast();
+                tagTextEdit(name, pk);
+            }else{
+                throw new Error(response.status);
+            }
+        }).catch((error)=>{
+            console.log(error);
+        })
+    }
+
+    function successEditToast(){
+        M.toast({html: 'Тэг изменен', classes: "toastSuccess"})
+    }
+    function tagTextEdit(text, pk){
+        let elem = document.getElementById(`tag_${pk}`);
+        elem.innerText = text;
+    }
+
+
+
+    function buttonAddId(pk){
+        let elem = document.getElementById("deleteModalButton");
+        elem.setAttribute("data-pk", pk);
+    }
+    async function deleteTag(elem){
+        let pk = elem.getAttribute("data-pk");
+        url = `/fetch/tag/delete/${pk}`;
+        await fetch(url, {
+            method: "delete",
+        }).then(async response=>{
+            if (response.status === 200){
+                deleteInList(pk);
+                successDeleteToast();
+            }else{
+
+            }
+        }).catch(
+
+        )
+    }
+
+    function deleteInList(pk){
+        let tag_item = document.getElementById(`tagItem_${pk}`);
+        tag_item.remove();
+    }
+
+    function successDeleteToast(){
+            M.toast({html: 'Тэг удален', classes: "toastSuccess"})
+        }
+
+
+    async function createTag(){
+        let text = document.getElementById("createModalInput").value;
+        let url = '/fetch/tag/create';
+        await fetch(url,{
+            method: "post",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "name": text,
+            })
+        }).then(async response => {
+            if (response.status === 200){
+                    successCreateToast();
+                    let response_body = await response.json();
+                    addTagsList(response_body["id"], response_body["name"]);
+                }
+            }
+        )
+    }
+
+    function successCreateToast(){
+        M.toast({html: 'Тэг создан', classes: "toastSuccess"})
+    }
+
+    function addTagsList(pk, name){
+        let tags = document.getElementById("tags");
+        console.log(tags);
+        console.log(tags.children);
+        console.log(tags.children.length);
+        let last_child_number = tags.children[tags.children.length-1].getAttribute("data-counter");
+        last_child_number = parseInt(last_child_number)+1;
+        let new_tag_elem = createLi(last_child_number, pk);
+        new_tag_elem.innerHTML = `
+                <span class="listItemNumber">${last_child_number}</span>
+                <div class="listItemContent">
+                    <span id="tag_${pk}">${name}</span>
+                    <span class="tagIconList">
+                        <a href="#modal_more" class="modal-trigger"><i class="material-icons more_icon">menu</i></a>
+                        <a href="#modal_edit" class="modal-trigger" onclick="selectTag(${pk})"><i class="material-icons edit_icon">edit</i></a>
+                        <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId(${pk})"><i class="material-icons delete_icon">delete</i></a>
+                    </span>
+                </div>`;
+
+        tags.appendChild(new_tag_elem);
+    }
+    function createLi(counter, pk) {
+        let li = document.createElement('li');
+        li.classList.add("tags-item");
+        li.setAttribute("data-counter", counter);
+        li.id = `tagItem_${pk}`;
+        return li;
+    }
+</script>
 {% endblock %}

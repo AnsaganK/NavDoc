@@ -64,4 +64,7 @@ urlpatterns+=[
     path("fetch/counting", FetchCountingList.as_view(), name="FetchCountingList"),
     path("fetch/departments", FetchDepartmentList.as_view(), name="FetchDepartmentList"),
     path("fetch/users/<int:pk>", FetchUserDetail.as_view(), name="FetchUserDetail"),
+    path("fetch/tag/edit", FetchTagEdit.as_view(), name="FetchTagEdit"),
+    path("fetch/tag/delete/<int:pk>", FetchTagDelete.as_view(), name="FetchTagDelete"),
+    path("fetch/tag/create", FetchTagCreate.as_view(), name="FetchTagCreate"),
 ]

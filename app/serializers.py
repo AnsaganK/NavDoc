@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup as BS
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tags
-        fields = ('name',)
+        fields = ('id','name',)
 
 
 class DepartmentNameSerializer(serializers.ModelSerializer):
@@ -90,6 +90,9 @@ class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = "__all__"
+
+
+
 
 #class MovieDetailSerializer(serializers.ModelSerializer):
 #    genres = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)

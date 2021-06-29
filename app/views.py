@@ -5,11 +5,13 @@ import json
 import requests
 from django.db.models import F
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView
 
 from rest_framework import status
 from django.db.models import Q
 from django.views.generic.base import View
+from rest_framework.authentication import SessionAuthentication
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from .forms import DepartmentForm, UserForm, ServiceNoteForm, TagForm, UserEditForm, ProfileForm, ServiceNoteEditForm
@@ -28,7 +30,7 @@ from django.http import Http404
 from bs4 import BeautifulSoup as BS
 
 from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer, \
-    UserInfoSerializer, UserNoteDetailSerializer, DepartmentSerializer
+    UserInfoSerializer, UserNoteDetailSerializer, DepartmentSerializer, TagSerializer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 role_employee_name = 'employee'
@@ -1152,6 +1154,44 @@ class FetchUserDetail(APIView):
         return Response(serializer.data)
 
 
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return None
+
+
+class FetchTagEdit(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+
+    def post(self, request, format=None):
+        tag = Tags.objects.filter(pk=int(request.data["pk"])).first()
+        if tag:
+            tag.name = request.data["name"]
+            tag.save()
+            serializer = TagSerializer(tag)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "message": "Не найден тэг"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class FetchTagDelete(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    def delete(self, request, pk, format=None):
+        tag = Tags.objects.filter(pk=pk).first()
+        if tag:
+            tag.delete()
+            return Response({"message": "Тэг удален"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "message": "Не найден тэг"}, status=status.HTTP_404_NOT_FOUND)
+
+class FetchTagCreate(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    def post(self, request, format=None):
+        tag = Tags(name = request.data["name"])
+        tag.save()
+        serializer = TagSerializer(tag)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 def new_send(request):
     return render(request, "new_design/send.html", )
 
@@ -1175,7 +1215,7 @@ def new_users(request):
 
 
 def new_tags(request):
-    tags = Tags.objects.all()
+    tags = Tags.objects.all().order_by("pk")
     return render(request, "new_design/tags.html", {"tags": tags})
 
 
