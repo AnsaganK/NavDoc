@@ -60,6 +60,13 @@
     .profileBlockItem span:last-child{
         text-align: right;
     }
+    .user_actions{
+        text-align: right;
+    }
+    .user_actions a{
+        border-right: 1px solid #e0e0e0;
+        padding:0px 5px;
+    }
 </style>
 {% endblock %}
 
@@ -71,6 +78,7 @@
             <td>ФИО</td>
             <td>Должность</td>
             <td>Номер</td>
+            <td class="user_actions">Действия</td>
         </tr>
         </thead>
         <tbody>
@@ -79,6 +87,10 @@
             <td>{{ i.last_name }} {{ i.first_name }} {{ i.username }}</td>
             <td>{{ i.profile.position }}</td>
             <td>{{ i.profile.mobile }}</td>
+            <td class="user_actions">
+                   <a href="#modal_edit" class="modal-trigger" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
+                <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
+            </td>
             <div class="profileBlock" id="profileBlock_{{i.pk}}"></div>
         </tr>
         {% endfor %}
