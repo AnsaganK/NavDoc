@@ -56,77 +56,28 @@
     ul{
         list-style-type: none;
     }
-    .note_detail_tags{
+    .collection-item{
+        color: blue;
+        display: flex;
+    }
+    .listItemNumber {
+        margin-right: 120px;
+        border-radius: 100%;
+        background: #58a5ff;
+        text-align: center;
+        width: 33px;
         display: flex;
         justify-content: center;
+        height: 30px;
         align-items: center;
-        margin-top: 20px;
-    }
-    .note_detail_tag{
-        margin: 5px 10px;
-        padding:7px;
-        border-radius: 5px;
         color: white;
-        background: #628bb591;
     }
-    .note_detail_users{
-        display: flex;
-        justify-content: center;
+    .listItemContent{
+        display: inline-flex;
+        justify-content: space-between;
+        width: 100%;
         align-items: center;
-        margin-top: 20px;
-    }
-    .note_detail_user{
-        padding:10px;
-        background-color: grey;
-        border-radius:5px;
-        color: white;
-        margin:7px;
-    }
-    .current_user{
-        background-color: cornflowerblue;
-    }
-    .success_user{
-        background-color:#25AE88;
-    }
-    .edit_user{
-        background-color: #ffc800;
-    }
-    .error_user{
-        background-color: #D75A4A;
-    }
-    .user_line{
-        width: 30px;
-        height: 1px;
-        background-color: #3a92ff;
-    }
-    .user_line:last-child{
-        display: none;
-    }
-    .note_info_status{
-        background: #00a93c;
-        width: fit-content;
-        padding: 11px;
-        font-size: 11px;
-        border-bottom-left-radius: 10px;
-        border-top-right-radius: 10px;
-        margin-top: -35px;
-        margin-right: -35px;
-        align-self: flex-end;
-        color: white;
-    }
-    .note_info_img{
-        background-color: white;
-        margin-top: -38px;
-        margin-right: 5px;
-        border-radius: 3px;
-        border-bottom-right-radius: 10px;
-        border-bottom-left-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
-        align-self: flex-end;
-    }
-    .note_info_item svg:hover {
-    fill: #7cb342;
+        color: #616161;;
     }
     .connection_error{
       height: 300px;
@@ -137,11 +88,72 @@
       font-size: 23px;
       color: #ff6600;
     }
+    .tags{
+        margin-top: 10px;
+        box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%) ;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .tags-item{
+        border-bottom: 1px solid grey;
+        display: flex;
+        justify-content: space-between;
+        background-color: #fff;
+        width: 100%;
+        line-height: 1.5rem;
+        padding: 10px 20px;
+        margin: 0;
+        border-bottom: 1px solid #e0e0e0;
+        align-items: center;
+        transition: .25s;
+    }
+    .tags-item:hover{
+        background-color: #f3f3f3;
+    }
+    .tagIconList{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .tagIconList i{
+        border-right: 1px solid #e0e0e0;
+        padding:0px 5px;
+    }
+    .tagIconList i:last-child{
+        border-right: 0px;
+    }
+    .more_icon{
+        color: #00bfa5;
+    }
+    .edit_icon{
+        color: orange;
+    }
+    .delete_icon{
+        color: orangered;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-
+<div class="content">
+    <div class="tags">
+        {% for i in tags %}
+            <a href="#!" class="tags-item">
+                <span class="listItemNumber">{{ forloop.counter }}</span>
+                <div class="listItemContent">
+                    <span>{{ i.name }}</span>
+                    <span class="tagIconList">
+                        <i class="material-icons more_icon">menu</i>
+                        <i class="material-icons edit_icon">edit</i>
+                        <i class="material-icons delete_icon">delete</i>
+                    </span>
+                </div>
+            </a>
+        {% endfor %}
+      </div>
+</div>
 {% endblock %}
 
 {% block script %}
