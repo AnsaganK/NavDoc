@@ -139,6 +139,9 @@
     .toastSuccess{
         background: #00bfa5;
     }
+    .toastError{
+        background: red;
+    }
 </style>
 {% endblock %}
 
@@ -232,9 +235,11 @@
                 successEditToast();
                 tagTextEdit(name, pk);
             }else{
+                errorConnectionToast();
                 throw new Error(response.status);
             }
         }).catch((error)=>{
+            errorConnectionToast();
             console.log(error);
         })
     }
@@ -263,11 +268,12 @@
                 deleteInList(pk);
                 successDeleteToast();
             }else{
-
+                errorConnectionToast();
+                throw new Error(response.status);
             }
-        }).catch(
-
-        )
+        }).catch(error => {
+            errorConnectionToast();
+            console.log(error);})
     }
 
     function deleteInList(pk){
@@ -296,9 +302,15 @@
                     successCreateToast();
                     let response_body = await response.json();
                     addTagsList(response_body["id"], response_body["name"]);
+                }else{
+                    errorConnectionToast();
+                    throw new Error(response.status);
                 }
             }
-        )
+        ).catch(error=>{
+            errorConnectionToast();
+            console.log(error);
+        })
     }
 
     function successCreateToast(){
@@ -331,6 +343,10 @@
         li.setAttribute("data-counter", counter);
         li.id = `tagItem_${pk}`;
         return li;
+    }
+
+    function errorConnectionToast(){
+        M.toast({html: 'Ошибка', classes: "toastError"})
     }
 </script>
 {% endblock %}

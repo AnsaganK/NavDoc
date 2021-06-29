@@ -141,7 +141,9 @@
 {% endblock %}
 
 {% block content %}
-
+{% for i in departments %}
+<p>{{ i.name }}</p>
+{% endfor %}
 {% endblock %}
 
 {% block script %}
