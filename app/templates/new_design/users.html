@@ -71,6 +71,15 @@
 {% endblock %}
 
 {% block content %}
+  <div id="modal_create" class="modal">
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
 <div class="">
     <table class="table-striped">
         <thead>
@@ -88,8 +97,8 @@
             <td>{{ i.profile.position }}</td>
             <td>{{ i.profile.mobile }}</td>
             <td class="user_actions">
-                   <a href="#modal_edit" class="modal-trigger" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
-                <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
+                    <a href="#modal_edit" class="modal-trigger" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
+                    <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
             </td>
             <div class="profileBlock" id="profileBlock_{{i.pk}}"></div>
         </tr>
@@ -97,6 +106,12 @@
         </tbody>
     </table>
 </div>
+
+   <div class="fixed-action-btn">
+        <a class="btn-floating btn-large pulse modal-trigger" href="#modal_create" style="background: #58a5ff !important">
+          <i class="large material-icons">add</i>
+        </a>
+   </div>
 {% endblock %}
 
 {% block script %}
@@ -152,10 +167,8 @@
             setBlock(block, "");
     }
 
-
-
       function getBlock(id, visible) {
-            let style = visible === "show" ? `display:flex;top:${count * 63 + 10}px;` : "display:none;"
+            let style = visible === "show" ? `display:flex;top:${count * 60 + 10}px;` : "display:none;"
             let block = document.getElementById(`profileBlock_${id}`);
 
             block.style = style;

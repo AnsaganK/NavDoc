@@ -141,6 +141,24 @@
       font-size: 23px;
       color: #ff6600;
     }
+    .modal .modal_content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 800px;
+        z-index: 99999;
+        border-radius: 10px;
+    }
+
+    .modal .modal_content .close_modal_window, .close_modal_window2{
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
 </style>
 {% endblock %}
 
@@ -152,6 +170,100 @@
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+  <div id="modal_create" class="modal">
+    <div class="modal_content">
+        <span class="close_modal_window">×</span>
+        <form action="{% url 'service_note_add' %}" method="post" class="form_box" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h3 class="form_title" style="margin-left: 20px">Служебная записка №<input type="number" class="note_number_input" name="number" min="1" value="{{number}}"></h3>
+
+            <div class="form_item">
+                <label for="">Название</label>
+                <input type="text" name="title" style="text-align: center" required>
+            </div>
+            <div class="form_item">
+                <label for="">Дата</label>
+                <input type="date" name="date" required value="{{ current_date }}">
+            </div>
+            <div class="form_item" style="flex-direction:column;">
+                <label for="">Текст</label>
+                <textarea type="text" id="editor1" name="text" rows="4"></textarea>
+            </div>
+            <div class="form_item">
+                <label for="">Итого</label>
+                <input type="number" name="summa" style="text-align: center" required>
+            </div>
+            <div class="form_item" style="margin-bottom: 30px;margin-top: 10px;">
+                <label for="">Файлы</label>
+                <div class="input_files">
+                    <div class="input_file">
+                        <input type="file" id="input_file_1" name="input_file_1" onchange="file_upload(this)">
+                        <label for="input_file_1" class="input_file_label">+</label>
+                    </div>
+                    <div class="input_file">
+                        <input type="file" id="input_file_2" name="input_file_2" onchange="file_upload(this)">
+                        <label for="input_file_2" class="input_file_label">+</label>
+                    </div>
+                    <div class="input_file">
+                        <input type="file" id="input_file_3" name="input_file_3" onchange="file_upload(this)">
+                        <label for="input_file_3" class="input_file_label">+</label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form_item">
+                <label for="">Кому</label>
+                <div class="user_selects" id="user_selects">
+                    <div class="user_select">
+                        <span class="user_select_number" data-tag-id="1">1</span>
+                        <select name="user_1" id="" style="width:430px;">
+                            {% for user in users %}
+                            <option value="{{ user.pk }}">{{ user.first_name|slice:"1" }}.{{ user.last_name }}({{ user.profile.position }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form_item" style="justify-content: flex-end">
+
+            <div class="select_buttons">
+                <span class="add_select_button" onclick="add_select()">+</span>
+                <span class="delete_select_button" onclick="delete_select()">Удалить</span>
+            </div>
+            </div>
+            <div class="form_item">
+                <label for="">
+                    Срочно
+                </label>
+                <div>
+
+            <input type="checkbox" id="slider_input" name="fast" style="display: none">
+            <label for="slider_input">
+                <div class="slider_wrap">
+                    <div class="slider_circle"></div>
+                </div>
+            </label>
+                </div>
+            </div>
+                <!--<div class="form_item">
+                    <input type="checkbox" id="fast" style="display: none">
+                    <label for="fast" class="fast">Срочно</label>
+                </div>-->
+            <div class="form_item" style="border-top:1px solid #cecece;padding-top:10px;">
+                <div class="tags">
+                    {% for tag in tags %}
+                    <input type="checkbox" id="tag_{{ tag.pk }}" name="tag_{{ tag.pk }}">
+                    <label class="tag" for="tag_{{ tag.pk }}">
+                        {{ tag.name }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <button type="submit" class="form_button">Создать</button>
+        </form>
     </div>
   </div>
 
@@ -246,15 +358,9 @@
   </div>
 
   <div class="fixed-action-btn">
-    <a class="btn-floating btn-large pulse" style="background: #58a5ff !important">
-      <i class="large material-icons">mode_edit</i>
+    <a class="btn-floating btn-large pulse modal-trigger" href="#modal_create" style="background: #58a5ff !important">
+      <i class="large material-icons">add</i>
     </a>
-    <ul>
-      <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-      <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-      <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-      <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-    </ul>
   </div>
 {% endblock %}
 
