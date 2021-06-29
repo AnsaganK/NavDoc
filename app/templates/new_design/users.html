@@ -19,7 +19,7 @@
         cursor:pointer;
     }
     tbody tr:hover{
-        background: #e8e8e8;
+        background: #e8e8e8 !important;
     }
 
 
@@ -38,10 +38,15 @@
         flex-direction: column;
     }
     .profileBlock::before{
-        content: "1";
+        content: "";
         height: 10px;
         width: 10px;
-        background-color: red;
+        border-bottom: 10px solid #ffffff00;
+        border-top: 10px solid #ffffff00;
+        border-right: 10px solid white;
+        position: absolute;
+        top: 66px;
+        left: -10px;
     }
     .profileBlockItem{
         display: flex;
@@ -70,7 +75,7 @@
         </thead>
         <tbody>
         {% for i in users %}
-        <tr onclick="getUserForApi(id={{i.pk}}, count={{forloop.counter}}, 'show')">
+        <tr onclick="getUserForApi(this, id={{i.pk}}, count={{forloop.counter}}, 'show')">
             <td>{{ i.last_name }} {{ i.first_name }} {{ i.username }}</td>
             <td>{{ i.profile.position }}</td>
             <td>{{ i.profile.mobile }}</td>
@@ -99,16 +104,26 @@
                  '    </div>\n' +
                  '    </div>';
 
+        function notDisplay(list){
+                 list.forEach(
+                     (elem) => {
+                         elem.style.display = "none";
+                     }
+                 )
+                }
+        function backgroundInherit(list){
+            list.forEach((elem)=>{
+                elem.style.backgroundColor = "inherit";
+            })
+        }
+     async function getUserForApi(elem, id, count, visible){
+        let trs = document.querySelectorAll("tr");
+        backgroundInherit(trs);
 
-
-     async function getUserForApi(id, count, visible){
+            elem.style.backgroundColor = "#e8e8e8";
         let url = `/fetch/users/${id}`;
         let openBlocks = document.querySelectorAll(".profileBlock");
-        openBlocks.forEach(
-            block => {
-                block.style.display = 'none';
-            }
-        );
+        notDisplay(openBlocks);
         let block = getBlock(id, visible);
         visible === 'show' ?
                 await fetch(url).then(async response => {
@@ -124,6 +139,8 @@
             }) :
             setBlock(block, "");
     }
+
+
 
       function getBlock(id, visible) {
             let style = visible === "show" ? `display:flex;top:${count * 54 + 10}px;` : "display:none;"
