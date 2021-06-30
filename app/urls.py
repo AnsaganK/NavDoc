@@ -56,6 +56,7 @@ urlpatterns+=[
     path("new/tags", new_tags, name="new_tags"),
     path("new/roles", new_roles, name="new_roles"),
     path("new/profile", new_profile, name="new_profile"),
+    path("new/calendar", new_calendar, name="new_calendar"),
 
 
     path("fetch/notes", FetchNotesList.as_view(), name="FetchNotesList"),
@@ -67,4 +68,5 @@ urlpatterns+=[
     path("fetch/tag/edit", FetchTagEdit.as_view(), name="FetchTagEdit"),
     path("fetch/tag/delete/<int:pk>", FetchTagDelete.as_view(), name="FetchTagDelete"),
     path("fetch/tag/create", FetchTagCreate.as_view(), name="FetchTagCreate"),
+    path("fetch/calendar", FetchCalendar.as_view(), name="FetchCalendar"),
 ]

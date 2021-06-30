@@ -1192,6 +1192,19 @@ class FetchTagCreate(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class FetchCalendar(APIView):
+    def get(self, request, format=None):
+        try:
+            year = int(request.GET.get('year'))
+            month = int(request.GET.get('month'))
+            day = int(request.GET.get('day'))
+        except:
+            return Response({"message": "Ошибка"},status=status.HTTP_400_BAD_REQUEST)
+        notes = ServiceNote.objects.filter(date_create__year=year,date_create__month=month,date_create__day=day)
+        serializer = ServiceMyNoteDetailSerializer(notes, many=True)
+        print(notes)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 def new_send(request):
     return render(request, "new_design/send.html", )
 
@@ -1227,3 +1240,7 @@ def new_roles(request):
 def new_profile(request):
     user = request.user
     return render(request, "new_design/profile.html", {"user": user})
+
+
+def new_calendar(request):
+    return render(request, "new_design/calendar.html")

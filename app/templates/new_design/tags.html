@@ -319,11 +319,11 @@
 
     function addTagsList(pk, name){
         let tags = document.getElementById("tags");
-        console.log(tags);
-        console.log(tags.children);
-        console.log(tags.children.length);
-        let last_child_number = tags.children[tags.children.length-1].getAttribute("data-counter");
-        last_child_number = parseInt(last_child_number)+1;
+        let last_child_number = 1;
+        if(tags.children.length > 0){
+            last_child_number = tags.children[tags.children.length-1].getAttribute("data-counter");
+            last_child_number = parseInt(last_child_number)+1;
+        }
         let new_tag_elem = createLi(last_child_number, pk);
         new_tag_elem.innerHTML = `
                 <span class="listItemNumber">${last_child_number}</span>

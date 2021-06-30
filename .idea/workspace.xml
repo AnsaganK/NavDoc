@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,10 +23,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/templates/new_design/calendar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/new_design/my.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/my.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/new_design/send.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/send.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/users.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/users.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/tags.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/tags.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,6 +135,14 @@
       <workItem from="1624958440540" duration="1544000" />
       <workItem from="1624960488196" duration="1781000" />
       <workItem from="1624962300807" duration="691000" />
+      <workItem from="1625044294616" duration="743000" />
+      <workItem from="1625046109188" duration="1781000" />
+      <workItem from="1625047919043" duration="1462000" />
+      <workItem from="1625049732662" duration="2444000" />
+      <workItem from="1625052230852" duration="863000" />
+      <workItem from="1625054099372" duration="604000" />
+      <workItem from="1625055926030" duration="555000" />
+      <workItem from="1625070229910" duration="1584000" />
     </task>
     <servers />
   </component>
