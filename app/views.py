@@ -1202,7 +1202,6 @@ class FetchCalendar(APIView):
             return Response({"message": "Ошибка"},status=status.HTTP_400_BAD_REQUEST)
         notes = ServiceNote.objects.filter(date_create__year=year,date_create__month=month,date_create__day=day)
         serializer = ServiceMyNoteDetailSerializer(notes, many=True)
-        print(notes)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 def new_send(request):

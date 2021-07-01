@@ -44,6 +44,17 @@
     font-size: 28px;
     cursor: pointer;
 }
+#day_notes_date{
+    text-align: center;
+}
+@media only screen and (min-width: 601px){
+    .col.m4 {
+        width: 33.3333333333%;
+        margin-left: auto;
+        left: auto;
+        right: auto;
+    }
+}
 </style>
 {% endblock %}
 
@@ -54,6 +65,13 @@
         <tr><td>Пн<td>Вт<td>Ср<td>Чт<td>Пт<td>Сб<td>Вс
       <tbody>
     </table>
+
+<div>
+    <h5 id="day_notes_date"></h5>
+    <div id="day_notes_list">
+
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}
@@ -115,10 +133,16 @@
     }
 
     async function getDayNotes(year, month, day){
+        let dayNotesList = document.getElementById("day_notes_list");
+        dayNotesList.innerHTML = preloader;
         url = `/fetch/calendar?year=${year}&month=${month+1}&day=${day}`;
+        let dayNotesDate = document.getElementById('day_notes_date');
+        day = parseInt(day)<10 ? '0' + day : day;
+        month = parseInt(month)<10 ? '0' + month : month;
+        dayNotesDate.innerHTML = `Данные за ${day}.${month}.${year}`
         await fetch(url).then(async response=>{
             if (response.status === 200){
-                await response.json();
+                loadNoteList(await response.json());
             }else{
                 throw new Error(response.status);
             }
@@ -126,8 +150,83 @@
     }
 
     function loadNoteList(notes){
-
+        let lis = '';
+        let dayNotesList = document.getElementById('day_notes_list');
+        console.log(notes);
+        notes.length > 0 ? lis += createList(notes) : lis += '<p class="not_found">Данные не найдены</p>';
+        dayNotesList.innerHTML = lis;
     }
+
+    function createList(data){
+            let empty = '';
+            data.forEach(
+                (i) => {
+                let fast = i["fast"] ? ' <i class="material-icons" style="color: #ffbd29;margin-top: 4px;position: absolute;margin-left: 20px;">offline_bolt</i>' : '';
+                let file = i["files"].length>0 ? ' <i class="material-icons right">attachment</i>' : '';
+                let card_color = "";
+                let card_status_text = "";
+                if (i["status"] == "null"){
+                  card_status_text = "(В ожидании)";
+                }else if(i.status == "success"){
+                  card_status_text = "(Подписано)";
+                }else if(i.status == "edit"){
+                  card_status_text = "(Редактирование)";
+                }else if(i.status == "error"){
+                  card_status_text = "(Отказано)";
+                }
+                  empty+=`<a class="waves-effect waves-light modal-trigger new-collection-item collection-item" href="#modal1" onclick="getDetailNote(${i.id})">СЗ №${i["number"]} - ${i["title"]}</a>`;
+                }
+            );
+
+            /*let pagination = '' +
+                    '<i class="material-icons" onclick="setDisplay(1,'+"'"+list_id+"'"+','+data["page"]+')" style="\n' +
+                    '                    float: right;\n' +
+                    '                    cursor: pointer;\n' +
+                    '                    position: absolute;\n' +
+                    '                    left: 10px;\n' +
+                    '                    top: 120px;\n' +
+                    '                    font-size: 33px;\n' +
+                    '                    color: '+
+                    display_card_color+
+                    ';\n' +
+                    '                ">apps</i>'+
+                    '<i class="material-icons" onclick="setDisplay(2,'+"'"+list_id+"'"+','+data["page"]+')" style="\n' +
+                    '                    float: right;\n' +
+                    '                    cursor: pointer;\n' +
+                    '                    position: absolute;\n' +
+                    '                    left: 50px;\n' +
+                    '                    top: 120px;\n' +
+                    '                    font-size: 33px;\n' +
+                    '                    color: '+
+                    display_list_color+
+                    ';\n' +
+                    '                ">reorder</i>'+
+                    '<i class="material-icons" style="\n' +
+                    '    float: right;\n' +
+                    '    cursor: pointer;\n' +
+                    '    position: absolute;\n' +
+                    '    right: 10px;\n' +
+                    '    display: block;\n' +
+                    '    top: 120px;\n' +
+                    '    font-size: 33px;\n' +
+                    '    color: #546e7a;\n' +
+                    '">filter_list</i>'*/
+            if (empty === ""){
+                empty = "<span style='color: grey;justify-content: center;display: flex;align-items: center;margin: 20px auto;'>Не найдено</span>"
+            }else{
+
+                  empty="<div class='collection' style='width:100%'>"+empty+"</div>";
+
+                    return empty;
+        }
+    }
+
+    function getCookie(name) {
+          let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+          ));
+          return matches ? decodeURIComponent(matches[1]) : undefined;
+        }
 
 </script>
 {% endblock %}
