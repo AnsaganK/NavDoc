@@ -314,7 +314,7 @@
         let departmentUserList = document.getElementById("modal_detail");
         let users = "";
         let table = '<table><thead><tr>' +
-            '<td>ФИО</td><td>Должность</td></tr></thead><tbody>'
+            '<th>ФИО</th><th>Должность</th></tr></thead><tbody>'
         if (departmentUsers.length>0) {
             departmentUsers.forEach(elem => {
             table += `<tr class="department_users_td"><td>${elem.user.first_name} ${elem.user.last_name}</td><td>${elem.position}</td></tr>`;
