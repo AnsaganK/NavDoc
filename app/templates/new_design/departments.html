@@ -211,6 +211,9 @@
     .department_users_td:last-child{
         border-bottom:0px solid white;
     }
+    .department_name:hover{
+        color:#50a1ff;
+    }
 </style>
 {% endblock %}
 
@@ -258,7 +261,7 @@
             <li href="#!" class="departments-item" data-counter="{{ forloop.counter }}" id="departmentItem_{{ i.pk }}">
                 <span class="listItemNumber">{{ forloop.counter }}</span>
                 <div class="listItemContent">
-                    <span id="department_{{ i.pk }}" href="#modal_detail" class="modal-trigger" onclick="departmentDetail({{i.pk}})">{{ i.name }}</span>
+                    <span id="department_{{ i.pk }}" href="#modal_detail" class="modal-trigger department_name" onclick="departmentDetail({{i.pk}})">{{ i.name }}</span>
                     <span class="departmentIconList">
                         <!--<a href="#modal_more" class="modal-trigger"><i class="material-icons more_icon">menu</i></a>-->
                         <a href="#modal_edit" class="modal-trigger" onclick="selectDepartment({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
