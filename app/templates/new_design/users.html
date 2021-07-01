@@ -181,13 +181,15 @@
          //let picture = data.profile.picture !== null ? data.profile.picture : '{% static "img/user.png" %}';
          //console.log(picture);//<img src="${picture}" width="240px" height="240px" alt="">
          let signature = '';
-         let picture = '';
          let position = '';
          let mobile = '';
+         let birth_date = '';
+         let picture = '';
          if (data.profile !== null){
             signature = data.profile.signature !== null ? `<img src="${data.profile.signature}" width="200px" height="200px" alt="">` : '';
             mobile = data.profile.mobile !== null ? data.profile.mobile : '';
             position = data.profile.position !== null ? data.profile.position : '';
+            birth_date = data.profile.birth_date !== null ? data.profile.birth_date : '';
             picture = data.profile.picture !== null ? data.profile.picture : '';
          }
          return data !== 'error' ? `
@@ -206,6 +208,10 @@
                 <div class="profileBlockItem">
                     <span>Мобильный:</span>
                     <span>${mobile}</span>
+                </div>
+                <div class="profileBlockItem">
+                    <span>Дата рождения:</span>
+                    <span>${birth_date}</span>
                 </div>
                 ${signature}
         ` : `<div>Ошибка</div>`;

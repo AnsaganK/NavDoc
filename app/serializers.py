@@ -92,7 +92,11 @@ class DepartmentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
+class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = Profile
+        fields = ('user',)
 
 #class MovieDetailSerializer(serializers.ModelSerializer):
 #    genres = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)

@@ -30,7 +30,7 @@ from django.http import Http404
 from bs4 import BeautifulSoup as BS
 
 from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer, \
-    UserInfoSerializer, UserNoteDetailSerializer, DepartmentSerializer, TagSerializer
+    UserInfoSerializer, UserNoteDetailSerializer, DepartmentSerializer, TagSerializer, ProfileSerializer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 role_employee_name = 'employee'
@@ -1238,6 +1238,19 @@ class FetchDepartmentCreate(APIView):
         department.save()
         serializer = DepartmentSerializer(department)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FetchDepartmentUsers(APIView):
+    def get(self, request, pk, format=None):
+        department = Department.objects.filter(pk=pk).first()
+        if department:
+            profiles = department.profiles
+            serializer = ProfileSerializer(profiles, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Отдел не найден"}, status=status.HTTP_404_NOT_FOUND)
+
+
 
 def new_send(request):
     return render(request, "new_design/send.html", )

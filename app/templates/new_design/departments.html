@@ -212,6 +212,11 @@
 {% endblock %}
 
 {% block content %}
+    <div id="modal_detail" class="modal departmentModal">
+        <div class="modal-content">
+
+        </div>
+    </div>
     <div id="modal_create" class="modal departmentModal">
         <div class="modal-content">
           <h5 class="createModalTitle">Создание</h5>
@@ -250,7 +255,7 @@
             <li href="#!" class="departments-item" data-counter="{{ forloop.counter }}" id="departmentItem_{{ i.pk }}">
                 <span class="listItemNumber">{{ forloop.counter }}</span>
                 <div class="listItemContent">
-                    <span id="department_{{ i.pk }}">{{ i.name }}</span>
+                    <span id="department_{{ i.pk }}" href="#modal_detail" class="modal-trigger" onclick="departmentDetail({{i.pk}})">{{ i.name }}</span>
                     <span class="departmentIconList">
                         <!--<a href="#modal_more" class="modal-trigger"><i class="material-icons more_icon">menu</i></a>-->
                         <a href="#modal_edit" class="modal-trigger" onclick="selectDepartment({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
@@ -270,6 +275,46 @@
 
 {% block script %}
 <script>
+        var preloader = `<div class="preloader-wrapper big active" style="
+    margin: 150px auto;
+    display: block;">
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+        </div>`
+    /*Детальная страница(с пользователями) для отдела*/
+    async function departmentDetail(pk){
+        let departmentUserList = document.getElementById("modal_detail");
+        departmentUserList.innerHTML = preloader;
+        let url = `/fetch/department/${pk}/users`;
+        await fetch(url).then(async response => {
+            if (response.status === 200){
+                createDetailDepartment(await response.json());
+            }else {
+                errorConnectionToast();
+                throw new Error(response.status);
+            }
+        }).catch(error => {console.log(error);}
+        )
+    }
+
+    function createDetailDepartment(departmentUsers){
+        let departmentUserList = document.getElementById("modal_detail");
+        let users = '';
+        departmentUsers.length>0 ? departmentUsers.forEach(elem=>{
+            users += `<p>${elem.user.first_name} ${elem.user.last_name}</p>`;
+        }) : users = '<p class="not_found">Пользователей не найдено</p>';
+        departmentUserList.innerHTML = users;
+        console.log(departmentUserList)
+    }
     /*Тут редактирование*/
     function selectDepartment(pk){
         let name = document.getElementById(`department_${pk}`).textContent;

@@ -72,4 +72,5 @@ urlpatterns+=[
     path("fetch/department/edit", FetchDepartmentEdit.as_view(), name="FetchDepartmentEdit"),
     path("fetch/department/delete/<int:pk>", FetchDepartmentDelete.as_view(), name="FetchDepartmentDelete"),
     path("fetch/department/create", FetchDepartmentCreate.as_view(), name="FetchDepartmentCreate"),
+    path("fetch/department/<int:pk>/users", FetchDepartmentUsers.as_view(), name="FetchDepartmentUsers"),
 ]
