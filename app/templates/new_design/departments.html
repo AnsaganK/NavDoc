@@ -208,6 +208,9 @@
         align-items: center;
         color: #616161;;
     }
+    .department_users_td:last-child{
+        border-bottom:0px solid white;
+    }
 </style>
 {% endblock %}
 
@@ -243,7 +246,7 @@
         <div class="modal-content">
           <h5 class="deleteModalTitle">Удаление</h5>
           <p>
-            Вы действительно хотите удалить данный отдел, отменить это действе будет невозможно</p>
+            Вы действительно хотите удалить данный отдел, отменить это действие будет невозможно</p>
         </div>
         <div class="modal-footer">
           <a href="#!" class="modal-close waves-effect waves-grey btn-flat">Нет</a>
@@ -275,7 +278,7 @@
 
 {% block script %}
 <script>
-        var preloader = `<div class="preloader-wrapper big active" style="
+    var preloader = `<div class="preloader-wrapper big active" style="
     margin: 150px auto;
     display: block;">
         <div class="spinner-layer spinner-blue-only">
@@ -289,7 +292,8 @@
             <div class="circle"></div>
           </div>
         </div>
-        </div>`
+        </div>`;
+
     /*Детальная страница(с пользователями) для отдела*/
     async function departmentDetail(pk){
         let departmentUserList = document.getElementById("modal_detail");
@@ -308,13 +312,22 @@
 
     function createDetailDepartment(departmentUsers){
         let departmentUserList = document.getElementById("modal_detail");
-        let users = '';
-        departmentUsers.length>0 ? departmentUsers.forEach(elem=>{
-            users += `<p>${elem.user.first_name} ${elem.user.last_name}</p>`;
-        }) : users = '<p class="not_found">Пользователей не найдено</p>';
-        departmentUserList.innerHTML = users;
-        console.log(departmentUserList)
+        let users = "";
+        let table = '<table><thead><tr>' +
+            '<td>ФИО</td><td>Должность</td></tr></thead><tbody>'
+        if (departmentUsers.length>0) {
+            departmentUsers.forEach(elem => {
+            table += `<tr class="department_users_td"><td>${elem.user.first_name} ${elem.user.last_name}</td><td>${elem.position}</td></tr>`;
+            });
+            table += "</tbody></table>"
+            departmentUserList.innerHTML = table;
+        }else{
+            users = '<p class="not_found">Пользователей не найдено</p>';
+            departmentUserList.innerHTML = users;
+            console.log(departmentUserList)
+        }
     }
+
     /*Тут редактирование*/
     function selectDepartment(pk){
         let name = document.getElementById(`department_${pk}`).textContent;

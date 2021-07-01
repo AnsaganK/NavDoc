@@ -96,7 +96,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Profile
-        fields = ('user',)
+        fields = ('user', 'position',)
 
 #class MovieDetailSerializer(serializers.ModelSerializer):
 #    genres = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
