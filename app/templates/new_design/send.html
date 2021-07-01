@@ -342,6 +342,7 @@
           await fetch(url).then(async response => {
               if (response.status === 200) {
                  createDetail(await response.json());
+
               } else {
                 throw new Error(response.status);
               }
@@ -511,7 +512,6 @@
               }
             }).catch(error => {
                 console.log(error);
-
              });
 		}
 
