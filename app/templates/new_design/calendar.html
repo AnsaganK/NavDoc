@@ -59,6 +59,16 @@
 {% endblock %}
 
 {% block content %}
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+
    <table id="calendar2">
       <thead>
         <tr><td class="arrow">‹<td colspan="5"><td class="arrow">›
@@ -139,15 +149,22 @@
         url = `/fetch/calendar?year=${year}&month=${month+1}&day=${day}`;
         let dayNotesDate = document.getElementById('day_notes_date');
         day = parseInt(day)<10 ? '0' + day : day;
+        month += 1;
         month = parseInt(month)<10 ? '0' + month : month;
         dayNotesDate.innerHTML = `Данные за ${day}.${month}.${year}`
         await fetch(url).then(async response=>{
             if (response.status === 200){
                 loadNoteList(await response.json());
             }else{
+                errorConnectionToast();
+                errorConnectionText();
                 throw new Error(response.status);
             }
-        }).catch(error=>console.log(error));
+        }).catch(error=>{
+            errorConnectionToast();
+            errorConnectionText();
+            console.log(error)
+        });
     }
 
     function loadNoteList(notes){
@@ -164,17 +181,6 @@
                 (i) => {
                 let fast = i["fast"] ? ' <i class="material-icons" style="color: #ffbd29;position: absolute;right: 20px">offline_bolt</i>' : '';
                 let file = i["files"].length>0 ? ' <i class="material-icons right">attachment</i>' : '';
-                let card_color = "";
-                let card_status_text = "";
-                if (i["status"] == "null"){
-                  card_status_text = "(В ожидании)";
-                }else if(i.status == "success"){
-                  card_status_text = "(Подписано)";
-                }else if(i.status == "edit"){
-                  card_status_text = "(Редактирование)";
-                }else if(i.status == "error"){
-                  card_status_text = "(Отказано)";
-                }
                   empty+=`<a class="waves-effect waves-light modal-trigger new-collection-item collection-item" href="#modal1" onclick="getDetailNote(${i.id})">СЗ №${i["number"]} - ${i["title"]}  ${fast}</a>`;
                 }
             );
@@ -188,6 +194,98 @@
         }
     }
 
+    function errorConnectionToast(){
+        M.toast({html: 'Ошибка', classes: "toastError"})
+    }
 
+
+    function errorConnectionText() {
+        let dayNotesList = document.getElementById('day_notes_list');
+        dayNotesList.innerHTML = "<p class='error_text'>Ошибка соединения, попробуйте позже</p>"
+    }
+
+
+    function createDetail(data){
+          let modal = document.getElementById("modal1");
+          modal.classList.add("note_info");
+          let buh = data.buh !== null ? `${data.buh.first_name} ${data.buh.last_name}(подписано)`: 'в ожидании';
+
+          let status = data.status;
+          let status_image = '';
+          if (status === null){
+            status_image = 'wait';
+          }else if(status === 'success'){
+            status_image = 'success';
+          }else if(status === 'edit'){
+            status_image = 'warning';
+          }else if(status === 'error'){
+            status_image = 'error';
+          }
+
+          let user_count = 0;
+          let users = '';
+          data.users.forEach((i)=>{
+            let user_status = '';
+            user_count++;
+            if(user_count === data.user_index){
+              console.log(i);
+              if (status == null){
+                user_status = 'current_user';
+              }else if(status === 'success'){
+                user_status = 'success_user';
+              }else if(status === 'edit'){
+                user_status = 'edit_user';
+              }else if(status === 'error') {
+                user_status = 'error_user';
+              }
+            }else if(user_count < data.user_index){
+                user_status = 'success_user';
+              }
+            users+=`<li class="note_detail_user ${user_status}">${i.user.first_name} ${i.user.last_name}</li><span class="user_line"></span>`
+          });
+          users = `<ul class="note_detail_users">${users}</ul>`
+
+          modal.innerHTML = `<div class="note_detail">
+                <div style="display: flex;
+                margin-top: 14px;
+                border-radius: 10px;
+                flex-direction: column;">
+                    <img src="/static/img/${status_image}.svg" class="note_info_img" width="60" height="60">
+                    <div class="note_info_item"><span>Создал:</span>
+                        <span>${data.user.first_name} ${data.user.last_name}</span></div>
+                    <div class="note_info_item"><span>Название:</span> <span>${data.title}</span></div>
+                    <div class="note_info_item"><span>Дата СЗ:</span> <span>${data.date}</span></div>
+                    <div class="note_info_item"><span>Дата создания:</span> <span>22 июня 2021 г. 11:18</span></div>
+                    <div class="note_info_item"><span>Текст:</span> <span><p>${data.text}</p></span></div>
+                    <div class="note_info_item"><span>Итого:</span> <span>${data.summa}</span></div>
+                    <div class="note_info_item"><span>Бухгалтер:</span> <span> <span style="color:grey;">${buh}</span> </span></div>
+                    <ul class="note_detail_tags">
+                    </ul>
+                </div>
+                ${users}
+            </div>`;
+
+        }
+
+
+
+
+        async function getDetailNote(id){
+          let modal = document.getElementById("modal1");
+          modal.innerHTML = preloader;
+          let url = '/fetch/notes/'+id;
+          await fetch(url).then(async response => {
+              if (response.status === 200) {
+                 createDetail(await response.json());
+
+              } else {
+                throw new Error(response.status);
+              }
+            }).catch((error)=>{
+              console.log(error);
+              let modal = document.getElementById("modal1");
+              modal.innerHTML = "<div class='connection_error'>Ошибка<br>Нет связи с сервером</div>";
+            });
+        }
 </script>
 {% endblock %}

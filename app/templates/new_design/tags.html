@@ -136,12 +136,6 @@
         width: 500px;
         border-top:1px solid #e0e0e0;
     }
-    .toastSuccess{
-        background: #00bfa5;
-    }
-    .toastError{
-        background: red;
-    }
 </style>
 {% endblock %}
 
@@ -204,6 +198,7 @@
 
 {% block script %}
 <script>
+    /*Тут редактирование*/
     function selectTag(pk){
         let name = document.getElementById(`tag_${pk}`).textContent;
         let input = document.getElementById("editModalInput");
@@ -252,12 +247,13 @@
         elem.innerText = text;
     }
 
-
+    /*Тут удаление*/
 
     function buttonAddId(pk){
         let elem = document.getElementById("deleteModalButton");
         elem.setAttribute("data-pk", pk);
     }
+
     async function deleteTag(elem){
         let pk = elem.getAttribute("data-pk");
         url = `/fetch/tag/delete/${pk}`;
@@ -283,9 +279,9 @@
 
     function successDeleteToast(){
             M.toast({html: 'Тэг удален', classes: "toastSuccess"})
-        }
+    }
 
-
+    /*Тут создание*/
     async function createTag(){
         let text = document.getElementById("createModalInput").value;
         let url = '/fetch/tag/create';
@@ -311,10 +307,6 @@
             errorConnectionToast();
             console.log(error);
         })
-    }
-
-    function successCreateToast(){
-        M.toast({html: 'Тэг создан', classes: "toastSuccess"})
     }
 
     function addTagsList(pk, name){
@@ -345,6 +337,11 @@
         return li;
     }
 
+    function successCreateToast(){
+        M.toast({html: 'Тэг создан', classes: "toastSuccess"})
+    }
+
+    /*Ошибка при отсутсвии интернета и серверных ошибках(редактирование, удаление, создание)*/
     function errorConnectionToast(){
         M.toast({html: 'Ошибка', classes: "toastError"})
     }

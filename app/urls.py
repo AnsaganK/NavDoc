@@ -69,4 +69,7 @@ urlpatterns+=[
     path("fetch/tag/delete/<int:pk>", FetchTagDelete.as_view(), name="FetchTagDelete"),
     path("fetch/tag/create", FetchTagCreate.as_view(), name="FetchTagCreate"),
     path("fetch/calendar", FetchCalendar.as_view(), name="FetchCalendar"),
+    path("fetch/department/edit", FetchDepartmentEdit.as_view(), name="FetchDepartmentEdit"),
+    path("fetch/department/delete/<int:pk>", FetchDepartmentDelete.as_view(), name="FetchDepartmentDelete"),
+    path("fetch/department/create", FetchDepartmentCreate.as_view(), name="FetchDepartmentCreate"),
 ]

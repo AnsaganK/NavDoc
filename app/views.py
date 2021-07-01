@@ -1204,6 +1204,41 @@ class FetchCalendar(APIView):
         serializer = ServiceMyNoteDetailSerializer(notes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class FetchDepartmentEdit(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+
+    def post(self, request, format=None):
+        department = Department.objects.filter(pk=int(request.data["pk"])).first()
+        if department:
+            department.name = request.data["name"]
+            department.save()
+            serializer = DepartmentSerializer(department)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "message": "Не найден отдел"}, status=status.HTTP_404_NOT_FOUND)
+
+class FetchDepartmentDelete(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+
+    def delete(self, request, pk, format=None):
+        department = Department.objects.filter(pk=pk).first()
+        if department:
+            department.delete()
+            return Response({"message": "Отдел удален"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "message": "Не найден отдел"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class FetchDepartmentCreate(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+
+    def post(self, request, format=None):
+        department = Department(name=request.data["name"])
+        department.save()
+        serializer = DepartmentSerializer(department)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 def new_send(request):
     return render(request, "new_design/send.html", )
 
@@ -1217,7 +1252,7 @@ def new_counting(request):
 
 
 def new_departments(request):
-    departments = Department.objects.all()
+    departments = Department.objects.all().order_by("pk")
     return render(request, "new_design/departments.html", {"departments": departments})
 
 
