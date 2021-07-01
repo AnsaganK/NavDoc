@@ -271,6 +271,9 @@
           modal.classList.add("note_info");
           let buh = data.buh !== null ? `${data.buh.first_name} ${data.buh.last_name}(подписано)`: 'в ожидании';
 
+          let tags = '';
+          data.tags.length>0?data.tags.forEach((i)=>{tags+=`<li class="note_detail_tag">${i.name}</li>`}):"";
+
           let status = data.status;
           let status_image = '';
           if (status === null){
@@ -321,6 +324,7 @@
                     <div class="note_info_item"><span>Итого:</span> <span>${data.summa}</span></div>
                     <div class="note_info_item"><span>Бухгалтер:</span> <span> <span style="color:grey;">${buh}</span> </span></div>
                     <ul class="note_detail_tags">
+                    ${tags}
                     </ul>
                 </div>
                 ${users}
