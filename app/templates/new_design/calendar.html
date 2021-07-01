@@ -106,6 +106,7 @@
     for(var  i = 1; i <= Dlast; i++) {
       if (i == new Date().getDate() && D.getFullYear() == new Date().getFullYear() && D.getMonth() == new Date().getMonth()) {
         calendar += `<td class="today" onclick="getDayNotes(${year}, ${D.getMonth()}, ${i})">` + i;
+        getDayNotes(year, D.getMonth(), i);
       }else{
         calendar += `<td onclick="getDayNotes(${year}, ${D.getMonth()}, ${i})">` + i;
       }
@@ -161,7 +162,7 @@
             let empty = '';
             data.forEach(
                 (i) => {
-                let fast = i["fast"] ? ' <i class="material-icons" style="color: #ffbd29;margin-top: 4px;position: absolute;margin-left: 20px;">offline_bolt</i>' : '';
+                let fast = i["fast"] ? ' <i class="material-icons" style="color: #ffbd29;position: absolute;right: 20px">offline_bolt</i>' : '';
                 let file = i["files"].length>0 ? ' <i class="material-icons right">attachment</i>' : '';
                 let card_color = "";
                 let card_status_text = "";
@@ -174,43 +175,9 @@
                 }else if(i.status == "error"){
                   card_status_text = "(Отказано)";
                 }
-                  empty+=`<a class="waves-effect waves-light modal-trigger new-collection-item collection-item" href="#modal1" onclick="getDetailNote(${i.id})">СЗ №${i["number"]} - ${i["title"]}</a>`;
+                  empty+=`<a class="waves-effect waves-light modal-trigger new-collection-item collection-item" href="#modal1" onclick="getDetailNote(${i.id})">СЗ №${i["number"]} - ${i["title"]}  ${fast}</a>`;
                 }
             );
-
-            /*let pagination = '' +
-                    '<i class="material-icons" onclick="setDisplay(1,'+"'"+list_id+"'"+','+data["page"]+')" style="\n' +
-                    '                    float: right;\n' +
-                    '                    cursor: pointer;\n' +
-                    '                    position: absolute;\n' +
-                    '                    left: 10px;\n' +
-                    '                    top: 120px;\n' +
-                    '                    font-size: 33px;\n' +
-                    '                    color: '+
-                    display_card_color+
-                    ';\n' +
-                    '                ">apps</i>'+
-                    '<i class="material-icons" onclick="setDisplay(2,'+"'"+list_id+"'"+','+data["page"]+')" style="\n' +
-                    '                    float: right;\n' +
-                    '                    cursor: pointer;\n' +
-                    '                    position: absolute;\n' +
-                    '                    left: 50px;\n' +
-                    '                    top: 120px;\n' +
-                    '                    font-size: 33px;\n' +
-                    '                    color: '+
-                    display_list_color+
-                    ';\n' +
-                    '                ">reorder</i>'+
-                    '<i class="material-icons" style="\n' +
-                    '    float: right;\n' +
-                    '    cursor: pointer;\n' +
-                    '    position: absolute;\n' +
-                    '    right: 10px;\n' +
-                    '    display: block;\n' +
-                    '    top: 120px;\n' +
-                    '    font-size: 33px;\n' +
-                    '    color: #546e7a;\n' +
-                    '">filter_list</i>'*/
             if (empty === ""){
                 empty = "<span style='color: grey;justify-content: center;display: flex;align-items: center;margin: 20px auto;'>Не найдено</span>"
             }else{
@@ -221,12 +188,6 @@
         }
     }
 
-    function getCookie(name) {
-          let matches = document.cookie.match(new RegExp(
-            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-          ));
-          return matches ? decodeURIComponent(matches[1]) : undefined;
-        }
 
 </script>
 {% endblock %}
