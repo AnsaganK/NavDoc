@@ -197,6 +197,10 @@
         font-weight: bold;
         cursor: pointer;
     }
+    .modalTitle{
+        text-align: center;
+
+    }
     </style>
     {% block style %}
 
@@ -286,6 +290,9 @@
           });
     	$(document).ready(function(){
             $('.fixed-action-btn').floatingActionButton();
+          });
+        $(document).ready(function(){
+            $('select').formSelect();
           });
     </script>
 </body>

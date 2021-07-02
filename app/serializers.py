@@ -20,6 +20,11 @@ class ProfileInfoSerializer(serializers.ModelSerializer):
         model = Profile
         fields = '__all__'
 
+class CreateUserSerializer(serializers.ModelSerializer):
+    profile = ProfileInfoSerializer()
+    class Meta:
+        model = User
+        fields = ("id", "first_name", "last_name", "email", "profile")
 
 class UserInfoSerializer(serializers.ModelSerializer):
     profile = ProfileInfoSerializer()

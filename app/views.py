@@ -30,7 +30,8 @@ from django.http import Http404
 from bs4 import BeautifulSoup as BS
 
 from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer, \
-    UserInfoSerializer, UserNoteDetailSerializer, DepartmentSerializer, TagSerializer, ProfileSerializer
+    UserInfoSerializer, UserNoteDetailSerializer, DepartmentSerializer, TagSerializer, ProfileSerializer, \
+    CreateUserSerializer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 role_employee_name = 'employee'
@@ -1284,13 +1285,25 @@ class FetchUserCreate(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
 
     def post(self, request, format=None):
+        data = request.data
+        error_list = []
+        if data["password1"] != data["password2"]:
+            error_list.append({"message":"Пароли не совпадают"})
+
+        if User.objects.filter(username=data["username"]):
+            error_list.append({"message":"Пользователь с таким логином уже существует"})
+
+        if len(error_list) > 0:
+            return Response({"messages": error_list}, status=status.HTTP_400_BAD_REQUEST)
+
         form = UserForm(request.data)
         if form.is_valid():
-            form.save()
-            serializer = DepartmentSerializer(form)
+            user = form.save()
+            serializer = CreateUserSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response({"Отправлены не валидные данные"}, status=status.HTTP_400_BAD_REQUEST)
+            error_list.append({"message": "Отправлены не валидные данные"})
+            return Response({"messages":error_list}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def new_send(request):
@@ -1312,7 +1325,8 @@ def new_departments(request):
 
 def new_users(request):
     users = User.objects.order_by("pk").all()
-    return render(request, "new_design/users.html", {"users": users})
+    departments = Department.objects.order_by("pk").all()
+    return render(request, "new_design/users.html", {"users": users, "departments":departments})
 
 
 def new_tags(request):

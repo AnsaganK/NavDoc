@@ -74,18 +74,36 @@
         width: 500px;
         border-top:1px solid #e0e0e0;
     }
+    .form_button{
+        margin:auto !important;
+        display: block;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-  <div id="modal_create" class="modal">
-    <div class="modal-content">
-      <h4>Modal Header</h4>
-      <p>A bunch of text</p>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
+  <div id="modal_create" class="modal userModal">
+        <form action="#" method="post" id="createUserForm">
+                    <div class="modal-content">
+                      <h5 class="modalTitle">Создание пользователя</h5>
+
+                        <input type="text" name="first_name" required placeholder="Имя">
+                        <input type="text" name="last_name" required placeholder="Фамилия">
+                        <input type="text" name="username" required placeholder="Логин">
+                        <input type="email" name="email" required placeholder="Почта">
+                        <input type="password" name="password1" required placeholder="Пароль">
+                        <input type="password" name="password2" required placeholder="Пароль(повтор)">
+                        <select name="department" id="">
+                            {% for i in departments %}
+                                <option value="{{ i.pk }}">{{ i.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                      <div class="modal-footer">
+                          <button type="submit" class="btn waves-effect form_button">Создать</button>
+                      </div>
+        </form>
+
   </div>
 
     <div id="modal_delete" class="modal userModal">
@@ -102,7 +120,7 @@
 
 
 <div class="">
-    <table class="table-striped">
+    <table class="table-striped" id="userTable">
         <thead>
         <tr>
             <td>ФИО</td>
@@ -113,12 +131,12 @@
         </thead>
         <tbody>
         {% for i in users %}
-            <tr  data-id="userItem_{{ i.pk }}">
-                <td>{{ i.last_name }} {{ i.first_name }} {{ i.username }}</td>
+            <tr data-id="userItem_{{ i.pk }}">
+                <td>{{ i.last_name }} {{ i.first_name }}</td>
                 <td>{{ i.profile.position }}</td>
                 <td>{{ i.profile.mobile }}</td>
                 <td class="user_actions">
-                        <a href="#modal_edit" class="modal-trigger" onclick="getUserForApi(this, id={{i.pk}}, count={{forloop.counter}}, 'show')"><i class="material-icons more_icon">more_vert</i></a>
+                        <a onclick="getUserForApi(this, id={{i.pk}}, count={{forloop.counter}}, 'show')"><i class="material-icons more_icon">more_vert</i></a>
                         <a href="#modal_edit" class="modal-trigger" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
                         <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
                 </td>
@@ -251,18 +269,17 @@
 </script>
 <script>
     /*Тут удаление*/
-      function getBlock(id, visible) {
-            let style = visible === "show" ? `display:flex;top:${count * 60 + 10}px;` : "display:none;"
-            let block = document.getElementById(`profileBlock_${id}`);
-
-            block.style = style;
-            block.innerHTML = preloader;
-
-            return block;
-        }
+    function notDisplay(list){
+                 list.forEach(
+                     (elem) => {
+                         elem.style.display = "none";
+                     }
+                 )
+                }
 
     function buttonAddId(pk){
-          getBlock(pk, "hide");
+        let openBlocks = document.querySelectorAll(".profileBlock");
+        notDisplay(openBlocks);
         let elem = document.getElementById("deleteModalButton");
         elem.setAttribute("data-pk", pk);
     }
@@ -287,7 +304,6 @@
 
     function deleteInList(pk){
         let user_item = document.querySelectorAll(`tr[data-id='userItem_${pk}']`)[0];
-        console.log(user_item);
         user_item.remove();
     }
 
@@ -296,9 +312,70 @@
     }
 
 
+    /*Тут создание пользователя*/
+    let form = document.querySelector("form");
+    form.onsubmit = function(evt){
+        evt.preventDefault();
+        let formData = new FormData(form);
+        createUserAPI(formData)
+    }
+
+    async function createUserAPI(userData){
+        url = '/fetch/user/create';
+        await fetch(url, {
+            method: "POST",
+            body: userData,
+        }).then(async response => {
+                if (response.status === 200) {
+                    successCreateToast();
+                    addTable(await response.json());
+
+                }else{
+                    errorMessage(await response.json());
+                }
+            }
+        ).catch(error=>{
+            errorConnectionToast();
+            console.log(error);
+        })
+    }
+
+    function errorMessage(data){
+        if (data.messages != null){
+            data.messages.forEach(
+                elem => {
+                    M.toast({html: `${elem.message}`, classes: "toastError"})
+                }
+            )
+        }else{
+            M.toast({html: 'Отправлены не валидные данные', classes: "toastError"})
+        }
+    }
+
+    function addTable(data){
+        let table = document.getElementById("userTable");
+        let tbody = table.children[1];
+        let count = tbody.children.length+1;
+        let tr = document.createElement("tr");
+        tr.setAttribute("data-id", `userItem_${data.id}`);
+        tr.innerHTML = `<td>${data.last_name} ${data.first_name}</td>
+                <td>${data.profile.position}</td>
+                <td>${data.profile.mobile}</td>
+                <td class="user_actions">
+                        <a onclick="getUserForApi(this, id=${data.id}, count=${count}, 'show')"><i class="material-icons more_icon">more_vert</i></a>
+                        <a href="#modal_edit" class="modal-trigger" onclick="selectTag(${data.id})"><i class="material-icons edit_icon">edit</i></a>
+                        <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId(${data.id})"><i class="material-icons delete_icon">delete</i></a>
+                </td>
+                <div class="profileBlock" id="profileBlock_${data.id}"></div>`
+        tbody.appendChild(tr);
+    }
+
+    function successCreateToast(){
+        M.toast({html: 'Пользователь создан', classes: "toastSuccess"})
+    }
     /*Ошибка при отсутсвии интернета и серверных ошибках(редактирование, удаление, создание)*/
     function errorConnectionToast(){
-        M.toast({html: 'Ошибка', classes: "toastError"})
+        M.toast({html: 'Нет соединения', classes: "toastError"})
     }
 </script>
 {% endblock %}
