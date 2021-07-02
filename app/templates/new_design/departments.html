@@ -211,9 +211,6 @@
     .department_users_td:last-child{
         border-bottom:0px solid white;
     }
-    .department_name:hover{
-        color:#50a1ff;
-    }
 </style>
 {% endblock %}
 
@@ -264,9 +261,9 @@
             <li href="#!" class="departments-item" data-counter="{{ forloop.counter }}" id="departmentItem_{{ i.pk }}">
                 <span class="listItemNumber">{{ forloop.counter }}</span>
                 <div class="listItemContent">
-                    <span id="department_{{ i.pk }}" href="#modal_detail" class="modal-trigger department_name" onclick="departmentDetail({{i.pk}})">{{ i.name }}</span>
+                    <span id="department_{{ i.pk }}" class="department_name">{{ i.name }}</span>
                     <span class="departmentIconList">
-                        <!--<a href="#modal_more" class="modal-trigger"><i class="material-icons more_icon">menu</i></a>-->
+                        <a href="#modal_detail" class="modal-trigger" onclick="departmentDetail({{i.pk}})"><i class="material-icons more_icon">more_vert</i></a>
                         <a href="#modal_edit" class="modal-trigger" onclick="selectDepartment({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
                         <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
                     </span>
@@ -322,8 +319,8 @@
         let table = '<table><thead><tr>' +
             '<th>ФИО</th><th>Должность</th></tr></thead><tbody>'
         if (departmentUsers.length>0) {
-            departmentUsers.forEach(elem => {
-            table += `<tr class="department_users_td"><td>${elem.user.first_name} ${elem.user.last_name}</td><td>${elem.position}</td></tr>`;
+                departmentUsers.forEach(elem => {
+                table += `<tr class="department_users_td"><td>${elem.user.first_name} ${elem.user.last_name}</td><td>${elem.position}</td></tr>`;
             });
             table += "</tbody></table>"
             departmentUserList.innerHTML = table;
@@ -457,6 +454,7 @@
                 <div class="listItemContent">
                     <span id="department_${pk}">${name}</span>
                     <span class="departmentIconList">
+                        <a href="#modal_detail" class="modal-trigger" onclick="departmentDetail(${pk})"><i class="material-icons more_icon">more_vert</i></a>
                         <a href="#modal_edit" class="modal-trigger" onclick="selectDepartment(${pk})"><i class="material-icons edit_icon">edit</i></a>
                         <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId(${pk})"><i class="material-icons delete_icon">delete</i></a>
                     </span>
