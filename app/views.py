@@ -1299,6 +1299,10 @@ class FetchUserCreate(APIView):
         form = UserForm(request.data)
         if form.is_valid():
             user = form.save()
+            department = Department.objects.filter(pk=data["department"]).first()
+            if department:
+                user.profile.department = department
+                user.save()
             serializer = CreateUserSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:

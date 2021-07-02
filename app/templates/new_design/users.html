@@ -87,9 +87,9 @@
                     <div class="modal-content">
                       <h5 class="modalTitle">Создание пользователя</h5>
 
+                        <input type="text" name="username" required placeholder="Логин">
                         <input type="text" name="first_name" required placeholder="Имя">
                         <input type="text" name="last_name" required placeholder="Фамилия">
-                        <input type="text" name="username" required placeholder="Логин">
                         <input type="email" name="email" required placeholder="Почта">
                         <input type="password" name="password1" required placeholder="Пароль">
                         <input type="password" name="password2" required placeholder="Пароль(повтор)">
@@ -136,7 +136,7 @@
                 <td>{{ i.profile.position }}</td>
                 <td>{{ i.profile.mobile }}</td>
                 <td class="user_actions">
-                        <a onclick="getUserForApi(this, id={{i.pk}}, count={{forloop.counter}}, 'show')"><i class="material-icons more_icon">more_vert</i></a>
+                        <a onclick="getUserForApi(this, id={{i.pk}}, 'show')"><i class="material-icons more_icon">more_vert</i></a>
                         <a href="#modal_edit" class="modal-trigger" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
                         <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
                 </td>
@@ -185,15 +185,21 @@
             })
         }
 
-     async function getUserForApi(elem, id, count, visible){
+     async function getUserForApi(elem, id, visible){
         let trs = document.querySelectorAll("tr");
         backgroundInherit(trs);
         elem.parentElement.parentElement.style.backgroundColor = "#e8e8e8";
-        //elem.id = `userItem_${pk}`;
+
+        let table = document.getElementById("userTable");
+        let tbody = table.children[1];
+        let trs_list = [...tbody.children];
+        let count = trs_list.indexOf(elem.parentElement.parentElement)+1;
+        console.log(count);
+
         let url = `/fetch/users/${id}`;
         let openBlocks = document.querySelectorAll(".profileBlock");
         notDisplay(openBlocks);
-        let block = getBlock(id, visible);
+        let block = getBlock(id, count, visible);
         visible === 'show' ?
                 await fetch(url).then(async response => {
                   if (response.status === 200) {
@@ -209,7 +215,7 @@
             setBlock(block, "");
     }
 
-      function getBlock(id, visible) {
+      function getBlock(id, count, visible) {
             let style = visible === "show" ? `display:flex;top:${count * 60 + 10}px;` : "display:none;"
             let block = document.getElementById(`profileBlock_${id}`);
 
@@ -355,14 +361,13 @@
     function addTable(data){
         let table = document.getElementById("userTable");
         let tbody = table.children[1];
-        let count = tbody.children.length+1;
         let tr = document.createElement("tr");
         tr.setAttribute("data-id", `userItem_${data.id}`);
         tr.innerHTML = `<td>${data.last_name} ${data.first_name}</td>
                 <td>${data.profile.position}</td>
                 <td>${data.profile.mobile}</td>
                 <td class="user_actions">
-                        <a onclick="getUserForApi(this, id=${data.id}, count=${count}, 'show')"><i class="material-icons more_icon">more_vert</i></a>
+                        <a onclick="getUserForApi(this, id=${data.id}, 'show')"><i class="material-icons more_icon">more_vert</i></a>
                         <a href="#modal_edit" class="modal-trigger" onclick="selectTag(${data.id})"><i class="material-icons edit_icon">edit</i></a>
                         <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId(${data.id})"><i class="material-icons delete_icon">delete</i></a>
                 </td>
