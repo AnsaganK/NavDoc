@@ -1275,7 +1275,7 @@ class FetchUserDelete(APIView):
     def delete(self, request, pk, format=None):
         user = User.objects.filter(pk=pk).first()
         if user:
-            user.delete()
+            #user.delete()1
             return Response({"message": "Пользователь удален"}, status=status.HTTP_200_OK)
         else:
             return Response({"status": "error", "message": "Не найден пользователь"}, status=status.HTTP_404_NOT_FOUND)

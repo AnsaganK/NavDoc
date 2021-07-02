@@ -24,12 +24,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/calendar.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/calendar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/counting.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/counting.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/my.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/my.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/send.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/send.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +165,7 @@
       <workItem from="1625211761052" duration="1783000" />
       <workItem from="1625213573897" duration="1785000" />
       <workItem from="1625215782241" duration="1848000" />
-      <workItem from="1625217661665" duration="514000" />
+      <workItem from="1625217661665" duration="3862000" />
     </task>
     <servers />
   </component>
