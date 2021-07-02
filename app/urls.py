@@ -61,16 +61,23 @@ urlpatterns+=[
 
     path("fetch/notes", FetchNotesList.as_view(), name="FetchNotesList"),
     path("fetch/my/notes", FetchMyNotesList.as_view(), name="FetchMyNotesList"),
-    path("fetch/notes/<int:pk>", FetchNoteDetail.as_view(), name="FetchNoteDetail"),
     path("fetch/counting", FetchCountingList.as_view(), name="FetchCountingList"),
     path("fetch/departments", FetchDepartmentList.as_view(), name="FetchDepartmentList"),
-    path("fetch/users/<int:pk>", FetchUserDetail.as_view(), name="FetchUserDetail"),
+    path("fetch/calendar", FetchCalendar.as_view(), name="FetchCalendar"),
+
+    path("fetch/notes/<int:pk>", FetchNoteDetail.as_view(), name="FetchNoteDetail"),
+
     path("fetch/tag/edit", FetchTagEdit.as_view(), name="FetchTagEdit"),
     path("fetch/tag/delete/<int:pk>", FetchTagDelete.as_view(), name="FetchTagDelete"),
     path("fetch/tag/create", FetchTagCreate.as_view(), name="FetchTagCreate"),
-    path("fetch/calendar", FetchCalendar.as_view(), name="FetchCalendar"),
+
     path("fetch/department/edit", FetchDepartmentEdit.as_view(), name="FetchDepartmentEdit"),
     path("fetch/department/delete/<int:pk>", FetchDepartmentDelete.as_view(), name="FetchDepartmentDelete"),
     path("fetch/department/create", FetchDepartmentCreate.as_view(), name="FetchDepartmentCreate"),
     path("fetch/department/<int:pk>/users", FetchDepartmentUsers.as_view(), name="FetchDepartmentUsers"),
+
+    path("fetch/users/<int:pk>", FetchUserDetail.as_view(), name="FetchUserDetail"),
+    path("fetch/user/edit", FetchUserEdit.as_view(), name="FetchUserEdit"),
+    path("fetch/user/delete/<int:pk>", FetchUserDelete.as_view(), name="FetchUserDelete"),
+    path("fetch/user/create", FetchUserCreate.as_view(), name="FetchUserCreate"),
 ]

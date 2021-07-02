@@ -29,7 +29,7 @@
         width: 300px;
         min-height: 230px;
         background: white;
-        right: 120px;
+        right: 150px;
         margin: auto;
         border-radius: 10px;
         box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
@@ -43,10 +43,10 @@
         width: 10px;
         border-bottom: 10px solid #ffffff00;
         border-top: 10px solid #ffffff00;
-        border-right: 10px solid white;
+        border-left: 10px solid white;
         position: absolute;
         top: 66px;
-        left: -10px;
+        right: -10px;
     }
     .profileBlockItem{
         display: flex;
@@ -67,6 +67,13 @@
         border-right: 1px solid #e0e0e0;
         padding:0px 5px;
     }
+    .userModal{
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        width: 500px;
+        border-top:1px solid #e0e0e0;
+    }
 </style>
 {% endblock %}
 
@@ -80,6 +87,20 @@
       <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
     </div>
   </div>
+
+    <div id="modal_delete" class="modal userModal">
+        <div class="modal-content">
+          <h5 class="deleteModalTitle">Удаление</h5>
+          <p>
+            Вы действительно хотите удалить данного пользователя, отменить это действие будет невозможно</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-grey btn-flat">Нет</a>
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat" data-pk="" id="deleteModalButton" onclick="deleteUser(this)">Да</a>
+        </div>
+    </div>
+
+
 <div class="">
     <table class="table-striped">
         <thead>
@@ -92,16 +113,17 @@
         </thead>
         <tbody>
         {% for i in users %}
-        <tr onclick="getUserForApi(this, id={{i.pk}}, count={{forloop.counter}}, 'show')">
-            <td>{{ i.last_name }} {{ i.first_name }} {{ i.username }}</td>
-            <td>{{ i.profile.position }}</td>
-            <td>{{ i.profile.mobile }}</td>
-            <td class="user_actions">
-                    <a href="#modal_edit" class="modal-trigger" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
-                    <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
-            </td>
-            <div class="profileBlock" id="profileBlock_{{i.pk}}"></div>
-        </tr>
+            <tr  data-id="userItem_{{ i.pk }}">
+                <td>{{ i.last_name }} {{ i.first_name }} {{ i.username }}</td>
+                <td>{{ i.profile.position }}</td>
+                <td>{{ i.profile.mobile }}</td>
+                <td class="user_actions">
+                        <a href="#modal_edit" class="modal-trigger" onclick="getUserForApi(this, id={{i.pk}}, count={{forloop.counter}}, 'show')"><i class="material-icons more_icon">more_vert</i></a>
+                        <a href="#modal_edit" class="modal-trigger" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
+                        <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
+                </td>
+                <div class="profileBlock" id="profileBlock_{{i.pk}}"></div>
+            </tr>
         {% endfor %}
         </tbody>
     </table>
@@ -138,15 +160,18 @@
                      }
                  )
                 }
-        function backgroundInherit(list){
+
+     function backgroundInherit(list){
             list.forEach((elem)=>{
                 elem.style.backgroundColor = "inherit";
             })
         }
+
      async function getUserForApi(elem, id, count, visible){
         let trs = document.querySelectorAll("tr");
         backgroundInherit(trs);
-            elem.style.backgroundColor = "#e8e8e8";
+        elem.parentElement.parentElement.style.backgroundColor = "#e8e8e8";
+        //elem.id = `userItem_${pk}`;
         let url = `/fetch/users/${id}`;
         let openBlocks = document.querySelectorAll(".profileBlock");
         notDisplay(openBlocks);
@@ -226,14 +251,25 @@
 </script>
 <script>
     /*Тут удаление*/
+      function getBlock(id, visible) {
+            let style = visible === "show" ? `display:flex;top:${count * 60 + 10}px;` : "display:none;"
+            let block = document.getElementById(`profileBlock_${id}`);
+
+            block.style = style;
+            block.innerHTML = preloader;
+
+            return block;
+        }
+
     function buttonAddId(pk){
+          getBlock(pk, "hide");
         let elem = document.getElementById("deleteModalButton");
         elem.setAttribute("data-pk", pk);
     }
 
-    async function deleteTag(elem){
+    async function deleteUser(elem){
         let pk = elem.getAttribute("data-pk");
-        url = `/fetch/department/delete/${pk}`;
+        url = `/fetch/user/delete/${pk}`;
         await fetch(url, {
             method: "delete",
         }).then(async response=>{
@@ -250,13 +286,19 @@
     }
 
     function deleteInList(pk){
-        let department_item = document.getElementById(`departmentItem_${pk}`);
-        department_item.remove();
+        let user_item = document.querySelectorAll(`tr[data-id='userItem_${pk}']`)[0];
+        console.log(user_item);
+        user_item.remove();
     }
 
     function successDeleteToast(){
-            M.toast({html: 'Отдел удален', classes: "toastSuccess"})
+            M.toast({html: 'Пользователь удален', classes: "toastSuccess"})
     }
 
+
+    /*Ошибка при отсутсвии интернета и серверных ошибках(редактирование, удаление, создание)*/
+    function errorConnectionToast(){
+        M.toast({html: 'Ошибка', classes: "toastError"})
+    }
 </script>
 {% endblock %}

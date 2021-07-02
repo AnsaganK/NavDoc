@@ -1251,6 +1251,47 @@ class FetchDepartmentUsers(APIView):
             return Response({"message": "Отдел не найден"}, status=status.HTTP_404_NOT_FOUND)
 
 
+# КОНТРОЛЛЕРЫ ДЛЯ ПОЛЬЗОВАТЕЛЯ
+class FetchUserEdit(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+
+    def post(self, request, format=None):
+        user = User.objects.filter(pk=int(request.data["pk"])).first()
+        if user:
+            form = UserForm(request.data, instance=user)
+            if form.is_valid():
+                user.save()
+                serializer = DepartmentSerializer(user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "Отправлены не полные данные"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"status": "error", "message": "Не найден пользователь"}, status=status.HTTP_404_NOT_FOUND)
+
+class FetchUserDelete(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+
+    def delete(self, request, pk, format=None):
+        user = User.objects.filter(pk=pk).first()
+        if user:
+            user.delete()
+            return Response({"message": "Пользователь удален"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "message": "Не найден пользователь"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class FetchUserCreate(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+
+    def post(self, request, format=None):
+        form = UserForm(request.data)
+        if form.is_valid():
+            form.save()
+            serializer = DepartmentSerializer(form)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"Отправлены не валидные данные"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 def new_send(request):
     return render(request, "new_design/send.html", )
@@ -1270,7 +1311,7 @@ def new_departments(request):
 
 
 def new_users(request):
-    users = User.objects.all()
+    users = User.objects.order_by("pk").all()
     return render(request, "new_design/users.html", {"users": users})
 
 

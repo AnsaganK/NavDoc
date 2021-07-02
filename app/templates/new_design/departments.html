@@ -234,6 +234,7 @@
     <div id="modal_more" class="modal departmentModal">
         Загрузить
     </div>
+
     <div id="modal_edit" class="modal departmentModal">
         <div class="modal-content">
           <h5 class="editModalTitle">Редактирование</h5>
@@ -245,6 +246,7 @@
           <a href="#!" id="editModalButton" class="modal-close waves-effect waves-green btn-flat" data-pk="" data-name="" onclick="editModalButton(this)">Да</a>
         </div>
     </div>
+
     <div id="modal_delete" class="modal departmentModal">
         <div class="modal-content">
           <h5 class="deleteModalTitle">Удаление</h5>
@@ -256,6 +258,7 @@
           <a href="#!" class="modal-close waves-effect waves-green btn-flat" data-pk="" id="deleteModalButton" onclick="deleteTag(this)">Да</a>
         </div>
     </div>
+
     <ul class="departments" id="departments">
         {% for i in departments %}
             <li href="#!" class="departments-item" data-counter="{{ forloop.counter }}" id="departmentItem_{{ i.pk }}">
