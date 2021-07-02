@@ -206,6 +206,8 @@
 
 
     function createDetail(data){
+            let create_user_first_name;
+            let create_user_last_name;
           let modal = document.getElementById("modal1");
           modal.classList.add("note_info");
           let buh = data.buh !== null ? `${data.buh.first_name} ${data.buh.last_name}(подписано)`: 'в ожидании';
@@ -241,10 +243,22 @@
             }else if(user_count < data.user_index){
                 user_status = 'success_user';
               }
-            users+=`<li class="note_detail_user ${user_status}">${i.user.first_name} ${i.user.last_name}</li><span class="user_line"></span>`
+            if (i.user !== null){
+                let first_name = i.user.first_name;
+                let last_name = i.user.last_name;
+                users+=`<li class="note_detail_user ${user_status}">${first_name} ${last_name}</li><span class="user_line"></span>`
+            }else{
+                users+=`<li class="note_detail_user">Удаленный пользователь</li><span class="user_line"></span>`
+            }
           });
           users = `<ul class="note_detail_users">${users}</ul>`
-
+        if(data.user !== null){
+                 create_user_first_name = data.user.first_name;
+                 create_user_last_name = data.user.last_name;
+            }else{
+                 create_user_first_name = "Удаленный";
+                 create_user_last_name = "пользователь";
+            }
           modal.innerHTML = `<div class="note_detail">
                 <div style="display: flex;
                 margin-top: 14px;
@@ -252,7 +266,7 @@
                 flex-direction: column;">
                     <img src="/static/img/${status_image}.svg" class="note_info_img" width="60" height="60">
                     <div class="note_info_item"><span>Создал:</span>
-                        <span>${data.user.first_name} ${data.user.last_name}</span></div>
+                        <span>${create_user_first_name} ${create_user_last_name}</span></div>
                     <div class="note_info_item"><span>Название:</span> <span>${data.title}</span></div>
                     <div class="note_info_item"><span>Дата СЗ:</span> <span>${data.date}</span></div>
                     <div class="note_info_item"><span>Дата создания:</span> <span>22 июня 2021 г. 11:18</span></div>

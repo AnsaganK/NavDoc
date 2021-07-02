@@ -131,6 +131,7 @@ class Profile(models.Model):
     blocked = models.BooleanField(default=False)
     token = models.TextField(null=True, blank=True)
 
+    archive = models.BooleanField(default=False, null=True, blank=True, verbose_name="Архив")
     isChef = models.BooleanField(default=False, null=True, blank=True, verbose_name="это шеф")
     isBuh = models.BooleanField(default=False, null=True, blank=True, verbose_name="это бухгалтер")
 
