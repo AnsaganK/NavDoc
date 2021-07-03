@@ -1394,7 +1394,7 @@ def new_departments(request):
 
 
 def new_users(request):
-    users = User.objects.filter(archive=False).order_by("pk").all()
+    users = User.objects.filter(profile__archive=False).order_by("pk").all()
     departments = Department.objects.order_by("pk").all()
     return render(request, "new_design/users.html", {"users": users, "departments":departments})
 
