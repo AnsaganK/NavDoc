@@ -1,4 +1,4 @@
-        function createDetail(data){
+function createDetail(data){
             let create_user_first_name;
             let create_user_last_name;
           let modal = document.getElementById("modal1");
@@ -6,7 +6,7 @@
           let buh = data.buh !== null ? `${data.buh.first_name} ${data.buh.last_name}(подписано)`: 'в ожидании';
 
           let tags = '';
-          data.tags.length>0?data.tags.forEach((i)=>{tags+=`<li class="note_detail_tag">${i.name}</li>`}):"";
+          data.tags.length > 0?data.tags.forEach((i)=>{tags+=`<li class="note_detail_tag">${i.name}</li>`}):"";
 
           let file_count = 0;
           let files = ''
@@ -73,6 +73,7 @@
                 create_user_last_name = "пользователь";
             }
           modal.innerHTML = `<div class="note_detail">
+<a href="/notes/show/isSignature/${data.id}">PDF</a>
                 <div style="display: flex;
                 margin-top: 14px;
                 border-radius: 10px;
@@ -94,4 +95,4 @@
                 ${users}
             </div>`;
 
-        }
+}

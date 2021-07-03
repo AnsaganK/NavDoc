@@ -716,7 +716,7 @@ class ShowPdfSignature(DetailView):
         self.context['note'] = self.get_object()
         self.context['isSignature'] = True
         self.context['chef_signature'] = Profile.objects.filter(
-            isChef=True).first().signature.url if Profile.objects.filter(isChef=True).first() else None
+            isChef=True).first().signature.url if Profile.objects.filter(isChef=True).first() and Profile.objects.filter(isChef=True).first().signature else None
         buh = self.get_object().buh
         if buh:
             self.context['buh_signature'] = buh.profile.signature.url
