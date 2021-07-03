@@ -1353,9 +1353,8 @@ class FetchNoteCreate(APIView):
             return Response({"message": "СЗ сохранено"}, status=status.HTTP_200_OK)
 
         else:
-            print(1)
             print(form.errors)
-            return Response({"message": "Отправлены не валидные данные"}, status=status.HTTP_200_OK)
+            return Response({"message": "Отправлены не валидные данные"}, status=status.HTTP_400_BAD_REQUEST)
 
             #error_list.append({"message": "Отправлены не валидные данные"})
             #return Response({"messages":error_list}, status=status.HTTP_400_BAD_REQUEST)
