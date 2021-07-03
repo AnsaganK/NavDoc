@@ -103,6 +103,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('user', 'position',)
 
+
+class CreateServiceNoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceNote
+        fields = '__all__'
 #class MovieDetailSerializer(serializers.ModelSerializer):
 #    genres = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
 #    category = serializers.SlugRelatedField(slug_field='name', read_only=True)

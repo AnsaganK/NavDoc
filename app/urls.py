@@ -80,4 +80,6 @@ urlpatterns+=[
     path("fetch/user/edit", FetchUserEdit.as_view(), name="FetchUserEdit"),
     path("fetch/user/delete/<int:pk>", FetchUserDelete.as_view(), name="FetchUserDelete"),
     path("fetch/user/create", FetchUserCreate.as_view(), name="FetchUserCreate"),
+
+    path("fetch/note/create", FetchNoteCreate.as_view(), name="FetchNoteCreate"),
 ]

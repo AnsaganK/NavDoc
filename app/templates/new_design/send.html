@@ -37,7 +37,168 @@
                 box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 0%);
           }
 
+    .tags {
+        display: flex;
+        flex-direction: row;
+        width:inherit;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px auto;
+    }
 
+    label.tag {
+        cursor: pointer;
+        margin: 5px;
+        padding: 7px;
+        border-radius: 5px;
+        background-color: grey;
+        color: white;
+        transition: background-color .3s ease;
+    }
+
+    .tags input[type="checkbox"] {
+        display: none;
+    }
+
+    input:checked + label.tag {
+        background-color: #9ccc65;
+    }
+
+    .user_select {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .user_select_number {
+        background: #5096ff;
+        border-top-left-radius: 10px;
+        height: min-content;
+        padding: 8px 10px;
+        color: white;
+        border-bottom-left-radius: 10px;
+    }
+
+    .form_box select {
+        border-bottom-left-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+    .select_buttons {
+        width: 369px;
+        margin: 15px auto;
+        display: flex;
+        flex-direction: row;
+        margin-top: 40px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .delete_select_button{
+        align-items: center;
+        padding: 5px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        color: white;
+        height: 20px;
+        margin-top: -15px;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 0px 0px 3px 1px #616161;
+        background-color: red;
+    }
+    .add_select_button {
+        align-items: center;
+        padding: 11px;
+        font-size: 30px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        width: 20px;
+        color: white;
+        height: 20px;
+        margin-top: -15px;
+        border-radius: 100%;
+        cursor: pointer;
+        box-shadow: 0px 0px 3px 1px #616161;
+        background-color: #50a6ff;
+    }
+    .input_files{
+        display: flex;
+        /* width: 458px; */
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .input_file_label{
+        border:1px dashed black;
+        padding:15px 20px;
+        margin-right: 20px;
+        border-radius: 13px;
+    }
+    .input_file input{
+        display: none;
+    }
+    .fast{
+        margin: auto;
+        background: grey;
+        padding: 12px;
+        color: white;
+        border-radius: 7px;
+        box-shadow: 0px 0px 3px 1px #1c1c1c;
+        transition: background .3s ease;
+    }
+    #fast:checked+label{
+        background:#ff4a4a;
+    }
+    label.fast{
+        color: #fff;
+    }
+    .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+    border-color: #47a2ff !important;
+}
+.form_title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.form_title input{
+    text-align: center;
+    margin-left: 10px;
+    width: 60px !important;
+}
+.create_note_modal{
+    background-color: inherit !important;
+    margin: 0% auto !important;
+    padding: 20px !important;
+    border: 0px !important;
+    width: 80% !important;
+    z-index: 99999 !important;
+    border-radius: 10px !important;
+}
+select{
+    display: inherit;
+    background-color: rgba(255,255,255,0.9);
+    padding: inherit;
+    border: 1px solid #f2f2f2;
+    border-radius: inherit;
+    height: inherit;
+}
+.note_number_input{
+    font-size:21px;
+    color: grey;
+    text-align: center;
+}
+.form_button{
+    display: block;
+    margin: auto;
+}
+.switch{
+    width: fit-content;
+    margin: auto;
+    display: block;
+    margin-bottom: 25px;
+}
 </style>
 {% endblock %}
 
@@ -52,28 +213,23 @@
     </div>
   </div>
   <div id="modal_create" class="modal">
-    <div class="modal_content">
-        <span class="close_modal_window">×</span>
-        <form action="{% url 'service_note_add' %}" method="post" class="form_box" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h3 class="form_title" style="margin-left: 20px">Служебная записка №<input type="number" class="note_number_input" name="number" min="1" value="{{number}}"></h3>
+    <div class="modal_content create_note_modal">
+        <form action="" method="" class="form_box" enctype="multipart/form-data">
+            <h5 class="form_title">
+                <span>Служебная записка №</span><input type="number" class="note_number_input" autocomplete="off" name="number" min="1" value="{{number}}"></h5>
 
-            <div class="form_item">
                 <label for="">Название</label>
-                <input type="text" name="title" style="text-align: center" required>
-            </div>
-            <div class="form_item">
+                <input type="text" name="title" autocomplete="off"  style="text-align: center" required>
+
                 <label for="">Дата</label>
-                <input type="date" name="date" required value="{{ current_date }}">
-            </div>
-            <div class="form_item" style="flex-direction:column;">
+                <input type="text" name="date" autocomplete="off" class="datepicker" required value="{{ current_date }}">
+
                 <label for="">Текст</label>
-                <textarea type="text" id="editor1" name="text" rows="4"></textarea>
-            </div>
-            <div class="form_item">
+                <textarea type="text" id="editor1" autocomplete="off"  name="text" rows="4"></textarea>
+
                 <label for="">Итого</label>
-                <input type="number" name="summa" style="text-align: center" required>
-            </div>
+                <input type="number" name="summa" autocomplete="off"  style="text-align: center" required>
+
             <div class="form_item" style="margin-bottom: 30px;margin-top: 10px;">
                 <label for="">Файлы</label>
                 <div class="input_files">
@@ -89,7 +245,14 @@
                         <input type="file" id="input_file_3" name="input_file_3" onchange="file_upload(this)">
                         <label for="input_file_3" class="input_file_label">+</label>
                     </div>
-
+                    <div class="input_file">
+                        <input type="file" id="input_file_4" name="input_file_4" onchange="file_upload(this)">
+                        <label for="input_file_4" class="input_file_label">+</label>
+                    </div>
+                    <div class="input_file">
+                        <input type="file" id="input_file_5" name="input_file_5" onchange="file_upload(this)">
+                        <label for="input_file_5" class="input_file_label">+</label>
+                    </div>
                 </div>
             </div>
             <div class="form_item">
@@ -109,16 +272,15 @@
             <div class="form_item" style="justify-content: flex-end">
 
             <div class="select_buttons">
-                <span class="add_select_button" onclick="add_select()">+</span>
-                <span class="delete_select_button" onclick="delete_select()">Удалить</span>
+                <i class="material-icons waves-green waves-effect" onclick="add_select()">add</i>
+                <i class="material-icons waves-orange waves-effect" onclick="delete_select()">delete</i>
             </div>
             </div>
-            <div class="form_item">
+            <!--<div class="form_item">
                 <label for="">
                     Срочно
                 </label>
                 <div>
-
             <input type="checkbox" id="slider_input" name="fast" style="display: none">
             <label for="slider_input">
                 <div class="slider_wrap">
@@ -126,11 +288,21 @@
                 </div>
             </label>
                 </div>
-            </div>
+            </div>-->
                 <!--<div class="form_item">
                     <input type="checkbox" id="fast" style="display: none">
                     <label for="fast" class="fast">Срочно</label>
                 </div>-->
+
+
+            <div class="switch">
+                <label>
+                  Обычный
+                  <input type="checkbox" name="fast">
+                  <span class="lever"></span>
+                  Срочный
+                </label>
+              </div>
             <div class="form_item" style="border-top:1px solid #cecece;padding-top:10px;">
                 <div class="tags">
                     {% for tag in tags %}
@@ -141,7 +313,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <button type="submit" class="form_button">Создать</button>
+            <button type="submit" class="form_button btn waves-effect">Создать</button>
         </form>
     </div>
   </div>
@@ -149,11 +321,11 @@
   	<div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s3"><a href="#test1" onclick="loadNotesList(q='wait')">В ожидании</a></li>
-        <li class="tab col s3"><a class="active" onclick="loadNotesList(q='fast')" href="#test2">Срочные</a></li>
-        <li class="tab col s3"><a href="#test3" onclick="loadNotesList(q='success')">Одобренные</a></li>
-        <li class="tab col s3"><a href="#test4" onclick="loadNotesList(q='edit')">Редактирование</a></li>
-        <li class="tab col s3"><a href="#test5" onclick="loadNotesList(q='error')">Отказано</a></li>
+        <li class="tab col s3" data-status="wait"><a href="#test1" onclick="loadNotesList(q='wait')">В ожидании</a></li>
+        <li class="tab col s3" data-status="fast"><a href="#test2" onclick="loadNotesList(q='fast')" class="active" >Срочные</a></li>
+        <li class="tab col s3" data-status="success"><a href="#test3" onclick="loadNotesList(q='success')">Одобренные</a></li>
+        <li class="tab col s3" data-status="edit"><a href="#test4" onclick="loadNotesList(q='edit')">Редактирование</a></li>
+        <li class="tab col s3" data-status="error"><a href="#test5" onclick="loadNotesList(q='error')">Отказано</a></li>
       </ul>
     </div>
 
@@ -250,6 +422,8 @@
       }
 
         loadNotesList(q="fast");
+
+
         var preloader = '<div class="preloader-wrapper big active" style="\n' +
                  '    margin: 150px auto;\n' +
                  '    display: block;\n' +
@@ -265,90 +439,7 @@
                  '    </div>\n' +
                  '    </div>';
 
-
-        function createDetail(data){
-            let create_user_first_name;
-            let create_user_last_name;
-          let modal = document.getElementById("modal1");
-          modal.classList.add("note_info");
-          let buh = data.buh !== null ? `${data.buh.first_name} ${data.buh.last_name}(подписано)`: 'в ожидании';
-
-          let tags = '';
-          data.tags.length>0?data.tags.forEach((i)=>{tags+=`<li class="note_detail_tag">${i.name}</li>`}):"";
-
-          let status = data.status;
-          let status_image = '';
-          if (status === null){
-            status_image = 'wait';
-          }else if(status === 'success'){
-            status_image = 'success';
-          }else if(status === 'edit'){
-            status_image = 'warning';
-          }else if(status === 'error'){
-            status_image = 'error';
-          }
-
-          let user_count = 0;
-          let users = '';
-          data.users.forEach((i)=>{
-            let user_status = '';
-            user_count++;
-            if(user_count === data.user_index){
-              console.log(i);
-              if (status == null){
-                user_status = 'current_user';
-              }else if(status === 'success'){
-                user_status = 'success_user';
-              }else if(status === 'edit'){
-                user_status = 'edit_user';
-              }else if(status === 'error') {
-                user_status = 'error_user';
-              }
-            }else if(user_count < data.user_index){
-                user_status = 'success_user';
-              }
-            if (i.user !== null){
-                let first_name = i.user.first_name;
-                let last_name = i.user.last_name;
-                users+=`<li class="note_detail_user ${user_status}">${first_name} ${last_name}</li><span class="user_line"></span>`
-            }else{
-                users+=`<li class="note_detail_user">Удаленный пользователь</li><span class="user_line"></span>`
-            }
-          });
-          users = `<ul class="note_detail_users">${users}</ul>`
-
-            if(data.user !== null){
-                create_user_first_name = data.user.first_name;
-                create_user_last_name = data.user.last_name;
-            }else{
-                create_user_first_name = "Удаленный";
-                create_user_last_name = "пользователь";
-            }
-          modal.innerHTML = `<div class="note_detail">
-                <div style="display: flex;
-                margin-top: 14px;
-                border-radius: 10px;
-                flex-direction: column;">
-                    <img src="/static/img/${status_image}.svg" class="note_info_img" width="60" height="60">
-                    <div class="note_info_item"><span>Создал:</span>
-                        <span>${create_user_first_name} ${create_user_last_name}</span></div>
-                    <div class="note_info_item"><span>Название:</span> <span>${data.title}</span></div>
-                    <div class="note_info_item"><span>Дата СЗ:</span> <span>${data.date}</span></div>
-                    <div class="note_info_item"><span>Дата создания:</span> <span>22 июня 2021 г. 11:18</span></div>
-                    <div class="note_info_item"><span>Текст:</span> <span><p>${data.text}</p></span></div>
-                    <div class="note_info_item"><span>Итого:</span> <span>${data.summa}</span></div>
-                    <div class="note_info_item"><span>Бухгалтер:</span> <span> <span style="color:grey;">${buh}</span> </span></div>
-                    <ul class="note_detail_tags">
-                    ${tags}
-                    </ul>
-                </div>
-                ${users}
-            </div>`;
-
-        }
-
-
-
+      {% include 'include/note_detail.js' %}
 
         async function getDetailNote(id){
           let modal = document.getElementById("modal1");
@@ -552,5 +643,137 @@
           }
           loadNotesList(q,paginator)
         }
+    </script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+    <script>
+       ClassicEditor
+                .create( document.querySelector( '#editor1' ) )
+                .catch( error => {
+                    console.error( error );
+                } );
+    </script>
+
+<!-- Тут CRUD для Notes -->
+<script>
+    /*Тут создание*/
+    let form = document.querySelector("form.form_box");
+    form.onsubmit = function(evt){
+        evt.preventDefault();
+        let formData = new FormData(form);
+        createNoteAPI(formData)
+    }
+
+    async function createNoteAPI(noteData){
+        url = '/fetch/note/create';
+        await fetch(url, {
+            method: "POST",
+            body: noteData,
+        }).then(async response => {
+                if (response.status === 200) {
+                    successCreateToast();
+                    updateData();
+                }else{
+                    errorMessage(await response.json());
+                }
+            }
+        ).catch(error=>{
+            errorConnectionToast();
+            console.log(error);
+        })
+    }
+
+    function errorMessage(data){
+        if (data.messages != null){
+            data.messages.forEach(
+                elem => {
+                    M.toast({html: `${elem.message}`, classes: "toastError"})
+                }
+            )
+        }else{
+            M.toast({html: 'Отправлены не валидные данные', classes: "toastError"})
+        }
+    }
+
+    function updateData(){
+        let status;
+        let tabs = document.getElementsByClassName("tabs")[0];
+        for (var i=0; i<tabs.children.length; ++i){
+            console.log(tabs.children[i]);
+            if (tabs.children[i].children[0].classList.contains('active')){
+                console.log(tabs.children[i]);
+                status = tabs.children[i].getAttribute("data-status");
+                console.log(status)
+                break;
+            }
+        }
+        loadNotesList(q=status);
+    }
+
+    function successCreateToast(){
+        M.toast({html: 'СЗ создано', classes: "toastSuccess"})
+    }
+
+
+
+
+    /*Ошибка при отсутсвии интернета и серверных ошибках(редактирование, удаление, создание)*/
+    function errorConnectionToast(){
+        M.toast({html: 'Нет соединения', classes: "toastError"})
+    }
+</script>
+
+
+<!--Тут скрипты для формы создания-->
+    <script>
+
+        function delete_select(){
+            var selects = document.getElementsByClassName('user_select');
+            var last_select = selects[selects.length - 1];
+            if(selects.length>1) {
+                last_select.remove();
+            }
+        }
+        function add_select() {
+            var selects = document.getElementsByClassName('user_select');
+            var last_select = selects[selects.length - 1];
+            var last_number = last_select.children[0].getAttribute("data-tag-id");
+            var data = '<span class = "user_select_number" data-tag-id = "' + (1 + parseInt(last_number)) + '">' + (1 + parseInt(last_number)) + '</span><select name="user_'+(1+parseInt(last_number))+'" id="" style="width:430px;">{% for user in users %}<option value="{{ user.pk }}">{{user.first_name|slice:"1"}}.{{user.last_name}}({{ user.profile.position }})</option>{% endfor %}</select>';
+            /*var data = `    <span class="user_select_number" data-tag-id="${1+last_number}">${1+last_number}</span>
+                            <div class="select-wrapper"><input class="select-dropdown dropdown-trigger" type="text" readonly="true" data-target="select-options-d130c26d-36fa-9aac-4903-69601ab81008">
+                                <ul id="select-options-d130c26d-36fa-9aac-4903-69601ab81008" class="dropdown-content select-dropdown" tabindex="0">
+                                    {% for user in users %}
+                                    <li id="select-options-d130c26d-36fa-9aac-4903-69601ab810080" tabindex="0" {% if forloop.counter == 1 %}class="selected"{% endif %}>
+                                        <span>{{user.first_name|slice:"1"}}.{{user.last_name}}({{ user.profile.position }})</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <svg class="caret" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg>
+                                <select name="user_1" id="" style="width:430px;" tabindex="-1">
+                                    {% for user in users %}
+                                        <option value="{{ user.pk }}">{{user.first_name|slice:"1"}}.{{user.last_name}}({{ user.profile.position }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>`*/
+            let div = document.createElement('div');
+            div.classList.add("user_select");
+            div.id = "user_selects"
+            div.innerHTML = data;
+            document.getElementById("user_selects").append(div);
+        }
+        function file_upload(r){
+            var data = r.parentNode.children[1];
+            console.log(data);
+            if (r.files.length === 0){
+                data.innerHTML = "+";
+                data.style = 'border:1px dashed grey;color:grey';
+            }
+            else {
+                var z = r.files[0].name;
+                data.innerHTML = "<img src=/static/img/success.svg width=20>";
+                data.style = 'border:1px solid #a5eb78;color:#a5eb78;padding: 19px 17px;padding-bottom: 12px;';
+            }
+        }
+
     </script>
 {% endblock %}

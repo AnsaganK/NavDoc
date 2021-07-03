@@ -12,6 +12,7 @@ from rest_framework import status
 from django.db.models import Q
 from django.views.generic.base import View
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.parsers import FileUploadParser
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from .forms import DepartmentForm, UserForm, ServiceNoteForm, TagForm, UserEditForm, ProfileForm, ServiceNoteEditForm
@@ -31,7 +32,7 @@ from bs4 import BeautifulSoup as BS
 
 from .serializers import ServiceNoteSerializer, ServiceMyNoteSerializer, ServiceMyNoteDetailSerializer, \
     UserInfoSerializer, UserNoteDetailSerializer, DepartmentSerializer, TagSerializer, ProfileSerializer, \
-    CreateUserSerializer
+    CreateUserSerializer, CreateServiceNoteSerializer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 role_employee_name = 'employee'
@@ -1275,7 +1276,8 @@ class FetchUserDelete(APIView):
     def delete(self, request, pk, format=None):
         user = User.objects.filter(pk=pk).first()
         if user:
-            #user.delete()1
+            user.profile.archive()
+            user.save()
             return Response({"message": "Пользователь удален"}, status=status.HTTP_200_OK)
         else:
             return Response({"status": "error", "message": "Не найден пользователь"}, status=status.HTTP_404_NOT_FOUND)
@@ -1309,9 +1311,73 @@ class FetchUserCreate(APIView):
             error_list.append({"message": "Отправлены не валидные данные"})
             return Response({"messages":error_list}, status=status.HTTP_400_BAD_REQUEST)
 
+class FetchNoteCreate(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+
+    def post(self, request, format=None):
+        post = request.data
+        files = request.FILES
+        form = ServiceNoteForm(post)
+        if form.is_valid():
+            data = form.save()
+            data.user = request.user
+            for i in files:
+                if "input_file" in i:
+                    file = files[i]
+                    note_file = NoteFiles.objects.create(note=data, file=file)
+                    note_file.save()
+            for i in post:
+                if "tag" in i:
+                    tag_id = i.split("_")[-1]
+                    tag = Tags.objects.get(pk=tag_id)
+                    data.tags.add(tag)
+            user_count = 0
+            for i in post:
+                if "user" in i:
+                    user_count += 1
+                    index = i.split("_")[1]
+                    user_id = post[i]
+                    user = User.objects.get(pk=user_id)
+                    if index == "1" and user.profile.token:
+                        send_push(token=user.profile.token, title=f"Поступило СЗ №{post['number']}", data=post["title"])
+                    signer = NoteUsers.objects.create(user=user, index=index, note=data)
+                    signer.save()
+
+            chef_user = Profile.objects.filter(isChef=True).first()
+            if chef_user:
+                user = chef_user.user
+                user_count += 1
+                signer = NoteUsers.objects.create(user=user, index=user_count, note=data)
+                signer.save()
+            data.save()
+            return Response({"message": "СЗ сохранено"}, status=status.HTTP_200_OK)
+
+        else:
+            print(1)
+            print(form.errors)
+            return Response({"message": "Отправлены не валидные данные"}, status=status.HTTP_200_OK)
+
+            #error_list.append({"message": "Отправлены не валидные данные"})
+            #return Response({"messages":error_list}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 def new_send(request):
-    return render(request, "new_design/send.html", )
+    users = User.objects.filter(profile__archive=False).filter(profile__isChef=False)
+    tags = Tags.objects.all()
+    last = ServiceNote.objects.last()
+    if last:
+        number = last.number + 1 if last.number else 1
+    else:
+        number = 1
+
+    date = datetime.datetime.now()
+    year = date.year
+    month = date.month if date.month > 9 else "0" + str(date.month)
+    day = date.day if date.day > 9 else "0" + str(date.day)
+    current_date = f"{year}-{month}-{day}"
+
+    return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date})
 
 
 def new_my(request):
@@ -1328,7 +1394,7 @@ def new_departments(request):
 
 
 def new_users(request):
-    users = User.objects.order_by("pk").all()
+    users = User.objects.filter(archive=False).order_by("pk").all()
     departments = Department.objects.order_by("pk").all()
     return render(request, "new_design/users.html", {"users": users, "departments":departments})
 

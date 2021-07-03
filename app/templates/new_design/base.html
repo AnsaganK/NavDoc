@@ -201,6 +201,32 @@
         text-align: center;
 
     }
+    .slider_wrap{
+        width: 50px;
+        height: 27px;
+        margin-bottom: 20px;
+        display: flex;
+        border-radius: 27px;
+        background-color: grey;
+        align-items: center;
+        transition: background-color .3s ease-in;
+    }
+    .slider_circle{
+        width: 27px;
+        height: 27px;
+        border-radius: 100%;
+        background-color: white;
+        margin-left: 0px;
+        transition: margin-left .3s ease-in;
+        border: 1px solid grey;
+    }
+    #slider_input:checked+label .slider_wrap{
+        background-color: #7dbdff;
+    }
+    #slider_input:checked+label .slider_circle{
+        margin-left: 23px;
+        background-color: #3a92ff;
+    }
     </style>
     {% block style %}
 
@@ -291,8 +317,18 @@
     	$(document).ready(function(){
             $('.fixed-action-btn').floatingActionButton();
           });
-        $(document).ready(function(){
-            $('select').formSelect();
+    	$(document).ready(function(){
+            $('.datepicker').datepicker({
+            firstDay: true,
+            format: 'yyyy-mm-dd',
+            i18n: {
+                months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+                monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июнь", "Июль", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+                weekdays: [ "Воскресенье", "Понедельник","Вторник", "Среда", "Четверг", "Пятница", "Суббота",],
+                weekdaysShort: ["ВС","ПН","ВТ", "СР", "ЧТ", "ПТ", "СБ"],
+                weekdaysAbbrev: [ "ВС","ПН","ВТ", "СР", "ЧТ", "ПТ", "СБ",]
+            }
+        });
           });
     </script>
 </body>

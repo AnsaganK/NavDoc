@@ -90,7 +90,7 @@
                         <input type="text" name="username" required placeholder="Логин">
                         <input type="text" name="first_name" required placeholder="Имя">
                         <input type="text" name="last_name" required placeholder="Фамилия">
-                        <input type="email" name="email" required placeholder="Почта">
+                        <input type="email" name="email" class="validate invalid" required placeholder="Почта">
                         <input type="password" name="password1" required placeholder="Пароль">
                         <input type="password" name="password2" required placeholder="Пароль(повтор)">
                         <select name="department" id="">
@@ -156,6 +156,10 @@
 
 {% block script %}
 <script>
+
+        $(document).ready(function(){
+            $('select').formSelect();
+          });
      var preloader = '<div class="preloader-wrapper big active" style="\n' +
                  '    margin: 150px auto;\n' +
                  '    display: block;\n' +
