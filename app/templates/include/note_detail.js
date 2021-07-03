@@ -73,12 +73,21 @@ function createDetail(data){
                 create_user_last_name = "пользователь";
             }
           modal.innerHTML = `<div class="note_detail">
-<a href="/notes/show/isSignature/${data.id}">PDF</a>
                 <div style="display: flex;
                 margin-top: 14px;
                 border-radius: 10px;
                 flex-direction: column;">
                     <img src="/static/img/${status_image}.svg" class="note_info_img" width="60" height="60">
+                    <div style="display: flex;justify-content: center">
+                        <a href="/notes/show/isSignature/${data.id}" class="waves-effect" target="_blank" style="padding: 4px;
+                            border: 1px solid #54c6f354;
+                            border-radius: 7px;
+                            margin: 5px 10px;">PDF1</a>
+                        <a href="/notes/show/${data.id}" class="waves-effect" target="_blank" style="padding: 4px;
+                            border: 1px solid #54c6f354;
+                            border-radius: 7px;
+                            margin: 5px 10px;">PDF2</a>
+                    </div>
                     <div class="note_info_item"><span>Создал:</span>
                         <span>${create_user_first_name} ${create_user_last_name}</span></div>
                     <div class="note_info_item"><span>Название:</span> <span>${data.title}</span></div>
