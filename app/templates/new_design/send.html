@@ -441,14 +441,80 @@ select{
 
       {% include 'include/note_detail.js' %}
 
+        function showInfoButton(users){
+          let modal = document.getElementById("modal1");
+          let counter = 0;
+          let users_timeline = '';
+          let status = '';
+          let status_img = '';
+          let comment = '';
+          let date_create = '';
+          let user = '';
+
+        users.forEach(elem =>{
+            counter++;
+            user = elem.user.first_name.substring(0,1)+'.'+elem.user.last_name;
+
+            if (elem.status === 'success'){
+                status = 'success';
+                status_img = '<img src="{% static 'img/success.svg' %}" width="40" alt="">'
+                date_create = elem.date_create;
+            }else if(elem.status === 'edit'){
+                status = 'edit';
+                status_img = '<img src="{% static 'img/warning_2.svg' %}" width="40" alt="">'
+                date_create = elem.date_create;
+            }else if(elem.status === 'error'){
+                status = 'error';
+                status_img = '<img src="{% static 'img/error.svg' %}" width="40" alt="">'
+                date_create = elem.date_create;
+            }else {
+                status_img = '<img src="{% static 'img/time_2.svg' %}" width="40" alt="">'
+                date_create = '';
+            }
+
+            if (elem.comment !== null){
+                comment = elem.comment;
+            }else {
+                comment = null;
+            }
+
+
+
+
+                users_timeline += `
+                                <div class="timeline-item ${status}">
+                    <div class="timeline-icon">
+                        ${status_img}
+                    </div>
+                    <div className="timeline-content ${counter % 2 === 0 ? 'right' : ''}">
+                <h2 style="display: flex; justify-content: space-between">${user}
+
+                <span style="font-size: 14px;color: white">${date_create}</span></h2>
+                    <p>
+                    ${comment!==null ? comment : ' <p style="color: gray">Без комментариев</p> '}
+                    </p>
+                    </div>
+                    </div>
+            `
+        });
+        users_timeline = '<div class="timeline">' + users_timeline + '</div>';
+        let div = document.createElement("div");
+        div.classList.add("container");
+        div.innerHTML = users_timeline;
+        modal.appendChild(div);
+
+        }
+
+
         async function getDetailNote(id){
           let modal = document.getElementById("modal1");
           modal.innerHTML = preloader;
           let url = '/fetch/notes/'+id;
           await fetch(url).then(async response => {
               if (response.status === 200) {
-                 createDetail(await response.json());
-
+                  let response_data = await response.json();
+                 createDetail(response_data);
+                    showInfoButton(response_data.users);
               } else {
                 throw new Error(response.status);
               }

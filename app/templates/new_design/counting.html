@@ -137,6 +137,16 @@
       font-size: 23px;
       color: #ff6600;
     }
+    .buh_button{
+      padding: 10px;
+      border: 1px solid #6495ed85;
+      box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+      border-radius: 4px;
+      margin: auto;
+      display: block;
+      width: fit-content;
+      cursor: pointer;
+    }
 </style>
 {% endblock %}
 
@@ -147,8 +157,8 @@
   	<div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s3"><a href="#test1" class="active" onclick="loadCounting(q='wait')">В ожидании</a></li>
-        <li class="tab col s3"><a onclick="loadCounting(q='success')" href="#test2">Подтвежденные</a></li>
+        <li class="tab col s3" data-status="wait"><a href="#test1" class="active" onclick="loadCounting(q='wait')">В ожидании</a></li>
+        <li class="tab col s3" data-status="success"><a onclick="loadCounting(q='success')" href="#test2">Подтвежденные</a></li>
       </ul>
     </div>
 
@@ -190,6 +200,7 @@
 {% block script %}
 <script>
     loadCounting(q="wait");
+
 
 var preloader = '<div class="preloader-wrapper big active" style="\n' +
                  '    margin: 150px auto;\n' +
@@ -383,7 +394,11 @@ var preloader = '<div class="preloader-wrapper big active" style="\n' +
           let url = '/fetch/notes/'+id;
           await fetch(url).then(async response => {
               if (response.status === 200) {
-                 createDetail(await response.json())
+                 let response_data = await response.json();
+                 createDetail(response_data);
+                {% if request.user.profile.isBuh %}
+                 addBuhButton(response_data.id, response_data.isBuh);
+                {% endif %}
               } else {
                 throw new Error(response.status);
               }
@@ -396,8 +411,50 @@ var preloader = '<div class="preloader-wrapper big active" style="\n' +
 
 
 
+        function addBuhButton(id, bool){
+          let modal = document.getElementById("modal1");
+          if (bool === false) {
+            let a = document.createElement("a");
+            url = `/fetch/counting/agree/${id}`;
+            a.classList.add("modal-close");
+            a.onclick = async () => {
+              await fetch(url).then(
+                      async response => {
+                        if (response.status === 200) {
+                          successSignToast()
+                          console.log("OK");
+                          updateData();
+                          await response.json();
+                        } else {
+                          errorConnectionToast()
+                          throw new Error(response.status);
+                        }
+                      }
+              ).catch(error => {
+                errorConnectionToast()
+                console.log(error);
+              })
+            }
+            a.classList.add("buh_button");
+            a.innerHTML = "Подтвердить сумму";
+            modal.appendChild(a);
+          }
+        }
 
-
+        function updateData(){
+          let status;
+          let tabs = document.getElementsByClassName("tabs")[0];
+          for (var i=0; i<tabs.children.length; ++i){
+              console.log(tabs.children[i]);
+              if (tabs.children[i].children[0].classList.contains('active')){
+                  console.log(tabs.children[i]);
+                  status = tabs.children[i].getAttribute("data-status");
+                  console.log(status)
+                  break;
+              }
+          }
+            loadCounting(q=status);
+        }
 
 		function getCookie(name) {
           let matches = document.cookie.match(new RegExp(
@@ -416,5 +473,13 @@ var preloader = '<div class="preloader-wrapper big active" style="\n' +
           loadCounting(q,paginator)
         }
 
+
+
+    function successSignToast(){
+        M.toast({html: 'Подтверждено', classes: "toastSuccess"})
+    }
+    function errorConnectionToast(){
+        M.toast({html: 'Нет соединения', classes: "toastError"})
+    }
 </script>
 {% endblock %}

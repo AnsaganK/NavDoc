@@ -1276,7 +1276,7 @@ class FetchUserDelete(APIView):
     def delete(self, request, pk, format=None):
         user = User.objects.filter(pk=pk).first()
         if user:
-            user.profile.archive()
+            user.profile.archive = True
             user.save()
             return Response({"message": "Пользователь удален"}, status=status.HTTP_200_OK)
         else:
@@ -1356,9 +1356,24 @@ class FetchNoteCreate(APIView):
             print(form.errors)
             return Response({"message": "Отправлены не валидные данные"}, status=status.HTTP_400_BAD_REQUEST)
 
-            #error_list.append({"message": "Отправлены не валидные данные"})
-            #return Response({"messages":error_list}, status=status.HTTP_400_BAD_REQUEST)
 
+class FetchBuhAgree(APIView):
+    def get(self, request, pk, format=None):
+        if request.user.profile.isBuh:
+            note = ServiceNote.objects.filter(pk=pk).first()
+            if note:
+                note.isBuh = True
+                note.buh = request.user
+                if note.user_index == len(note.users.all()):
+                    chef_user = Profile.objects.filter(isChef=True).first()
+                    if chef_user.token:
+                        send_push(chef_user.token, f"Поступило СЗ №{note.number}", note.title)
+                note.save()
+                return Response({"message": "Подтверждено"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"message": "У вас недостаточно прав"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def new_send(request):
@@ -1375,7 +1390,6 @@ def new_send(request):
     month = date.month if date.month > 9 else "0" + str(date.month)
     day = date.day if date.day > 9 else "0" + str(date.day)
     current_date = f"{year}-{month}-{day}"
-
     return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date})
 
 

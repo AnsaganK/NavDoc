@@ -82,4 +82,6 @@ urlpatterns+=[
     path("fetch/user/create", FetchUserCreate.as_view(), name="FetchUserCreate"),
 
     path("fetch/note/create", FetchNoteCreate.as_view(), name="FetchNoteCreate"),
+
+    path("fetch/counting/agree/<int:pk>", FetchBuhAgree.as_view(), name="FetchBuhAgree"),
 ]

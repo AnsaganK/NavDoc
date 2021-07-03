@@ -72,7 +72,8 @@ function createDetail(data){
                 create_user_first_name = "Удаленный";
                 create_user_last_name = "пользователь";
             }
-          modal.innerHTML = `<div class="note_detail">
+          modal.innerHTML = `
+            <div class="note_detail">
                 <div style="display: flex;
                 margin-top: 14px;
                 border-radius: 10px;
@@ -103,5 +104,4 @@ function createDetail(data){
                 </div>
                 ${users}
             </div>`;
-
 }
