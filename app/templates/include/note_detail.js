@@ -63,7 +63,8 @@ function createDetail(data){
                 users+=`<li class="note_detail_user">Удаленный пользователь</li><span class="user_line"></span>`
             }
           });
-          users = `<ul class="note_detail_users">${users}</ul>`
+          users = `<ul class="note_detail_users" style="margin-top: 0px;
+    margin-bottom: 30px;">${users}</ul>`
 
             if(data.user !== null){
                 create_user_first_name = data.user.first_name;

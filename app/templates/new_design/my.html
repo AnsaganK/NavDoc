@@ -133,7 +133,7 @@
         align-self: flex-end;
     }
     .note_info_item svg:hover {
-    fill: #7cb342;
+        fill: #7cb342;
     }
     .connection_error{
       height: 300px;
@@ -144,7 +144,76 @@
       font-size: 23px;
       color: #ff6600;
     }
-
+    .status_radio{
+        display: none;
+    }
+    .status_radio:checked + label{
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 45%), 0 1px 3px 1px rgb(60 64 67 / 25%);
+    }
+    .status_radio:checked + label.success{
+        border: 1px solid #79ff79;
+        color: #00ca00;
+    }
+    .status_radio:checked + label.edit{
+        border: 1px solid #ffcb57;
+        color: #ffcb57;
+    }
+    .status_radio:checked + label.error{
+        border: 1px solid orangered;
+        color: orangered;
+    }
+    .statuses_radio label{
+            cursor: pointer;
+        padding: 15px;
+        border: 1px solid white;
+        border-radius: 4px;
+        color: #a3a3a3;
+        transition: all .3s;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 15%), 0 1px 3px 1px rgb(60 64 67 / 5%);
+    }
+    .statuses_radio{
+        width: 500px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .status_comment{
+        min-width: 500px;
+        max-width: 500px;
+        width: 500px;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 15%), 0 1px 3px 1px rgb(60 64 67 / 5%);
+        display: block;
+        margin: auto;
+        border: 1px solid #efefef;
+        margin-top: 50px;
+        border-radius: 5px;
+        min-height: 120px;
+        padding: 10px;
+    }
+    .my_status{
+        border: 1px solid #9b9bff;
+        padding: 20px;
+        padding-top: 30px;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 45%), 0 1px 3px 1px rgb(60 64 67 / 25%);
+        border-radius: 10px;
+    }
+    .my_status_title{
+        background-color: #85bbff;
+        color: #ffffff;
+        padding: 1px 27px;
+        width: 120px;
+        margin-left: 10px;
+        font-weight: 100;
+        font-size: 19px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .my_status_button {
+        display: block;
+        margin: 10px auto;
+        margin-top: 30px;
+    }
 </style>
 {% endblock %}
 
@@ -155,48 +224,114 @@
 
 
   	<div class="row">
-    <div class="col s12">
-      <ul class="tabs">
-        <li class="tab col s3"><a href="#test1" onclick="loadNotesList(q='wait')">В ожидании</a></li>
-        <li class="tab col s3"><a class="active" onclick="loadNotesList(q='fast')" href="#test2">Срочные</a></li>
-        <li class="tab col s3"><a href="#test3" onclick="loadNotesList(q='success')">Одобренные</a></li>
-        <li class="tab col s3"><a href="#test4" onclick="loadNotesList(q='edit')">Редактирование</a></li>
-        <li class="tab col s3"><a href="#test5" onclick="loadNotesList(q='error')">Отказано</a></li>
-      </ul>
-    </div>
-
-
-    <div id="test1" class="col s12">
-      <div id="wait">
-
+      <div class="col s12">
+        <ul class="tabs">
+          <li class="tab col s3"><a href="#test1" onclick="loadNotesList(q='wait')">В ожидании</a></li>
+          <li class="tab col s3"><a class="active" onclick="loadNotesList(q='fast')" href="#test2">Срочные</a></li>
+          <li class="tab col s3"><a href="#test3" onclick="loadNotesList(q='success')">Одобренные</a></li>
+          <li class="tab col s3"><a href="#test4" onclick="loadNotesList(q='edit')">Редактирование</a></li>
+          <li class="tab col s3"><a href="#test5" onclick="loadNotesList(q='error')">Отказано</a></li>
+        </ul>
       </div>
-    </div>
-    <div id="test2" class="col s12">
-      <div id="fast">
 
-      </div>
-    </div>
-    <div id="test3" class="col s12">
-      <div id="success">
 
-      </div>
-    </div>
-    <div id="test4" class="col s12">
-      <div id="edit">
+      <div id="test1" class="col s12">
+        <div id="wait">
 
+        </div>
       </div>
-    </div>
-    <div id="test5" class="col s12">
-      <div id="error">
+      <div id="test2" class="col s12">
+        <div id="fast">
 
+        </div>
       </div>
-    </div>
+      <div id="test3" class="col s12">
+        <div id="success">
+
+        </div>
+      </div>
+      <div id="test4" class="col s12">
+        <div id="edit">
+
+        </div>
+      </div>
+      <div id="test5" class="col s12">
+        <div id="error">
+
+        </div>
+      </div>
   </div>
 
 {% endblock %}
 
 
 {% block script %}
+<!-- Тут Изменение статуса для Notes -->
+<script>
+    function createFormSubmit(){
+        let form = document.querySelector("form.noteStatusForm");
+        console.log(form);
+        form.onsubmit = function(evt){
+            evt.preventDefault();
+            let formData = new FormData(form);
+            createStatusNoteAPI(formData)
+        }
+    }
+
+    async function createStatusNoteAPI(noteData){
+        url = '/fetch/note/status';
+        await fetch(url, {
+            method: "POST",
+            body: noteData,
+        }).then(async response => {
+                if (response.status === 200) {
+                    successCreateToast();
+                    updateData();
+                }else{
+                    errorMessage(await response.json());
+                }
+            }
+        ).catch(error=>{
+            errorConnectionToast();
+            console.log(error);
+        })
+    }
+
+    function errorMessage(data){
+        if (data.message != null){
+                    M.toast({html: `${data.message}`, classes: "toastError"})
+        }else{
+            M.toast({html: 'Отправлены не валидные данные', classes: "toastError"})
+        }
+    }
+
+    function updateData(){
+        let status;
+        let tabs = document.getElementsByClassName("tabs")[0];
+        for (var i=0; i<tabs.children.length; ++i){
+            console.log(tabs.children[i]);
+            if (tabs.children[i].children[0].classList.contains('active')){
+                console.log(tabs.children[i]);
+                status = tabs.children[i].getAttribute("data-status");
+                console.log(status)
+                break;
+            }
+        }
+        loadNotesList(q=status);
+    }
+
+    function successCreateToast(){
+        M.toast({html: ' Статус изменен', classes: "toastSuccess"})
+    }
+
+
+
+
+    /*Ошибка при отсутсвии интернета и серверных ошибках(редактирование, удаление, создание)*/
+    function errorConnectionToast(){
+        M.toast({html: 'Нет соединения', classes: "toastError"})
+    }
+</script>
     <script type="text/javascript">
       if(getCookie('display') === undefined){
         document.cookie = "display=card"
@@ -226,9 +361,50 @@
           let modal = document.getElementById("modal1");
           modal.innerHTML = preloader;
           let url = '/fetch/notes/'+id;
+          const current_user_id = {{request.user.id}};
           await fetch(url).then(async response => {
               if (response.status === 200) {
-                 createDetail(await response.json())
+                  let userHistory;
+                 let response_data = await response.json();
+                 createDetail(response_data);
+                 let note_user_index = response_data.users[response_data.user_index-1].user.pk;
+                 console.log(note_user_index);
+                 if (note_user_index === current_user_id && response_data.status === null) {
+                     showStatusButton(response_data.id);
+                 }else{
+                     for (var i=0; i<response_data.users.length; ++i){
+                         let elem = response_data.users[i];
+                         console.log(elem);
+                         if (current_user_id === elem.user.pk){
+                             let userStatus;
+                             let userComment;
+                             let userDateCreate = `${elem.date_create.substring(0,10)}   <span style="color: grey">(${elem.date_create.substring(11,19)})</span>`;
+                             if (elem.status === 'success'){
+                                 userStatus = 'Подписано';
+                             }else if (elem.status === 'edit'){
+                                 userStatus = 'На редактирование';
+                             }else if (elem.status === 'error'){
+                                 userStatus = 'Отказано';
+                             }
+
+                             if (elem.comment === null || elem.comment === ''){
+                                 userComment = '<p class="no_comment">Без комментариев</p>';
+                             }else{
+                                 userComment = elem.comment;
+                             }
+                             userHistory = `
+                                <span class="my_status_title">Мой статус</span>
+                                <div class="my_status">
+                                    ${userStatus}
+                                    ${userComment}\n
+                                    ${userDateCreate}
+                                </div>
+                             `;
+                             break;
+                         }
+                     }
+                     showStatusHistory(userHistory);
+                 }
               } else {
                 throw new Error(response.status);
               }
@@ -239,6 +415,43 @@
             });
         }
 
+        function showStatusButton(id){
+          let modal = document.getElementById("modal1");
+          let div = document.createElement("div");
+          div.innerHTML = `
+            <span class="my_status_title">Мой статус</span>
+            <div class="my_status">
+            <form action="" method="" class="noteStatusForm">
+                <div class="statuses_radio">
+                    <input type="text" name="id" value="${id}" style="display: none">
+                    <div>
+                        <input type="radio" class="status_radio" id="radio1" name="status" value="success" checked>
+                        <label for="radio1" class="success">ПОДПИСАТЬ</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="status_radio" id="radio2" name="status" value="edit">
+                        <label for="radio2" class="edit">РЕДАКТИРОВАНИЕ</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="status_radio" id="radio3" name="status" value="error">
+                        <label for="radio3" class="error">ОТКАЗАТЬ</label>
+                    </div>
+                </div>
+                <textarea name="comment" placeholder="Комментарии..." class="status_comment" id="" cols="30" rows="10"></textarea>
+                <button type="submit" class="my_status_button btn waves-effect">Отправить</button>
+            </form>
+            </div>
+`;
+          modal.appendChild(div);
+          createFormSubmit();
+        }
+
+        function showStatusHistory(userHistory){
+          let modal = document.getElementById("modal1");
+          let div = document.createElement("div");
+          div.innerHTML = userHistory;
+          modal.appendChild(div);
+        }
 
         async function createList(data, list_id, display="card"){
             let previous_number = "";
@@ -424,4 +637,6 @@
           loadNotesList(q,paginator)
         }
     </script>
+
+
 {% endblock %}

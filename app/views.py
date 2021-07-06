@@ -1366,7 +1366,7 @@ class FetchBuhAgree(APIView):
                 note.buh = request.user
                 if note.user_index == len(note.users.all()):
                     chef_user = Profile.objects.filter(isChef=True).first()
-                    if chef_user.token:
+                    if chef_user and chef_user.token:
                         send_push(chef_user.token, f"Поступило СЗ №{note.number}", note.title)
                 note.save()
                 return Response({"message": "Подтверждено"}, status=status.HTTP_200_OK)
@@ -1374,6 +1374,51 @@ class FetchBuhAgree(APIView):
                 return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"message": "У вас недостаточно прав"}, status=status.HTTP_400_BAD_REQUEST)
+
+def editNoteStatus(note, user_note, status, comment):
+    pass
+
+
+class FetchUserAgree(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    def post(self, request, format=None):
+        post = request.data
+        user = request.user
+        note = ServiceNote.objects.filter(pk=post["id"]).first()
+        user_note = NoteUsers.objects.filter(user=user).filter(note=note).first()
+        comment = post["comment"]
+        status = post["status"]
+        if note and user_note:
+            if status == success:
+                users = note.users.all()
+                user_note.status = success
+                if user_note.index < len(users):
+                    new_index = user_note.index + 1
+                    note.user_index = new_index
+                    user_next = NoteUsers.objects.filter(note=note).filter(index=new_index).first()
+                    if user_next.user.profile.isChef:
+                        if new_index == len(users) and note.isBuh and user_next.user.profile.token:
+                            send_push(user_next.user.profile.token, f"Поступило СЗ №{note.number}", note.title)
+                    else:
+                        if user_next.user.profile.token:
+                            send_push(user_next.user.profile.token, f"Поступило СЗ №{note.number}", note.title)
+                    note.status = None
+                elif user_note.index == len(users):
+                    note.status = success
+                    note.isChef = True
+            elif status == edit:
+                user_note.status = edit
+                note.status = edit
+            elif status == error:
+                user_note.status = error
+                note.status = error
+            user_note.comment = comment
+            note.save()
+            user_note.save()
+            serializer = ServiceMyNoteDetailSerializer(note)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
 
 
 def new_send(request):

@@ -462,8 +462,8 @@ select{
           let url = '/fetch/notes/'+id;
           await fetch(url).then(async response => {
               if (response.status === 200) {
-                  let response_data = await response.json();
-                 createDetail(response_data);
+                    let response_data = await response.json();
+                    createDetail(response_data);
                     showInfoButton(response_data.users);
               } else {
                 throw new Error(response.status);
