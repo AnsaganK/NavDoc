@@ -477,9 +477,14 @@ select{
             let previous_number = "";
             let next_number = "";
             let empty = '';
+            let edit_button = '';
+
 
             data["data"].forEach(
                 (i) => {
+                    if (list_id === 'edit'){
+                        edit_button = `<a class="waves-effect waves-light modal-trigger" style="float: right;color: #ff701d;" href="#modal1" onclick="editNote(${i.id})">Отредактировать</a>`;
+                    }
                 let fast = i["fast"] ? ' <i class="material-icons" style="color: #ffbd29;margin-top: 4px;position: absolute;margin-left: 20px;">offline_bolt</i>' : '';
                 let file = i["files"].length>0 ? ' <i class="material-icons right">attachment</i>' : '';
                 let card_color = "";
@@ -515,6 +520,7 @@ select{
                     '<div class="card-action"> ' +
                     '<a href="/notes/show/isSignature/'+i["id"]+'" target="_blank">PDF</a> ' +
                     '<a class="waves-effect waves-light modal-trigger" href="#modal1" onclick="getDetailNote('+i.id+')">Подробнее</a> ' +
+                    edit_button +
                     '<a href="#">' +
                     file +
                     '</a> ' +
@@ -656,6 +662,13 @@ select{
           }
           loadNotesList(q,paginator)
         }
+
+      function editNote(id){
+          let modal = document.getElementById("modal1");
+          modal.innerHTML = id;
+       }
+
+
     </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
     <script>
@@ -664,6 +677,8 @@ select{
                 .catch( error => {
                     console.error( error );
                 } );
+
+
     </script>
 
 <!-- Тут CRUD для Notes -->
