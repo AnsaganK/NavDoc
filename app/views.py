@@ -768,7 +768,7 @@ def profile_edit(request, pk):
         else:
             print(form2.errors)
     if user == request.user:
-        return redirect('profile')
+        return redirect('/new/profile')
     else:
         return redirect(user.profile.get_absolute_url())
 
@@ -1420,7 +1420,7 @@ class FetchUserAgree(APIView):
         else:
             return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
 
-
+@login_required
 def new_send(request):
     users = User.objects.filter(profile__archive=False).filter(profile__isChef=False)
     tags = Tags.objects.all()
@@ -1437,40 +1437,40 @@ def new_send(request):
     current_date = f"{year}-{month}-{day}"
     return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date})
 
-
+@login_required
 def new_my(request):
     return render(request, "new_design/my.html")
 
-
+@login_required
 def new_counting(request):
     return render(request, "new_design/counting.html")
 
-
+@login_required
 def new_departments(request):
     departments = Department.objects.all().order_by("pk")
     return render(request, "new_design/departments.html", {"departments": departments})
 
-
+@login_required
 def new_users(request):
     users = User.objects.filter(profile__archive=False).order_by("pk").all()
     departments = Department.objects.order_by("pk").all()
     return render(request, "new_design/users.html", {"users": users, "departments":departments})
 
-
+@login_required
 def new_tags(request):
     tags = Tags.objects.all().order_by("pk")
     return render(request, "new_design/tags.html", {"tags": tags})
 
-
+@login_required
 def new_roles(request):
     roles = Role.objects.all()
     return render(request, "new_design/roles.html", {"roles": roles})
 
-
+@login_required
 def new_profile(request):
     user = request.user
     return render(request, "new_design/profile.html", {"user": user})
 
-
+@login_required
 def new_calendar(request):
     return render(request, "new_design/calendar.html")

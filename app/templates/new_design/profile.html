@@ -8,7 +8,7 @@
 {% block style %}
 <style type="text/css">
 .profile{
-    padding: 10px;
+    padding: 25px;
     margin: 20px 40px;
     width: 360px;
     background: #fff;
@@ -47,7 +47,6 @@
     <div class="modal-content">
       <h5 class="modal_title">Изменение профиля</h5>
         <div style="display: flex;justify-content: center;align-items:center;flex-direction: column;">
-            <p>Изменение профиля</p>
             <form action="{% url 'profile_edit' user.pk %}" method="post" class="form_box" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div style="margin-bottom: 20px" >
@@ -91,7 +90,7 @@
                     <input type="file" name="signature" style="display: none"  id="input_file_1" name="input_file_1" onchange="onFileSelected(event, this)">
                     <label for="input_file_1" class="signature_block" style="cursor:pointer;">{% if user.profile.signature %} <img id="user_signature_img" src="{{ user.profile.signature.url }}" alt="" width="360" height="100%">{% else %}<img id="user_signature_img" alt="" width="360" height="100%"> {% endif %}</label>
                 </div>
-                <button href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</button>
+                <button href="#!" style="margin-top: 15px" class="btn modal_title waves-effect waves-green">изменить</button>
             </form>
         </div>
     </div>
@@ -120,6 +119,10 @@
         <div class="profile_item">
             <span>Моб. номер</span>
             <span>{{ user.profile.mobile }}</span>
+        </div>
+        <div class="profile_item">
+            <span>Дата рождения</span>
+            <span>{% if user.profile.birth_date %}{{ user.profile.birth_date }}{% else %}-{% endif %}</span>
         </div>
         <div class="profile_item">
             <span>Должность</span>
