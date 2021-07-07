@@ -1416,7 +1416,7 @@ class FetchUserAgree(APIView):
             note.save()
             user_note.save()
             serializer = ServiceMyNoteDetailSerializer(note)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data)
         else:
             return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
 

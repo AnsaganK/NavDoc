@@ -226,11 +226,11 @@
   	<div class="row">
       <div class="col s12">
         <ul class="tabs">
-          <li class="tab col s3"><a href="#test1" onclick="loadNotesList(q='wait')">В ожидании</a></li>
-          <li class="tab col s3"><a class="active" onclick="loadNotesList(q='fast')" href="#test2">Срочные</a></li>
-          <li class="tab col s3"><a href="#test3" onclick="loadNotesList(q='success')">Одобренные</a></li>
-          <li class="tab col s3"><a href="#test4" onclick="loadNotesList(q='edit')">Редактирование</a></li>
-          <li class="tab col s3"><a href="#test5" onclick="loadNotesList(q='error')">Отказано</a></li>
+          <li class="tab col s3" data-status="wait"><a href="#test1" onclick="loadNotesList(q='wait')">В ожидании</a></li>
+          <li class="tab col s3" data-status="fast"><a class="active" onclick="loadNotesList(q='fast')" href="#test2">Срочные</a></li>
+          <li class="tab col s3" data-status="success"><a href="#test3" onclick="loadNotesList(q='success')">Одобренные</a></li>
+          <li class="tab col s3" data-status="edit"><a href="#test4" onclick="loadNotesList(q='edit')">Редактирование</a></li>
+          <li class="tab col s3" data-status="error"><a href="#test5" onclick="loadNotesList(q='error')">Отказано</a></li>
         </ul>
       </div>
 
@@ -390,14 +390,14 @@
                              if (elem.comment === null || elem.comment === ''){
                                  userComment = '<p class="no_comment">Без комментариев</p>';
                              }else{
-                                 userComment = elem.comment;
+                                 userComment = `<p>Комментарии: ${elem.comment}</p>`;
                              }
                              userHistory = `
                                 <span class="my_status_title">Мой статус</span>
                                 <div class="my_status">
-                                    ${userStatus}
+                                    Статус: ${userStatus}
                                     ${userComment}\n
-                                    ${userDateCreate}
+                                    Дата: ${userDateCreate}
                                 </div>
                              `;
                              break;
@@ -438,7 +438,7 @@
                     </div>
                 </div>
                 <textarea name="comment" placeholder="Комментарии..." class="status_comment" id="" cols="30" rows="10"></textarea>
-                <button type="submit" class="my_status_button btn waves-effect">Отправить</button>
+                <button type="submit" class="my_status_button modal-close btn waves-effect">Отправить</button>
             </form>
             </div>
 `;
@@ -601,6 +601,7 @@
             list.innerHTML = empty;
         }
     	 async function loadNotesList(q="all", paginator=1){
+             console.log(q);
     	     let url = '/fetch/my/notes?status='+q+'&page='+paginator;
     	     let display = getCookie("display");
     	     let page = document.getElementById(q);
