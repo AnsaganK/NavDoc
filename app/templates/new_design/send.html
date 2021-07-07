@@ -313,7 +313,7 @@ select{
                     {% endfor %}
                 </div>
             </div>
-            <button type="submit" class="modal-close form_button btn waves-effect">Создать</button>
+            <button type="submit" class="form_button btn waves-effect">Создать</button>
         </form>
     </div>
   </div>
@@ -418,38 +418,35 @@ select{
                 status_img = '<img src="{% static 'img/error.svg' %}" width="40" alt="">'
                 date_create = elem.date_create;
             }else {
+                status = '';
                 status_img = '<img src="{% static 'img/time_2.svg' %}" width="40" alt="">'
                 date_create = '';
             }
-
+            date_create = date_create !== '' ? `<br>${date_create.substring(0,10)}  ${date_create.substring(11,19)}` : ''
             if (elem.comment !== null){
                 comment = elem.comment;
             }else {
                 comment = null;
             }
-
-
-
-
                 users_timeline += `
-                                <div class="timeline-item ${status}">
+                <div class="timeline-item ${status}">
                     <div class="timeline-icon">
                         ${status_img}
                     </div>
-                    <div className="timeline-content ${counter % 2 === 0 ? 'right' : ''}">
-                <h2 style="display: flex; justify-content: space-between">${user}
-
-                <span style="font-size: 14px;color: white">${date_create}</span></h2>
+                    <div class="timeline-content ${counter % 2 === 0 ? 'right' : ''}">
+                <h5 style="display: flex; justify-content: space-between; flex-direction: column; line-height: 1;">
+                ${user}
+                <span style="font-size: 14px;color: white">${date_create}</span>
+                </h5>
                     <p>
-                    ${comment!==null ? comment : ' <p style="color: gray">Без комментариев</p> '}
+                    ${comment === null || comment === '' ? '<p style="color: gray">Без комментариев</p>' : comment}
                     </p>
                     </div>
-                    </div>
+                </div>
             `
         });
-        users_timeline = '<div class="timeline">' + users_timeline + '</div>';
+        users_timeline = '<div class="timeline" id="timeline">' + users_timeline + '</div>';
         let div = document.createElement("div");
-        div.classList.add("container");
         div.innerHTML = users_timeline;
         modal.appendChild(div);
 

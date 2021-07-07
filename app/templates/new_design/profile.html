@@ -6,12 +6,125 @@
 {% endblock %}
 
 {% block style %}
-
+<style type="text/css">
+.profile{
+    padding: 10px;
+    margin: 20px 40px;
+    width: 360px;
+    background: #fff;
+    color: #4c4c4c;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+}
+.profile_item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin:5px 0px;
+}
+.profile_picture{
+    margin: auto;
+    border: 1px solid #d0d0d0;
+    border-radius: 10px;
+}
+.edit_black_icon{
+    position: absolute;
+    left: 360px;
+}
+.modal_title{
+    margin: auto;
+    display: block;
+    width: fit-content;
+}
+</style>
 {% endblock %}
 
 {% block content %}
+  <div id="modal1" class="modal" style="width: 500px;">
+    <div class="modal-content">
+      <h5 class="modal_title">Изменение профиля</h5>
+        <div style="display: flex;justify-content: center;align-items:center;flex-direction: column;">
+            <p>Изменение профиля</p>
+            <form action="{% url 'profile_edit' user.pk %}" method="post" class="form_box" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div style="margin-bottom: 20px" >
+                    <input type="file" id="profile_picture" name="picture" onchange="onPictureSelected(event, this)" style="display:none;">
+                    <label for="profile_picture" style="cursor:pointer;">
+                            <img width="360" height="100%" id="profile_info_picture" class="profile_info_picture" src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'img/user.png' %}{% endif %}" alt="">
+                    </label>
+                </div>
+                <div class="form_item">
+                    <label for="">Фамилия</label>
+                    <input type="text" name="last_name" value="{{ user.last_name }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Имя</label>
+                    <input type="text" name="first_name" value="{{ user.first_name }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Отчество</label>
+                    <input type="text" name="patronymic" value="{{ user.profile.patronymic }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Почта</label>
+                    <input type="email" name="email" value="{{ user.email }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Должность</label>
+                    <input type="text" name="position" value="{{ user.profile.position }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Мобильный</label>
+                    <input type="text" name="mobile" value="{{ user.profile.mobile }}">
+                </div>
+                <div class="form_item">
+                    <label for="">Дата рождения</label>
+                    <input type="date" name="birth_date"
+                    value="{{ user.profile.birth_date.year }}-{% if user.profile.birth_date.month < 10 %}0{{ user.profile.birth_date.month  }}{% else %}{{ user.profile.birth_date.month  }}{% endif %}-{% if user.profile.birth_date.day < 10 %}0{{ user.profile.birth_date.day }}{% else %}{{ user.profile.birth_date.day }}{% endif %}">
+                </div>
+
+                <span>Подпись</span>
+                 <div class="form_item">
+                    <input type="file" name="signature" style="display: none"  id="input_file_1" name="input_file_1" onchange="onFileSelected(event, this)">
+                    <label for="input_file_1" class="signature_block" style="cursor:pointer;">{% if user.profile.signature %} <img id="user_signature_img" src="{{ user.profile.signature.url }}" alt="" width="360" height="100%">{% else %}<img id="user_signature_img" alt="" width="360" height="100%"> {% endif %}</label>
+                </div>
+                <button href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</button>
+            </form>
+        </div>
+    </div>
+  </div>
+
 <div class="content">
-    {{ user.first_name }}
-    {{ user.last_name }}
+    <div class="profile">
+        <img src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'img/user.png' %}{% endif %}" class="profile_picture" alt="" width="70%">
+        <a href="#modal1" class="modal-trigger" style="display: contents"><img src="{% static 'img/edit_black.svg' %}"  class="edit_black_icon" alt="" width="30px"></a>
+        <div class="profile_item">
+            <span>Фамилия</span>
+            <span>{{ user.last_name }}</span>
+        </div>
+        <div class="profile_item">
+            <span>Имя</span>
+            <span>{{ user.first_name }}</span>
+        </div>
+        <div class="profile_item">
+            <span>Отчество</span>
+            <span>{{ user.profile.patronymic }}</span>
+        </div>
+        <div class="profile_item">
+            <span>Почта</span>
+            <span>{{ user.email }}</span>
+        </div>
+        <div class="profile_item">
+            <span>Моб. номер</span>
+            <span>{{ user.profile.mobile }}</span>
+        </div>
+        <div class="profile_item">
+            <span>Должность</span>
+            <span>{{ user.profile.position }}</span>
+        </div>
+    </div>
 </div>
 {% endblock %}
