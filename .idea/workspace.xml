@@ -23,11 +23,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/migrations/0006_auto_20210707_1545.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/registration/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/registration/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/my.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/my.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/navistar_documents/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/navistar_documents/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -207,7 +207,10 @@
       <workItem from="1625635188285" duration="1724000" />
       <workItem from="1625636994904" duration="1301000" />
       <workItem from="1625642760276" duration="1009000" />
-      <workItem from="1625644622457" duration="586000" />
+      <workItem from="1625644622457" duration="1375000" />
+      <workItem from="1625648921861" duration="1689000" />
+      <workItem from="1625650826236" duration="1109000" />
+      <workItem from="1625652797439" duration="291000" />
     </task>
     <servers />
   </component>

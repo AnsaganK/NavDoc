@@ -70,6 +70,9 @@ def send_push(token, title, data):
 
 @login_required()
 def home(request):
+    return redirect("/new/send")
+
+
     if "design" in request.COOKIES and request.COOKIES["design"] == "new":
         return redirect("/new/send")
 
@@ -1332,15 +1335,22 @@ class FetchNoteCreate(APIView):
                     tag = Tags.objects.get(pk=tag_id)
                     data.tags.add(tag)
             user_count = 0
+            second_send = False
             for i in post:
                 if "user" in i:
                     user_count += 1
                     index = i.split("_")[1]
                     user_id = post[i]
                     user = User.objects.get(pk=user_id)
-                    if index == "1" and user.profile.token:
-                        send_push(token=user.profile.token, title=f"Поступило СЗ №{post['number']}", data=post["title"])
-                    signer = NoteUsers.objects.create(user=user, index=index, note=data)
+                    if index == "1" and user == request.user:
+                        second_send = True
+                        signer = NoteUsers.objects.create(status='success', date_create=datetime.datetime.now(), user=user, index=index, note=data)
+                        data.user_index += 1
+                        data.save()
+                    else:
+                        if (index == "1" and user.profile.token) or (index == "2" and user.profile.token and second_send):
+                            send_push(token=user.profile.token, title=f"Поступило СЗ №{post['number']}", data=post["title"])
+                        signer = NoteUsers.objects.create(user=user, index=index, note=data)
                     signer.save()
 
             chef_user = Profile.objects.filter(isChef=True).first()
@@ -1420,7 +1430,7 @@ class FetchUserAgree(APIView):
         else:
             return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
 
-@login_required
+@login_required()
 def new_send(request):
     users = User.objects.filter(profile__archive=False).filter(profile__isChef=False)
     tags = Tags.objects.all()
@@ -1437,40 +1447,40 @@ def new_send(request):
     current_date = f"{year}-{month}-{day}"
     return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date})
 
-@login_required
+@login_required()
 def new_my(request):
     return render(request, "new_design/my.html")
 
-@login_required
+@login_required()
 def new_counting(request):
     return render(request, "new_design/counting.html")
 
-@login_required
+@login_required()
 def new_departments(request):
     departments = Department.objects.all().order_by("pk")
     return render(request, "new_design/departments.html", {"departments": departments})
 
-@login_required
+@login_required()
 def new_users(request):
     users = User.objects.filter(profile__archive=False).order_by("pk").all()
     departments = Department.objects.order_by("pk").all()
     return render(request, "new_design/users.html", {"users": users, "departments":departments})
 
-@login_required
+@login_required()
 def new_tags(request):
     tags = Tags.objects.all().order_by("pk")
     return render(request, "new_design/tags.html", {"tags": tags})
 
-@login_required
+@login_required()
 def new_roles(request):
     roles = Role.objects.all()
     return render(request, "new_design/roles.html", {"roles": roles})
 
-@login_required
+@login_required()
 def new_profile(request):
     user = request.user
     return render(request, "new_design/profile.html", {"user": user})
 
-@login_required
+@login_required()
 def new_calendar(request):
     return render(request, "new_design/calendar.html")
