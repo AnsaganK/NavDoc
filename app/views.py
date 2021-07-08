@@ -507,14 +507,6 @@ def service_note_edit(request, pk):
 
             note.save()
             userNote.save()
-            # for i in post:
-            #    if "user" in i:
-            #        index = i.split("_")[1]
-            #        user_id = post[i]
-            #        user = User.objects.get(pk=user_id)
-            #        signer = NoteUsers.objects.create(user=user, index=index, note=data)
-            #        signer.save()
-
     return redirect(note.get_absolute_url())
 
 
@@ -1429,6 +1421,35 @@ class FetchUserAgree(APIView):
             return Response(serializer.data)
         else:
             return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class FetchNoteEdit(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    def post(self, request, format=None):
+        post = request.data
+        print(post)
+        note = ServiceNote.objects.get(pk=post["id"])
+        note.tags.clear()
+        userNote = NoteUsers.objects.filter(status="edit").filter(note=note).filter(note__user_index=F('index')).first()
+        files = request.FILES
+        form = ServiceNoteEditForm(post, instance=note)
+        print(form)
+        if form.is_valid():
+            data = form.save()
+            data.number = note.number
+            data.status = None
+
+            for i in post:
+                if "tag" in i:
+                    tag_id = i.split("_")[-1]
+                    tag = Tags.objects.get(pk=tag_id)
+                    data.tags.add(tag)
+            userNote.status = None
+            note.status = None
+
+            #note.save()
+            #userNote.save()
+        return Response({}, status=status.HTTP_200_OK)
 
 @login_required()
 def new_send(request):

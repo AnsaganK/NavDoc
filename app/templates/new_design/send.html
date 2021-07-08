@@ -483,7 +483,7 @@ select{
             data["data"].forEach(
                 (i) => {
                     if (list_id === 'edit'){
-                        edit_button = `<a class="waves-effect waves-light modal-trigger" style="float: right;color: #ff701d;" href="#modal1" onclick="editNote(${i.id})">Отредактировать</a>`;
+                        edit_button = `<a class="waves-effect waves-light modal-trigger" style="float: right;color: #ff701d;margin-left:20px;" href="#modal1" onclick="editNote(${i.id})">Отредактировать</a>`;
                     }
                 let fast = i["fast"] ? ' <i class="material-icons" style="color: #ffbd29;margin-top: 4px;position: absolute;margin-left: 20px;">offline_bolt</i>' : '';
                 let file = i["files"].length>0 ? ' <i class="material-icons right">attachment</i>' : '';
@@ -566,9 +566,9 @@ select{
                     let display_list_color = getCookie('display') === 'list'? '#ff985f' : '#546e7a';
             let pagination = '' +
                     '<ul class="pagination">\n' +
-                    previous_number_page+
+                    previous_number_page +
                     '    <li class="active"><a href="#!">'+
-                    data["page"]+
+                    data["page"] +
                     '</a></li>\n' +
                     next_number_page+
                     '  </ul>\n' +
@@ -580,9 +580,9 @@ select{
                     '                    top: 120px;\n' +
                     '                    font-size: 33px;\n' +
                     '                    color: '+
-                    display_card_color+
+                    display_card_color +
                     ';\n' +
-                    '                ">apps</i>'+
+                    '                ">apps</i>' +
                     '<i class="material-icons" onclick="setDisplay(2,'+"'"+list_id+"'"+','+data["page"]+')" style="\n' +
                     '                    float: right;\n' +
                     '                    cursor: pointer;\n' +
@@ -591,7 +591,7 @@ select{
                     '                    top: 120px;\n' +
                     '                    font-size: 33px;\n' +
                     '                    color: '+
-                    display_list_color+
+                    display_list_color +
                     ';\n' +
                     '                ">reorder</i>'+
                     '<i class="material-icons" style="\n' +
@@ -663,11 +663,156 @@ select{
           loadNotesList(q,paginator)
         }
 
-      function editNote(id){
-          let modal = document.getElementById("modal1");
-          modal.innerHTML = id;
+      async function editNote(id){
+          let url = '/fetch/notes/'+id;
+          await fetch(url).then(async response => {
+              if (response.status === 200) {
+
+                    let response_data = await response.json();
+                    editModalShow(response_data);
+              } else {
+                throw new Error(response.status);
+              }
+            }).catch((error)=>{
+              console.log(error);
+              let modal = document.getElementById("modal1");
+              modal.innerHTML = "<div class='connection_error'>Ошибка<br>Нет связи с сервером</div>";
+            });
        }
 
+       function editModalShow(data){
+          let modal = document.getElementById("modal1");
+          let tags = '';
+          let active_tag = '';
+          let check_tags = [];
+          let check = '';
+          let users = '';
+          let user_count = 0;
+          let files = '';
+          let empty_files = '';
+          let empty_files_count;
+          check = data.fast === true ? 'checked' : '';
+
+          data.files.forEach(
+              (elem) => {
+                  files += `<a href="${elem.file}" target="_blank" style="border: 1px solid rgb(165, 235, 120);color: rgb(165, 235, 120);padding: 19px 17px 12px;margin-right: 20px;border-radius: 13px;">
+                            <img src="{% static 'img/success.svg' %}" width="20" alt="">
+                            </a>`;
+              }
+          )
+
+           for (i = 0; i<5-data.files.length;++i){
+               empty_files += `
+                            <div class="input_file">
+                                <input type="file" id="input_file_${i}" name="input_file_${i}" onchange="file_upload(this)">
+                                <label for="input_file_${i}" class="input_file_label">+</label>
+                            </div>`
+           }
+
+          data.users.forEach((elem) => {
+              ++user_count;
+              users += `<span style="margin: 10px;padding: 10px;background: #d4d4d4;border-radius: 4px;">${elem.user.first_name} ${elem.user.last_name} (${elem.user.profile.position})</span>`;
+          })
+           users = `<div style="display: flex;justify-content: center;flex-direction: column">${users}</div>`
+
+          data.tags.forEach((elem) => {
+
+              check_tags.push(elem.id);
+          })
+          let all_tags = [
+              {% for tag in tags %}
+                {
+                    "id": {{ tag.id }},
+                    "name": "{{tag.name}}"
+                },
+              {% endfor %}
+              ]
+          all_tags.forEach(
+              (elem) => {
+                  active_tag = check_tags.indexOf(elem.id) !== -1 ? 'checked' : '';
+                  tags += `<input type="checkbox" id="tag_${elem.id}" ${active_tag} name="tag_${elem.id}">
+                            <label class="tag" for="tag_${elem.id}">
+                                ${elem.name}
+                            </label>`;
+              }
+          )
+
+          modal.innerHTML = `
+            <div class="modal_content create_note_modal">
+                <form action="" method="" class="form_edit" enctype="multipart/form-data">
+                    <h5 class="form_title">
+                        <span>Служебная записка №</span><input type="number" class="note_number_input" autocomplete="off" name="number" min="1" value="${data.number}"></h5>
+
+                        <input type="text" name="id" value="${data.id}" style="display: none  ">
+                        <label for="" class="">Название</label>
+                        <input type="text" name="title" autocomplete="off" style="text-align: center" required="" value="${data.title}">
+
+                        <label for="" class="">Дата</label>
+
+
+                        <input type="text" name="date" autocomplete="off" class="datepicker2" required="" value="${data.date}">
+
+                        <label for="" class="">Текст</label>
+                        <textarea type="text" id="editor2" autocomplete="off" name="text" rows="4" style="display: none;">${data.text}</textarea>
+                        <label for="" class="">Итого</label>
+                        <input type="number" name="summa" autocomplete="off" style="text-align: center" required="" value="${data.summa}">
+
+                    <div class="form_item" style="margin-bottom: 30px;margin-top: 10px;">
+                        <label for="">Файлы</label>
+                        <div class="input_files">
+                        ${files}
+                        ${empty_files}
+                        </div>
+                    </div>
+                    <div class="form_item">
+                        <label for="">Кому</label>
+                        <div class="user_selects" id="user_selects">
+                            <div class="user_select">
+                                ${users}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="switch">
+                        <label>
+                          Обычный
+                          <input type="checkbox" name="fast" ${check}>
+                          <span class="lever"></span>
+                          Срочный
+                        </label>
+                      </div>
+                    <div class="form_item" style="border-top:1px solid #cecece;padding-top:10px;">
+                        <div class="tags">
+                            ${tags}
+                        </div>
+                    </div>
+                    <button type="submit" class="form_button btn waves-effect">Изменить</button>
+                </form>
+          </div>
+          `;
+
+
+                  ClassicEditor
+                    .create(document.querySelector('#editor2'))
+                    .catch(error=>{
+                        console.error(error);
+                    });
+
+                  $(document).ready(function(){
+            $('.datepicker2').datepicker({
+            firstDay: true,
+            format: 'yyyy-mm-dd',
+            i18n: {
+                months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+                monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июнь", "Июль", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+                weekdays: [ "Воскресенье", "Понедельник","Вторник", "Среда", "Четверг", "Пятница", "Суббота",],
+                weekdaysShort: ["ВС","ПН","ВТ", "СР", "ЧТ", "ПТ", "СБ"],
+                weekdaysAbbrev: [ "ВС","ПН","ВТ", "СР", "ЧТ", "ПТ", "СБ",]
+            }
+        });
+          });
+
+           editNoteFormSubmit();
+       }
 
     </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
@@ -683,6 +828,33 @@ select{
 
 <!-- Тут CRUD для Notes -->
 <script>
+    function editNoteFormSubmit() {
+        let form_edit = document.querySelector("form.form_edit");
+        console.log(form_edit);
+        form_edit.onsubmit = function (evt) {
+            evt.preventDefault();
+            let formData = new FormData(form_edit);
+            editNoteAPI(formData)
+        }
+    }
+    async function editNoteAPI(noteData){
+        url = `/fetch/notes/edit`;
+        await fetch(url, {
+            method: "POST",
+            body: noteData,
+        }).then(async response => {
+                if (response.status === 200) {
+                    successCreateToast();
+                    updateData();
+                }else{
+                    errorMessage(await response.json());
+                }
+            }
+        ).catch(error=>{
+            errorConnectionToast();
+            console.log(error);
+        })
+    }
     /*Тут создание*/
     let form = document.querySelector("form.form_box");
     form.onsubmit = function(evt){
@@ -690,7 +862,6 @@ select{
         let formData = new FormData(form);
         createNoteAPI(formData)
     }
-
     async function createNoteAPI(noteData){
         url = '/fetch/note/create';
         await fetch(url, {

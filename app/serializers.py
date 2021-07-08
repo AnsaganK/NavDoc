@@ -44,11 +44,16 @@ class ServiceNoteSerializer(serializers.ModelSerializer):
         model = ServiceNote
         fields = ('title', 'date', 'user', 'id', 'fast', 'status', 'number')
 
+class ProfilePositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('position',)
 
 class UserIdSerializer(serializers.ModelSerializer):
+    profile = ProfilePositionSerializer()
     class Meta:
         model = User
-        fields = ('pk','first_name','last_name')
+        fields = ('pk', 'first_name', 'last_name', 'profile')
 
 class UserNoteSerializer(serializers.ModelSerializer):
     user = UserIdSerializer()
