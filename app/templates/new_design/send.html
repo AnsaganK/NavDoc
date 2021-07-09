@@ -204,13 +204,10 @@ select{
 
 {% block content %}
   <div id="modal1" class="modal">
-    <div class="modal-content">
-      <h4>Modal Header</h4>
-      <p>A bunch of text</p>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
+
+  </div>
+  <div id="modal_edit" class="modal">
+
   </div>
   <div id="modal_create" class="modal">
     <div class="modal_content create_note_modal">
@@ -483,7 +480,7 @@ select{
             data["data"].forEach(
                 (i) => {
                     if (list_id === 'edit'){
-                        edit_button = `<a class="waves-effect waves-light modal-trigger" style="float: right;color: #ff701d;margin-left:20px;" href="#modal1" onclick="editNote(${i.id})">Отредактировать</a>`;
+                        edit_button = `<a class="waves-effect waves-light modal-trigger" style="float: right;color: #ff701d;margin-left:20px;" href="#modal_edit" onclick="editNote(${i.id})">Отредактировать</a>`;
                     }
                 let fast = i["fast"] ? ' <i class="material-icons" style="color: #ffbd29;margin-top: 4px;position: absolute;margin-left: 20px;">offline_bolt</i>' : '';
                 let file = i["files"].length>0 ? ' <i class="material-icons right">attachment</i>' : '';
@@ -664,6 +661,8 @@ select{
         }
 
       async function editNote(id){
+          let modal = document.getElementById("modal_edit");
+          modal.innerHTML = preloader;
           let url = '/fetch/notes/'+id;
           await fetch(url).then(async response => {
               if (response.status === 200) {
@@ -675,13 +674,12 @@ select{
               }
             }).catch((error)=>{
               console.log(error);
-              let modal = document.getElementById("modal1");
               modal.innerHTML = "<div class='connection_error'>Ошибка<br>Нет связи с сервером</div>";
             });
        }
 
        function editModalShow(data){
-          let modal = document.getElementById("modal1");
+          let modal = document.getElementById("modal_edit");
           let tags = '';
           let active_tag = '';
           let check_tags = [];
