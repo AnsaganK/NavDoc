@@ -356,12 +356,23 @@ var preloader = '<div class="preloader-wrapper big active" style="\n' +
               if (response.status === 200) {
                  createList(await response.json(), q, display)
               } else {
+                serverError(q);
                 throw new Error(response.status);
               }
-            });
+            }).catch((error) => {
+              serverError(q);
+                     errorConnectionToast();
+                     console.log(error);
+                     }
+             );
 		}
 
 
+
+function serverError(q){
+          let page = document.getElementById(`${q}`);
+          page.innerHTML = "<div class='serverErrorPage'><span>Ошибка</span><br><span>Попробуйте позже</span></div>";
+}
 
 
 		{% include 'include/note_detail.js' %}

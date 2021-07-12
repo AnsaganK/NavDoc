@@ -199,6 +199,7 @@ select{
     display: block;
     margin-bottom: 25px;
 }
+
 </style>
 {% endblock %}
 
@@ -368,7 +369,6 @@ select{
         document.cookie = "display=card"
       }
 
-        loadNotesList(q="fast");
 
 
         var preloader = '<div class="preloader-wrapper big active" style="\n' +
@@ -386,6 +386,7 @@ select{
                  '    </div>\n' +
                  '    </div>';
 
+        loadNotesList(q="fast");
       {% include 'include/note_detail.js' %}
 
         function showInfoButton(users){
@@ -631,8 +632,11 @@ select{
                  createList(await response.json(), q, display)
               } else {
                 throw new Error(response.status);
+                serverError(q);
               }
             }).catch(error => {
+                errorConnectionToast();
+                serverError(q);
                 console.log(error);
              });
 		}
@@ -640,7 +644,11 @@ select{
 
 
 
+function serverError(q){
+          let page = document.getElementById(`${q}`);
+          page.innerHTML = "<div class='serverErrorPage'><span>Ошибка</span><br><span>Попробуйте позже</span></div>";
 
+}
 
 
         function getCookie(name) {
@@ -835,6 +843,7 @@ select{
             editNoteAPI(formData)
         }
     }
+
     async function editNoteAPI(noteData){
         url = `/fetch/notes/edit`;
         await fetch(url, {
@@ -842,7 +851,7 @@ select{
             body: noteData,
         }).then(async response => {
                 if (response.status === 200) {
-                    successCreateToast();
+                    M.toast({html: 'СЗ изменено', classes: "toastSuccess"})
                     updateData();
                 }else{
                     errorMessage(await response.json());
@@ -853,6 +862,7 @@ select{
             console.log(error);
         })
     }
+
     /*Тут создание*/
     let form = document.querySelector("form.form_box");
     form.onsubmit = function(evt){

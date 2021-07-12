@@ -25,7 +25,10 @@
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/new_design/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/counting.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/counting.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/my.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/my.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/new_design/send.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/send.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,6 +223,14 @@
       <workItem from="1625828589453" duration="1780000" />
       <workItem from="1625833309023" duration="565000" />
       <workItem from="1625841340225" duration="1185000" />
+      <workItem from="1625858757271" duration="55000" />
+      <workItem from="1626076507886" duration="1298000" />
+      <workItem from="1626078375824" duration="616000" />
+      <workItem from="1626093771046" duration="1356000" />
+      <workItem from="1626106093066" duration="1399000" />
+      <workItem from="1626107952663" duration="1109000" />
+      <workItem from="1626109891236" duration="2060000" />
+      <workItem from="1626112057055" duration="1632000" />
     </task>
     <servers />
   </component>

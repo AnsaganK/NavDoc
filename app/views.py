@@ -971,17 +971,10 @@ class NoteEditStatus(APIView):
 
 class FetchNotesList(APIView):
     def get(self, request, format=None):
-        last = ServiceNote.objects.last()
-        tags = Tags.objects.all()
+ #       last = ServiceNote.objects.last()
+ #       tags = Tags.objects.all()
         notes = ServiceNote.objects.filter(user=request.user).order_by('-pk')
 
-        count_all = notes.count()
-        count_wait = notes.filter(status=None).count()
-        count_fast = notes.filter(status=None).filter(fast=True).count()
-        count_success = notes.filter(status=success).count()
-        count_edit = notes.filter(status=edit).count()
-        count_error = notes.filter(status=error).count()
-        count_files = notes.filter(~Q(files=None)).count()
         q = "all"
 
         if request.GET:
@@ -1014,16 +1007,16 @@ class FetchNotesList(APIView):
             # Если страница больше максимальной, доставить последнюю страницу результатов
             notes = paginator.page(paginator.num_pages)
 
-        date = datetime.datetime.now()
-        year = date.year
-        month = date.month if date.month > 9 else "0" + str(date.month)
-        day = date.day if date.day > 9 else "0" + str(date.day)
-        current_date = f"{year}-{month}-{day}"
-        users = User.objects.exclude(profile__isChef=True).order_by("-pk")
-        if last:
-            number = last.number + 1 if last.number else 1
-        else:
-            number = 1
+#        date = datetime.datetime.now()
+#        year = date.year
+#        month = date.month if date.month > 9 else "0" + str(date.month)
+#        day = date.day if date.day > 9 else "0" + str(date.day)
+#        current_date = f"{year}-{month}-{day}"
+#        users = User.objects.exclude(profile__isChef=True).order_by("-pk")
+#        if last:
+ #           number = last.number + 1 if last.number else 1
+ #       else:
+ #           number = 1
         serializer = ServiceMyNoteDetailSerializer(notes, many=True)
         return Response({"data": serializer.data, "page": notes.number, "isPrevious": notes.has_previous(),
                          "isNext": notes.has_next()})
@@ -1048,13 +1041,13 @@ class FetchMyNotesList(APIView):
         if request.user.profile.isChef:
             notes = notes.filter(note__isBuh=True)
 
-        count_all = notes.count()
-        count_wait = notes.filter(status=None).count()
-        count_fast = notes.filter(status=None).filter(note__fast=True).count()
-        count_success = notes.filter(status=success).count()
-        count_edit = notes.filter(status=edit).count()
-        count_error = notes.filter(status=error).count()
-        count_files = notes.filter(~Q(note__files=None)).count()
+    #    count_all = notes.count()
+    #    count_wait = notes.filter(status=None).count()
+    #    count_fast = notes.filter(status=None).filter(note__fast=True).count()
+    #    count_success = notes.filter(status=success).count()
+    #    count_edit = notes.filter(status=edit).count()
+    #    count_error = notes.filter(status=error).count()
+    #    count_files = notes.filter(~Q(note__files=None)).count()
 
         if request.user.profile.isChef:
             count_wait = notes.filter(status=None).filter(note__isBuh=True).count()
@@ -1434,6 +1427,7 @@ class FetchNoteEdit(APIView):
         files = request.FILES
         form = ServiceNoteEditForm(post, instance=note)
         print(form)
+        print(123)
         if form.is_valid():
             data = form.save()
             data.number = note.number
@@ -1450,6 +1444,12 @@ class FetchNoteEdit(APIView):
             #note.save()
             #userNote.save()
         return Response({}, status=status.HTTP_200_OK)
+
+
+
+class FetchNewSend(APIView):
+    def get(self, request, format=None):
+        pass
 
 @login_required()
 def new_send(request):
