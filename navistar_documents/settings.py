@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'doc.navistar-asia.com',
-    '12c157342180.ngrok.io',
+    '08a488b6d001.ngrok.io',
 ]
 
 
