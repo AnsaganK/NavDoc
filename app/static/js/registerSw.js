@@ -1,3 +1,5 @@
+let ngrok_url = 'https://08a488b6d001.ngrok.io/webpush/save_information'
+
 const registerSw = async () => {
     if ('serviceWorker' in navigator) {
         const reg = await navigator.serviceWorker.register('/sw.js');
