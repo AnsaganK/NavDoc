@@ -1428,13 +1428,8 @@ class FetchNoteEdit(APIView):
         userNote = NoteUsers.objects.filter(status="edit").filter(note=note).filter(note__user_index=F('index')).first()
         files = request.FILES
         form = ServiceNoteEditForm(post, instance=note)
-        print(form)
-        print(123)
         if form.is_valid():
             data = form.save()
-            data.number = note.number
-            data.status = None
-
             for i in post:
                 if "tag" in i:
                     tag_id = i.split("_")[-1]
@@ -1443,8 +1438,8 @@ class FetchNoteEdit(APIView):
             userNote.status = None
             note.status = None
 
-            #note.save()
-            #userNote.save()
+            note.save()
+            userNote.save()
         return Response({}, status=status.HTTP_200_OK)
 
 
@@ -1455,10 +1450,6 @@ class FetchNewSend(APIView):
 
 @login_required()
 def new_send(request):
-    webpush_settings = getattr(settings, 'WEBPUSH_SETTINGS', {})
-    vapid_key = webpush_settings.get('VAPID_PUBLIC_KEY')
-    user = request.user
-    #return render(request, 'home.html', {user: user, 'vapid_key': vapid_key})
     users = User.objects.filter(profile__archive=False).filter(profile__isChef=False)
     tags = Tags.objects.all()
     last = ServiceNote.objects.last()
@@ -1472,8 +1463,7 @@ def new_send(request):
     month = date.month if date.month > 9 else "0" + str(date.month)
     day = date.day if date.day > 9 else "0" + str(date.day)
     current_date = f"{year}-{month}-{day}"
-    return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date,
-                                                    "vapid_key": vapid_key})
+    return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date,})
 
 @login_required()
 def new_my(request):

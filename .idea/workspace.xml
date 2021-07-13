@@ -23,6 +23,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/js/registerSw.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/js/registerSw.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/js/site.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/js/site.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/sw.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -229,7 +235,13 @@
       <workItem from="1626149067593" duration="1782000" />
       <workItem from="1626150879080" duration="1801000" />
       <workItem from="1626152700862" duration="1316000" />
-      <workItem from="1626154525424" duration="1633000" />
+      <workItem from="1626154525424" duration="1797000" />
+      <workItem from="1626156350893" duration="965000" />
+      <workItem from="1626158164802" duration="336000" />
+      <workItem from="1626158513255" duration="1785000" />
+      <workItem from="1626161999003" duration="2724000" />
+      <workItem from="1626165604162" duration="1711000" />
+      <workItem from="1626168126620" duration="1202000" />
     </task>
     <servers />
   </component>

@@ -24,7 +24,7 @@ class ServiceNoteForm(forms.ModelForm):
 class ServiceNoteEditForm(forms.ModelForm):
     class Meta:
         model = ServiceNote
-        fields = ('title', 'text', 'fast', 'summa', 'date')
+        fields = ('number', 'title', 'text', 'fast', 'summa', 'date')
 
 class TagForm(forms.ModelForm):
     class Meta:

@@ -128,6 +128,56 @@
             <span>Должность</span>
             <span>{{ user.profile.position }}</span>
         </div>
+        <div class="profile_item">
+            {% if user.profile.signature %}
+                <img src="{{ user.profile.signature.url }}" style="margin: auto" height="120" alt="">
+            {% endif %}
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function onPictureSelected(event, r){
+        var selectedFile = event.target.files[0];
+        console.log(selectedFile);
+          var reader = new FileReader();
+
+          var imgtag = document.getElementById("profile_info_picture");
+
+          if (r.files.length === 0){
+            imgtag.src = "{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'img/camera.svg' %}{% endif %}";
+          }
+
+          imgtag.title = selectedFile.name;
+
+          reader.onload = function(event) {
+            imgtag.src = event.target.result;
+          };
+
+          reader.readAsDataURL(selectedFile);
+             console.log(selectedFile);
+    }
+    function onFileSelected(event, r) {
+      var selectedFile = event.target.files[0];
+        console.log(selectedFile);
+      var reader = new FileReader();
+
+      var imgtag = document.getElementById("user_signature_img");
+
+      if (r.files.length === 0){
+        imgtag.src = "{% if user.profile.signature %}{{ user.profile.signature.url }}{% endif %}";
+      }
+
+      imgtag.title = selectedFile.name;
+
+      reader.onload = function(event) {
+        imgtag.src = event.target.result;
+      };
+
+      reader.readAsDataURL(selectedFile);
+         console.log(selectedFile);
+    }
+</script>
 {% endblock %}
