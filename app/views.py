@@ -14,7 +14,6 @@ from django.db.models import Q
 from django.views.generic.base import View
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.parsers import FileUploadParser
-from webpush import send_user_notification
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from .forms import DepartmentForm, UserForm, ServiceNoteForm, TagForm, UserEditForm, ProfileForm, ServiceNoteEditForm
