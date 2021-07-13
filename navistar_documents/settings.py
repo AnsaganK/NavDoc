@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'app',
     'wkhtmltopdf',
     'rest_framework',
+    'webpush',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'app.context_processors.unReadNotes',
+                #'app.context_processors.unReadNotes',
+                'app.context_processors.get_vapid_key',
             ],
         },
     },
@@ -123,7 +125,11 @@ AUTH_PASSWORD_VALIDATORS = [
     #},
 ]
 
-
+WEBPUSH_SETTINGS = {
+   "VAPID_PUBLIC_KEY": "BL5Pb2SxBrs0wUIaPjN39OEB3jShYy_NPNgV5BzBsmRQeNul4k5qpKX4mW_8HefMBCIKUplUySmJfQKyjpUoXpg",
+   "VAPID_PRIVATE_KEY": "7hedbCNOsCZNtAx3qJUIoWLjbEBiVp4EJ4pYsgp73Cw",
+   "VAPID_ADMIN_EMAIL": "ansagankabdolla4@gmail.com"
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

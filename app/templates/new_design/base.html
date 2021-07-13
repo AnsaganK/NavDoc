@@ -5,6 +5,7 @@
 	<title>{% block title %}doc.navistar-asia.com{% endblock %}</title>
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <meta name="vapid-key" content="{{ vapid_key }}">
     <link rel="stylesheet" href="{% static 'materialize/css/materialize.min.css' %}">
     <link rel="icon" href="{% static 'css/new.css' %}">
     <!--<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
@@ -454,7 +455,7 @@ h1, h2, h3, h4, h5 {
       <a href="#name"><span class="white-text name">{{ request.user.first_name }} {{ request.user.last_name }}</span></a>
       <a href="#email"><span class="white-text email">{{ request.user.email }}</span></a>
     </div>
-        <!--<span class="new badge" style="margin-right: 10px">{{ unReadCount }}</span>-->
+        <!--<span class="new badge" style="margin-right: 10px"></span>-->
     </li>
     <li><a href="{% url 'new_my' %}" class="{% if '/new/my' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">mark_email_unread</i>Принятые</a></li>
     <li><a href="{% url 'new_send' %}" class="{% if '/new/send' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">mail</i>Отправленные</a></li>
@@ -516,5 +517,7 @@ h1, h2, h3, h4, h5 {
         });
           });
     </script>
+    <script src="{% static 'js/registerSw.js' %}"></script>
+    <script src="{% static 'js/site.js' %}"></script>
 </body>
 </html>

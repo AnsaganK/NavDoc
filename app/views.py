@@ -3,8 +3,9 @@ import datetime
 import json
 
 import requests
+from django.conf import settings
 from django.db.models import F
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView
 
@@ -13,6 +14,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.parsers import FileUploadParser
+from webpush import send_user_notification
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from .forms import DepartmentForm, UserForm, ServiceNoteForm, TagForm, UserEditForm, ProfileForm, ServiceNoteEditForm
@@ -26,7 +28,7 @@ from rest_framework.views import APIView
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http import Http404
+from django.http import Http404, JsonResponse
 
 from bs4 import BeautifulSoup as BS
 
@@ -935,7 +937,7 @@ class NoteEditStatus(APIView):
         note_id = data['note_id']
         comment = data['comment']
         status = data['status']
-
+        body = {}
         user = User.objects.get(pk=user_id)
         note = ServiceNote.objects.get(pk=note_id)
         user_note = NoteUsers.objects.filter(user=user).filter(note=note).first()
@@ -956,12 +958,26 @@ class NoteEditStatus(APIView):
             elif user_note.index == len(users):
                 note.status = success
                 note.isChef = True
+                body = {
+                    "head": "Подписано",
+                    "body": f"СЗ №{note.number}",
+                }
         elif status == edit:
             user_note.status = edit
             note.status = edit
+            body = {
+                "head": "На редактирование",
+                "body": f"СЗ №{note.number}",
+            }
         elif status == error:
             user_note.status = error
             note.status = error
+            body = {
+                "head": "Отказано",
+                "body": f"СЗ №{note.number}",
+            }
+        if body != {}:
+            send_web_push(note.user, body)
         user_note.comment = comment
         note.save()
         user_note.save()
@@ -1333,7 +1349,7 @@ class FetchNoteCreate(APIView):
                         data.user_index += 1
                         data.save()
                     else:
-                        if (index == "1" and user.profile.token) or (index == "2" and user.profile.token and second_send):
+                        if (index == "1" and user.profile.token) or (index == "2" and user.profile.token and second_send and user.profile.isChef == False):
                             send_push(token=user.profile.token, title=f"Поступило СЗ №{post['number']}", data=post["title"])
                         signer = NoteUsers.objects.create(user=user, index=index, note=data)
                     signer.save()
@@ -1453,6 +1469,10 @@ class FetchNewSend(APIView):
 
 @login_required()
 def new_send(request):
+    webpush_settings = getattr(settings, 'WEBPUSH_SETTINGS', {})
+    vapid_key = webpush_settings.get('VAPID_PUBLIC_KEY')
+    user = request.user
+    #return render(request, 'home.html', {user: user, 'vapid_key': vapid_key})
     users = User.objects.filter(profile__archive=False).filter(profile__isChef=False)
     tags = Tags.objects.all()
     last = ServiceNote.objects.last()
@@ -1466,7 +1486,8 @@ def new_send(request):
     month = date.month if date.month > 9 else "0" + str(date.month)
     day = date.day if date.day > 9 else "0" + str(date.day)
     current_date = f"{year}-{month}-{day}"
-    return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date})
+    return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date,
+                                                    "vapid_key": vapid_key})
 
 @login_required()
 def new_my(request):
@@ -1505,3 +1526,15 @@ def new_profile(request):
 @login_required()
 def new_calendar(request):
     return render(request, "new_design/calendar.html")
+
+
+
+def send_web_push(user, body):
+    try:
+        data = json.loads(body)
+        payload = {'head': data['head'], 'body': data['body']}
+        send_user_notification(user=user, payload=payload, ttl=1000)
+
+        return JsonResponse(status=200, data={"message": "Web push successful"})
+    except TypeError:
+        return JsonResponse(status=500, data={"message": "An error occurred"})

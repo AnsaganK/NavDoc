@@ -1,5 +1,7 @@
 from django.conf.urls import url
-from django.urls import path
+from django.urls import path, include
+from django.views.generic import TemplateView
+
 from .views import *
 from wkhtmltopdf.views import PDFTemplateView
 
@@ -45,6 +47,10 @@ urlpatterns = [
     path("notes/show/<int:pk>", ShowPdf.as_view(), name="note_show"),
     path("notes/show/isSignature/<int:pk>", ShowPdfSignature.as_view(), name="note_signature_show"),
     path("all-notes", all_notes, name="all_notes"),
+    path('send_push', send_web_push),
+    path('webpush/', include('webpush.urls')),
+    path('sw.js', TemplateView.as_view(template_name='new_design/sw.js', content_type='application/x-javascript'))
+
 ]
 
 urlpatterns+=[
