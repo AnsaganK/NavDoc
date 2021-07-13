@@ -179,7 +179,6 @@
 
 {% block script %}
 <script>
-    loadCounting(q="wait");
 
 
 var preloader = '<div class="preloader-wrapper big active" style="\n' +
@@ -197,6 +196,7 @@ var preloader = '<div class="preloader-wrapper big active" style="\n' +
                  '    </div>\n' +
                  '    </div>';
 
+    loadCounting(q="wait");
 
     async function createList(data, list_id, display="card"){
             let previous_number = "";
