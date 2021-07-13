@@ -958,26 +958,13 @@ class NoteEditStatus(APIView):
             elif user_note.index == len(users):
                 note.status = success
                 note.isChef = True
-                body = {
-                    "head": "Подписано",
-                    "body": f"СЗ №{note.number}",
-                }
         elif status == edit:
             user_note.status = edit
             note.status = edit
-            body = {
-                "head": "На редактирование",
-                "body": f"СЗ №{note.number}",
-            }
         elif status == error:
             user_note.status = error
             note.status = error
-            body = {
-                "head": "Отказано",
-                "body": f"СЗ №{note.number}",
-            }
-        if body != {}:
-            send_web_push(note.user, body)
+
         user_note.comment = comment
         note.save()
         user_note.save()
@@ -1528,7 +1515,7 @@ def new_calendar(request):
     return render(request, "new_design/calendar.html")
 
 
-
+'''
 def send_web_push(user, body):
     try:
         data = json.loads(body)
@@ -1538,3 +1525,4 @@ def send_web_push(user, body):
         return JsonResponse(status=200, data={"message": "Web push successful"})
     except TypeError:
         return JsonResponse(status=500, data={"message": "An error occurred"})
+        '''

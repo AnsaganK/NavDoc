@@ -1,3 +1,4 @@
+/*
 let ngrok_url = 'https://08a488b6d001.ngrok.io/webpush/save_information'
 
 const registerSw = async () => {
@@ -89,4 +90,4 @@ const handleResponse = (res) => {
     console.log(res.status);
 };
 
-registerSw();
+registerSw();*/
