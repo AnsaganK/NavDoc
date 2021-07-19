@@ -450,7 +450,7 @@ h1, h2, h3, h4, h5 {
       <div class="background">
 
       </div>
-      <a href="#user"><img class="circle" src="{% static 'img/user.png' %}"></a>
+      <a href="#user">{% if request.user.profile.picture %}<img src="{{ request.user.profile.picture.url }}" class="circle" alt="">{% else %}<img class="circle" src="{% static 'img/user.png' %}">{% endif %}</a>
       <a href="#name"><span class="white-text name">{{ request.user.first_name }} {{ request.user.last_name }}</span></a>
       <a href="#email"><span class="white-text email">{{ request.user.email }}</span></a>
     </div>

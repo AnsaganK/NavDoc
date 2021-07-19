@@ -24,7 +24,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +62,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../BrightProject/calling" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -242,7 +242,13 @@
       <workItem from="1626325150288" duration="588000" />
       <workItem from="1626404654075" duration="672000" />
       <workItem from="1626408342893" duration="1533000" />
-      <workItem from="1626410947891" duration="969000" />
+      <workItem from="1626410947891" duration="1529000" />
+      <workItem from="1626413415514" duration="594000" />
+      <workItem from="1626414991036" duration="10000" />
+      <workItem from="1626415110323" duration="20000" />
+      <workItem from="1626415211019" duration="3337000" />
+      <workItem from="1626426857014" duration="303000" />
+      <workItem from="1626669597005" duration="8169000" />
     </task>
     <servers />
   </component>
