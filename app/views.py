@@ -492,7 +492,7 @@ def service_note_edit(request, pk):
     if request.method == "POST":
         post = request.POST
         files = request.FILES
-        form = ServiceNoteEditForm(request.POST, instance=note)
+        form = ServiceNoteEditForm(request.POST, request.FILES, instance=note)
         if form.is_valid():
             data = form.save()
             data.number = note.number
@@ -1331,7 +1331,7 @@ class FetchNoteCreate(APIView):
                     user = User.objects.get(pk=user_id)
                     if index == "1" and user == request.user:
                         second_send = True
-                        signer = NoteUsers.objects.create(status='success', date_create=datetime.datetime.now(), user=user, index=index, note=data)
+                        signer = NoteUsers.objects.create(status='success', comment=' ', date_create=datetime.datetime.now(), user=user, index=index, note=data)
                         data.user_index += 1
                         data.save()
                     else:
@@ -1427,7 +1427,7 @@ class FetchNoteEdit(APIView):
         note.tags.clear()
         userNote = NoteUsers.objects.filter(status="edit").filter(note=note).filter(note__user_index=F('index')).first()
         files = request.FILES
-        form = ServiceNoteEditForm(post, instance=note)
+        form = ServiceNoteEditForm(post, files, instance=note)
         if form.is_valid():
             data = form.save()
             for i in post:

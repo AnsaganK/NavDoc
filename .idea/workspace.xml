@@ -23,13 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/templates/registration/password_change_done.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/registration/password_change_form.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/navistar_documents/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/navistar_documents/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/navistar_documents/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/navistar_documents/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/registration/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/registration/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -264,7 +260,7 @@
       <workItem from="1627268718197" duration="292000" />
       <workItem from="1627356757674" duration="1614000" />
       <workItem from="1627528543360" duration="956000" />
-      <workItem from="1627529889154" duration="1505000" />
+      <workItem from="1627529889154" duration="7389000" />
     </task>
     <servers />
   </component>
