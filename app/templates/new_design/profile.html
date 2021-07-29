@@ -133,6 +133,7 @@
                 <img src="{{ user.profile.signature.url }}" style="margin: auto" height="120" alt="">
             {% endif %}
         </div>
+        <a href="{% url 'password_change' %}" class="btn-warning btn waves-effect center" style="margin: auto; margin-top:40px;">Сменить пароль</a>
     </div>
 </div>
 {% endblock %}

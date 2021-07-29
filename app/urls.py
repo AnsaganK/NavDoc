@@ -1,12 +1,14 @@
 from django.conf.urls import url
 from django.urls import path, include
 from django.views.generic import TemplateView
+from django.contrib.auth import views as auth_views
 
 from .views import *
 from wkhtmltopdf.views import PDFTemplateView
 
 
 urlpatterns = [
+
     url(r'^pdf/$', PDFTemplateView.as_view(template_name='note_pdf.html',
                                            filename='my_pdf.pdf'), name='pdf'),
     path("", home, name="home"),
@@ -51,6 +53,8 @@ urlpatterns = [
 ]
 
 urlpatterns+=[
+    path('password-change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
+    path('password-change/done', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
     path("new/send", new_send, name="new_send"),
     path("new/my", new_my, name="new_my"),
     path("new/counting", new_counting, name="new_counting"),

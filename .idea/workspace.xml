@@ -23,8 +23,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/templates/registration/password_change_done.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/registration/password_change_form.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/new_design/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/navistar_documents/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/navistar_documents/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/navistar_documents/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/navistar_documents/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +71,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\User\Desktop\NavDocs\NavDoc\app\templates\registration" />
       <recent name="C:\Users\User\Desktop\NavDocs\NavDoc\app\static\img" />
       <recent name="C:\Users\User\Desktop\NavDocs\NavDoc" />
       <recent name="C:\Users\User\Desktop\NavDocs\NavDoc\navistar_documents" />
@@ -249,6 +255,16 @@
       <workItem from="1626415211019" duration="3337000" />
       <workItem from="1626426857014" duration="303000" />
       <workItem from="1626669597005" duration="8169000" />
+      <workItem from="1626689795221" duration="44000" />
+      <workItem from="1626755351019" duration="404000" />
+      <workItem from="1626755975643" duration="1474000" />
+      <workItem from="1626835011668" duration="6616000" />
+      <workItem from="1626864822867" duration="23000" />
+      <workItem from="1627019215203" duration="4540000" />
+      <workItem from="1627268718197" duration="292000" />
+      <workItem from="1627356757674" duration="1614000" />
+      <workItem from="1627528543360" duration="956000" />
+      <workItem from="1627529889154" duration="1505000" />
     </task>
     <servers />
   </component>
