@@ -78,6 +78,9 @@
         margin:auto !important;
         display: block;
     }
+    .user_actions a:last-child {
+        border-right: 0px;
+    }
 </style>
 {% endblock %}
 
@@ -138,7 +141,7 @@
                 <td class="user_actions">
                         <a onclick="getUserForApi(this, id={{i.pk}}, 'show')"><i class="material-icons more_icon">more_vert</i></a>
                         <a href="#modal_edit" class="modal-trigger" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
-                        <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
+                        {% if request.user.profile.is_admin %} <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a> {% endif %}
                 </td>
                 <div class="profileBlock" id="profileBlock_{{i.pk}}"></div>
             </tr>

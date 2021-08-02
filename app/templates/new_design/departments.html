@@ -265,7 +265,7 @@
                     <span class="departmentIconList">
                         <a href="#modal_detail" class="modal-trigger" onclick="departmentDetail({{i.pk}})"><i class="material-icons more_icon">more_vert</i></a>
                         <a href="#modal_edit" class="modal-trigger" onclick="selectDepartment({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
-                        <a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a>
+                        {% if request.user.profile.is_admin %}<a href="#modal_delete" class="modal-trigger" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a> {% endif %}
                     </span>
                 </div>
             </li>
