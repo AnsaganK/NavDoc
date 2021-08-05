@@ -64,6 +64,7 @@ class ServiceNote(models.Model):
     status = models.CharField(max_length=200, choices=statuses, null=True, blank=True)
     type = models.ForeignKey(ServiceNoteTypes, on_delete=models.DO_NOTHING, null=True, blank=True)
 
+    confidentially = models.BooleanField(default=False, verbose_name='Конфиденциально')
     isChef = models.BooleanField(default=False, null=True, blank=True)
 
     isBuh = models.BooleanField(default=False, null=True, blank=True)
@@ -146,7 +147,6 @@ class Profile(models.Model):
     isChef = models.BooleanField(default=False, null=True, blank=True, verbose_name="это шеф")
     isBuh = models.BooleanField(default=False, null=True, blank=True, verbose_name="это бухгалтер")
 
-    confidentially = models.BooleanField(default=False, verbose_name='Конфиденциально')
     telegram_user_id = models.CharField(max_length=200, null=True, blank=True)
     telegram_chat_id = models.CharField(max_length=200, null=True, blank=True)
 
