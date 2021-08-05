@@ -17,7 +17,7 @@ from rest_framework.parsers import FileUploadParser
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from .forms import DepartmentForm, UserForm, ServiceNoteForm, TagForm, UserEditForm, ProfileForm, ServiceNoteEditForm
-from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers, Profile
+from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers, Profile, ServiceNoteTypes
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -1323,6 +1323,11 @@ class FetchNoteCreate(APIView):
                     data.tags.add(tag)
             user_count = 0
             second_send = False
+            if post['type'] != '':
+                print(type)
+                type = ServiceNoteTypes.objects.filter(pk=int(post['type'])).first()
+                if type:
+                    data.type=type
             for i in post:
                 if "user" in i:
                     user_count += 1
@@ -1371,6 +1376,7 @@ class FetchBuhAgree(APIView):
                 return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"message": "У вас недостаточно прав"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 def editNoteStatus(note, user_note, status, comment):
     pass
@@ -1463,7 +1469,8 @@ def new_send(request):
     month = date.month if date.month > 9 else "0" + str(date.month)
     day = date.day if date.day > 9 else "0" + str(date.day)
     current_date = f"{year}-{month}-{day}"
-    return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date,})
+    types = ServiceNoteTypes.objects.all()
+    return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date,"types": types})
 
 @login_required()
 def new_my(request):
@@ -1503,6 +1510,29 @@ def new_profile(request):
 def new_calendar(request):
     return render(request, "new_design/calendar.html")
 
+
+@login_required()
+def new_note_types(request):
+    if request.method == 'POST':
+        type = ServiceNoteTypes.objects.create(name=request.POST['name'])
+        type.save()
+        for i in request.POST['users']:
+            user = User.objects.filter(pk=int(i)).first()
+            if user:
+                type.users.add(user)
+        type.save()
+        return redirect('new_note_types')
+    users = User.objects.filter(profile__isBuh=True).order_by('-pk')
+    types = ServiceNoteTypes.objects.all().order_by('-pk')
+    return render(request, 'new_design/note_types.html', {'types': types,
+                                                          'users': users})
+
+@login_required()
+def note_type_delete(request, pk):
+    note = ServiceNoteTypes.objects.filter(pk=pk).first()
+    if note:
+        note.delete()
+    return redirect('new_note_types')
 
 '''
 def send_web_push(user, body):

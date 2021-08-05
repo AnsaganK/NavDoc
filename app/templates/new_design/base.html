@@ -467,6 +467,7 @@ h1, h2, h3, h4, h5 {
     <li><a class="waves-effect" href="{% url 'new_tags' %}" class="{% if '/new/tags' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">tag</i>Тэги</a></li>
     <!--<li><a class="waves-effect" href="{% url 'new_roles' %}" class="{% if '/new/roles' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">contacts</i>Роли</a></li>-->
     <li><a class="waves-effect" href="{% url 'new_calendar' %}" class="{% if '/new/calendar' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">date_range</i>Календарь</a></li>
+    {% if request.user.profile.is_admin %}<li><a class="waves-effect" href="{% url 'new_note_types' %}" class="{% if '/new/note/types' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">library_add</i>Типы СЗ(бух.)</a></li>{% endif %}
     <!--<li><a class="waves-effect" href="#!"><i class="material-icons">stacked_bar_chart</i>Статистика</a></li>-->
     <!--<li><a class="waves-effect" href="/" onclick="setDesign()"><i class="material-icons">imagesearch_roller</i>Сменить обстановку</a></li>-->
   </ul>
@@ -483,7 +484,6 @@ h1, h2, h3, h4, h5 {
         function setDesign(){
             document.cookie = "design=old";
         }
-
         $(document).ready(function(){
           $('.modal').modal();
         });

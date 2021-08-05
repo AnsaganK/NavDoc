@@ -92,12 +92,13 @@ function createDetail(data){
                     </div>
                     <div class="note_info_item"><span>Создал:</span>
                         <span>${create_user_first_name} ${create_user_last_name}</span></div>
-                    <div class="note_info_item"><span>Название:</span> <span>${data.title}</span></div>
-                    <div class="note_info_item"><span>Дата СЗ:</span> <span>${data.date}</span></div>
-                    <div class="note_info_item"><span>Дата создания:</span> <span>${data.date_create.substr(0,10)}<br><span style="color:grey;">${data.date_create.substr(11,8)}</span></span></div>
-                    <div class="note_info_item"><span>Текст:</span> <span><p>${data.text}</p></span></div>
-                    <div class="note_info_item"><span>Итого:</span> <span>${data.summa}</span></div>
-                    <div class="note_info_item"><span>Бухгалтер:</span> <span> <span style="color:grey;">${buh}</span> </span></div>
+                    <div class="note_info_item"><span>Название: </span> <span>${data.title}</span></div>
+                    <div class="note_info_item"><span>Дата СЗ: </span> <span>${data.date}</span></div>
+                    <div class="note_info_item"><span>Дата создания: </span> <span>${data.date_create.substr(0,10)}<br><span style="color:grey;">${data.date_create.substr(11,8)}</span></span></div>
+                    <div class="note_info_item"><span>Текст: </span> <span><p>${data.text}</p></span></div>
+                    <div class="note_info_item"><span>Итого: </span> <span>${data.summa}</span></div>
+                    <div class="note_info_item"><span>Тип: </span> <span>${data.type === null ? '<span style="color:grey;">Не выбрано</span>' : data.type}</span></div>
+                    <div class="note_info_item"><span>Бухгалтер: </span> <span> <span style="color:grey;">${buh}</span> </span></div>
                     ${files}
                     <ul class="note_detail_tags">
                     ${tags}

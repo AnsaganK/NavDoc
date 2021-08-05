@@ -1,0 +1,55 @@
+{% extends 'new_design/base.html' %}
+
+{% block title %} Типы СЗ {% endblock %}
+
+{% block content %}
+    <div class="content">
+    <table class="table-striped" id="userTable">
+        <thead>
+        <tr style="font-weight: 600">
+            <td style="text-align: center">Названия типа</td>
+            <td style="text-align: center">Бухгалтер</td>
+            <td style="text-align: center" class="user_actions">Действия</td>
+        </tr>
+        </thead>
+        <tbody>
+            <form action="" method="post">
+                <tr>
+                    <td>
+                        <input type="text" name="name">
+                    </td>
+                    <td>
+                        <select name="users" id="" style="display:block;margin: auto">
+                            {% for user in users %}
+                                <option value="{{ user.pk }}">{{ user.last_name }} {{ user.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="">
+                        <button style="display: block;margin: auto" type="submit" class="btn">Создать</button>
+                    </td>
+                </tr>
+            </form>
+        {% for type in types %}
+            <tr data-id="userItem_{{ i.pk }}">
+                <td>{{ type.name }}</td>
+                <td>
+                    {% for user in type.users.all %}
+                        {{ user.last_name }}
+                        {{ user.first_name }}
+                        ({{ user.profile.position }})
+                        {% if not forloop.last %}
+                            ,
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="user_actions" style="display: flex;justify-content: center">
+                        <a href="#modal_edit" class="modal-trigger" style="border-right: 1px solid #e0e0e0; padding: 0px 5px" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
+                        {% if request.user.profile.is_admin %} <a href="{% url 'note_type_delete' type.pk %}" class="modal-trigger" style="padding: 0px 5px" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a> {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

@@ -225,6 +225,14 @@ select{
                 <label for="">Текст</label>
                 <textarea type="text" id="editor1" autocomplete="off"  name="text" rows="4"></textarea>
 
+                <label for="">Тип</label>
+                <div class="input-field col s12">
+                    <select name="type" id="" class="select_types" style="display: none">
+                        {% for type in types %}
+                        <option value="type.pk">{{ type.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
                 <label for="">Итого</label>
                 <input type="number" name="summa" autocomplete="off"  style="text-align: center" required>
 
@@ -368,7 +376,10 @@ select{
       if(getCookie('display') === undefined){
         document.cookie = "display=card"
       }
-
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.select_types');
+    var instances = M.FormSelect.init(elems);
+  });
 
 
         var preloader = '<div class="preloader-wrapper big active" style="\n' +
@@ -760,6 +771,9 @@ function serverError(q){
 
                         <label for="" class="">Текст</label>
                         <textarea type="text" id="editor2" autocomplete="off" name="text" rows="4" style="display: none;">${data.text}</textarea>
+
+
+
                         <label for="" class="">Итого</label>
                         <input type="number" name="summa" autocomplete="off" style="text-align: center" required="" value="${data.summa}">
 

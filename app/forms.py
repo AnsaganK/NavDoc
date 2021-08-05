@@ -1,5 +1,5 @@
 from django import forms
-from .models import Department, ServiceNote, Tags, Profile
+from .models import Department, ServiceNote, Tags, Profile, ServiceNoteTypes
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -21,10 +21,13 @@ class ServiceNoteForm(forms.ModelForm):
         model = ServiceNote
         fields = ('number', 'title', 'text', 'fast', 'summa', 'date')
 
+
 class ServiceNoteEditForm(forms.ModelForm):
     class Meta:
         model = ServiceNote
         fields = ('number', 'title', 'text', 'fast', 'summa', 'date')
+
+
 
 class TagForm(forms.ModelForm):
     class Meta:

@@ -64,6 +64,9 @@ urlpatterns+=[
     path("new/roles", new_roles, name="new_roles"),
     path("new/profile", new_profile, name="new_profile"),
     path("new/calendar", new_calendar, name="new_calendar"),
+    path("new/note/types", new_note_types, name="new_note_types"),
+
+    path("new/note/types/<int:pk>/delete", note_type_delete, name="note_type_delete"),
 
 
     path("fetch/notes", FetchNotesList.as_view(), name="FetchNotesList"),

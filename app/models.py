@@ -31,12 +31,22 @@ class Tags(models.Model):
         verbose_name_plural = "Тэги"
 
 
+class ServiceNoteTypes(models.Model):
+    name = models.CharField(max_length=250, default='', blank=True)
+    users = models.ManyToManyField(User, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Тип СЗ'
+        verbose_name_plural = 'Типы СЗ'
+
 statuses = (
     ("success", "Подписать"),
     ("edit", "На редактирование"),
     ("error", "Отказать"),
 )
-
 
 
 class ServiceNote(models.Model):
@@ -52,6 +62,7 @@ class ServiceNote(models.Model):
     tags = models.ManyToManyField(Tags,null=True, blank=True, related_name="notes")
     user_index = models.IntegerField(default=1, null=True, blank=True)
     status = models.CharField(max_length=200, choices=statuses, null=True, blank=True)
+    type = models.ForeignKey(ServiceNoteTypes, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     isChef = models.BooleanField(default=False, null=True, blank=True)
 
