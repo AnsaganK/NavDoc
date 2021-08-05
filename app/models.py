@@ -146,6 +146,7 @@ class Profile(models.Model):
     isChef = models.BooleanField(default=False, null=True, blank=True, verbose_name="это шеф")
     isBuh = models.BooleanField(default=False, null=True, blank=True, verbose_name="это бухгалтер")
 
+    confidentially = models.BooleanField(default=False, verbose_name='Конфиденциально')
     telegram_user_id = models.CharField(max_length=200, null=True, blank=True)
     telegram_chat_id = models.CharField(max_length=200, null=True, blank=True)
 
