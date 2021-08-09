@@ -78,12 +78,18 @@ class NoteFilesSerializer(serializers.ModelSerializer):
         model = NoteFiles
         fields = ('file',)
 
+class NoteTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceNoteTypes
+        fields = '__all__'
+
 class ServiceMyNoteDetailSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     users = UserNoteSerializer(many=True)
     files = NoteFilesSerializer(many=True)
     buh = UserSerializer()
     tags = TagSerializer(many=True)
+    type = NoteTypeSerializer()
     class Meta:
         model = ServiceNote
         fields = '__all__'

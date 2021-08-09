@@ -229,7 +229,7 @@ select{
                 <div class="input-field col s12">
                     <select name="type" id="" class="select_types" style="display: none">
                         {% for type in types %}
-                        <option value="type.pk">{{ type.name }}</option>
+                        <option value="{{type.pk}}">{{ type.name }}</option>
                         {% endfor %}
                     </select>
                 </div>

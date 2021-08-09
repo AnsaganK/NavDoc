@@ -19,7 +19,7 @@ class UserForm(UserCreationForm):
 class ServiceNoteForm(forms.ModelForm):
     class Meta:
         model = ServiceNote
-        fields = ('number', 'title', 'text', 'fast', 'summa', 'date')
+        fields = ('number', 'title', 'text', 'fast', 'summa', 'date', 'confidentially')
 
 
 class ServiceNoteEditForm(forms.ModelForm):

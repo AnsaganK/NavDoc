@@ -1324,7 +1324,6 @@ class FetchNoteCreate(APIView):
             user_count = 0
             second_send = False
             if post['type'] != '':
-                print(type)
                 type = ServiceNoteTypes.objects.filter(pk=int(post['type'])).first()
                 if type:
                     data.type=type
