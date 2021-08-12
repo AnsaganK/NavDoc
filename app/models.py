@@ -33,7 +33,7 @@ class Tags(models.Model):
 
 class ServiceNoteTypes(models.Model):
     name = models.CharField(max_length=250, default='', blank=True)
-    users = models.ManyToManyField(User, null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='types')
 
     def __str__(self):
         return self.name
@@ -42,11 +42,23 @@ class ServiceNoteTypes(models.Model):
         verbose_name = 'Тип СЗ'
         verbose_name_plural = 'Типы СЗ'
 
+
 statuses = (
     ("success", "Подписать"),
     ("edit", "На редактирование"),
     ("error", "Отказать"),
 )
+
+class Currency(models.Model):
+    name = models.CharField(max_length=250,null=True, blank=True, verbose_name='Название валюты')
+    code = models.CharField(max_length=250,null=True, blank=True, verbose_name='Код валюты')
+
+    def __str__(self):
+        return f'{self.name} ({self.code})'
+
+    class Meta:
+        verbose_name = 'Валюта'
+        verbose_name_plural = 'Валюты'
 
 
 class ServiceNote(models.Model):
@@ -63,7 +75,7 @@ class ServiceNote(models.Model):
     user_index = models.IntegerField(default=1, null=True, blank=True)
     status = models.CharField(max_length=200, choices=statuses, null=True, blank=True)
     type = models.ForeignKey(ServiceNoteTypes, on_delete=models.DO_NOTHING, null=True, blank=True)
-
+    currency = models.ForeignKey(Currency, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='notes')
     confidentially = models.BooleanField(default=False, verbose_name='Конфиденциально')
     isChef = models.BooleanField(default=False, null=True, blank=True)
 

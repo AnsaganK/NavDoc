@@ -17,7 +17,7 @@ from rest_framework.parsers import FileUploadParser
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from .forms import DepartmentForm, UserForm, ServiceNoteForm, TagForm, UserEditForm, ProfileForm, ServiceNoteEditForm
-from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers, Profile, ServiceNoteTypes
+from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers, Profile, ServiceNoteTypes, Currency
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -1095,7 +1095,9 @@ class FetchCountingList(APIView):
     def get(self, request, format=None):
         if request.GET:
             status = request.GET.get("status")
-
+            user = request.user
+            # if user.profile.isBuh and user.types:
+            #     notes = ServiceNote.objects.filter(user=user)
             if status == "success":
                 notes = ServiceNote.objects.filter(isBuh=True).order_by("-pk")
             else:
@@ -1515,16 +1517,23 @@ def new_note_types(request):
     if request.method == 'POST':
         type = ServiceNoteTypes.objects.create(name=request.POST['name'])
         type.save()
-        for i in request.POST['users']:
-            user = User.objects.filter(pk=int(i)).first()
-            if user:
-                type.users.add(user)
+        user = User.objects.filter(pk=request.POST['user']).first()
+        if user:
+            type.user = user
         type.save()
         return redirect('new_note_types')
     users = User.objects.filter(profile__isBuh=True).order_by('-pk')
     types = ServiceNoteTypes.objects.all().order_by('-pk')
     return render(request, 'new_design/note_types.html', {'types': types,
                                                           'users': users})
+@login_required()
+def new_currency(request):
+    if request.method == 'POST':
+        pass
+
+    currencies = Currency.objects.all()
+    return render(request, 'new_design/currency.html', {'currencies': currencies})
+
 
 @login_required()
 def note_type_delete(request, pk):

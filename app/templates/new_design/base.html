@@ -437,9 +437,7 @@ h1, h2, h3, h4, h5 {
 		</ul>
 	    <ul class="right hide-on-med-and-down">
         	<!--<li><a href="sass.html">Уведомления<span class="new badge">+4</span></a></li>-->
-
-		    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><i class="material-icons left">person</i>Профиль<i class="material-icons right">arrow_drop_down</i></a></li>
-
+		    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><i class="material-icons left">person</i>{{ request.user.first_name|slice:"1" }}.{{ request.user.last_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
       	</ul>
 	  </div>
 	</nav>
@@ -468,6 +466,7 @@ h1, h2, h3, h4, h5 {
     <!--<li><a class="waves-effect" href="{% url 'new_roles' %}" class="{% if '/new/roles' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">contacts</i>Роли</a></li>-->
     <li><a class="waves-effect" href="{% url 'new_calendar' %}" class="{% if '/new/calendar' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">date_range</i>Календарь</a></li>
     {% if request.user.profile.is_admin %}<li><a class="waves-effect" href="{% url 'new_note_types' %}" class="{% if '/new/note/types' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">library_add</i>Типы СЗ(бух.)</a></li>{% endif %}
+    {% if request.user.profile.is_admin %}<li><a class="waves-effect" href="{% url 'new_currency' %}" class="{% if '/new/note/currency' in request.path  %}sidenav_active_link{% endif %}"><i class="material-icons">money</i>Валюты</a></li>{% endif %}
     <!--<li><a class="waves-effect" href="#!"><i class="material-icons">stacked_bar_chart</i>Статистика</a></li>-->
     <!--<li><a class="waves-effect" href="/" onclick="setDesign()"><i class="material-icons">imagesearch_roller</i>Сменить обстановку</a></li>-->
   </ul>

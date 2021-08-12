@@ -19,7 +19,7 @@
                         <input type="text" name="name">
                     </td>
                     <td>
-                        <select name="users" id="" style="display:block;margin: auto">
+                        <select name="user" id="" style="display:block;margin: auto">
                             {% for user in users %}
                                 <option value="{{ user.pk }}">{{ user.last_name }} {{ user.first_name }}</option>
                             {% endfor %}
@@ -34,14 +34,9 @@
             <tr data-id="userItem_{{ i.pk }}">
                 <td>{{ type.name }}</td>
                 <td>
-                    {% for user in type.users.all %}
-                        {{ user.last_name }}
-                        {{ user.first_name }}
-                        ({{ user.profile.position }})
-                        {% if not forloop.last %}
-                            ,
-                        {% endif %}
-                    {% endfor %}
+                        {{ type.user.last_name }}
+                        {{ type.user.first_name }}
+                        ({{ type.user.profile.position }})
                 </td>
                 <td class="user_actions" style="display: flex;justify-content: center">
                         <a href="#modal_edit" class="modal-trigger" style="border-right: 1px solid #e0e0e0; padding: 0px 5px" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>

@@ -83,6 +83,11 @@ class NoteTypeSerializer(serializers.ModelSerializer):
         model = ServiceNoteTypes
         fields = '__all__'
 
+class NewSeriaizer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceNote
+        fields = '__all__'
+
 class ServiceMyNoteDetailSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     users = UserNoteSerializer(many=True)
@@ -119,6 +124,8 @@ class CreateServiceNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceNote
         fields = '__all__'
+
+
 #class MovieDetailSerializer(serializers.ModelSerializer):
 #    genres = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
 #    category = serializers.SlugRelatedField(slug_field='name', read_only=True)

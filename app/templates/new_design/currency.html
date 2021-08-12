@@ -1,0 +1,22 @@
+{% extends 'new_design/base.html' %}
+
+{% block title %} Валюты {% endblock %}
+
+{% block content %}
+    <div class="content">
+        <table  class="table-striped" id="userTable">
+            <tr>
+                <td>Страна</td>
+                <td>Код валюты</td>
+                <td>Действия</td>
+            </tr>
+            {% for currency in currencies %}
+            <tr>
+                <td>{{ currency.name }}</td>
+                <td>{{ currency.code }}</td>
+                <td><a href="" class="btn btn-warning">Редактировать</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
