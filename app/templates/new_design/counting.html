@@ -147,6 +147,77 @@
       width: fit-content;
       cursor: pointer;
     }
+
+    .status_radio{
+        display: none;
+    }
+    .status_radio:checked + label{
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 45%), 0 1px 3px 1px rgb(60 64 67 / 25%);
+    }
+    .status_radio:checked + label.success{
+        border: 1px solid #79ff79;
+        color: #00ca00;
+    }
+    .status_radio:checked + label.edit{
+        border: 1px solid #ffcb57;
+        color: #ffcb57;
+    }
+    .status_radio:checked + label.error{
+        border: 1px solid orangered;
+        color: orangered;
+    }
+    .statuses_radio label{
+            cursor: pointer;
+        padding: 15px;
+        border: 1px solid white;
+        border-radius: 4px;
+        color: #a3a3a3;
+        transition: all .3s;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 15%), 0 1px 3px 1px rgb(60 64 67 / 5%);
+    }
+    .statuses_radio{
+        width: 500px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .status_comment{
+        min-width: 500px;
+        max-width: 500px;
+        width: 500px;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 15%), 0 1px 3px 1px rgb(60 64 67 / 5%);
+        display: block;
+        margin: auto;
+        border: 1px solid #efefef;
+        margin-top: 50px;
+        border-radius: 5px;
+        min-height: 120px;
+        padding: 10px;
+    }
+    .my_status{
+        border: 1px solid #9b9bff;
+        padding: 20px;
+        padding-top: 30px;
+        box-shadow: 0 1px 2px 0 rgb(60 64 67 / 45%), 0 1px 3px 1px rgb(60 64 67 / 25%);
+        border-radius: 10px;
+    }
+    .my_status_title{
+        background-color: #85bbff;
+        color: #ffffff;
+        padding: 1px 27px;
+        width: 120px;
+        margin-left: 10px;
+        font-weight: 100;
+        font-size: 19px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .my_status_button {
+        display: block;
+        margin: 10px auto;
+        margin-top: 30px;
+    }
 </style>
 {% endblock %}
 
@@ -158,7 +229,7 @@
     <div class="col s12">
       <ul class="tabs">
         <li class="tab col s3" data-status="wait"><a href="#test1" class="active" onclick="loadCounting(q='wait')">В ожидании</a></li>
-        <li class="tab col s3" data-status="success"><a onclick="loadCounting(q='success')" href="#test2">Подтвежденные</a></li>
+        <li class="tab col s3" data-status="success"><a onclick="loadCounting(q='success')" href="#test2">Подтвержденные</a></li>
       </ul>
     </div>
 
@@ -197,6 +268,66 @@ var preloader = '<div class="preloader-wrapper big active" style="\n' +
                  '    </div>';
 
     loadCounting(q="wait");
+
+     function showStatusButton(id){
+          let modal = document.getElementById("modal1");
+          let div = document.createElement("div");
+          div.innerHTML = `
+            <span class="my_status_title">Бухгалтерия</span>
+            <div class="my_status">
+            <form action="" method="" class="noteStatusForm">
+                <div class="statuses_radio">
+                    <input type="text" name="id" value="${id}" style="display: none">
+                    <div>
+                        <input type="radio" class="status_radio" id="radio1" name="status" value="Одобрено" checked>
+                        <label for="radio1" class="success">ПОДПИСАТЬ</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="status_radio" id="radio2" name="status" value="На редактирование">
+                        <label for="radio2" class="edit">РЕДАКТИРОВАНИЕ</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="status_radio" id="radio3" name="status" value="Отказано">
+                        <label for="radio3" class="error">ОТКАЗАТЬ</label>
+                    </div>
+                </div>
+                <textarea name="comment" placeholder="Комментарии..." class="status_comment" id="" cols="30" rows="10"></textarea>
+                <button type="submit" class="my_status_button modal-close btn waves-effect">Отправить</button>
+            </form>
+            </div>
+`;
+          modal.appendChild(div);
+          createFormSubmit();
+        }
+
+  function createFormSubmit(){
+        let form = document.querySelector("form.noteStatusForm");
+        console.log(form);
+        form.onsubmit = function(evt){
+            evt.preventDefault();
+            let formData = new FormData(form);
+            createBuhStatusNoteAPI(formData)
+        }
+    }
+
+  async function createBuhStatusNoteAPI(noteData){
+        url = '/fetch/note/counting/status';
+        await fetch(url, {
+            method: "POST",
+            body: noteData,
+        }).then(async response => {
+                if (response.status === 200) {
+                    M.toast({html: 'Успешно изменено', classes:'toastSuccess'})
+                    updateData();
+                }else{
+                    M.toast({html: 'Не получилось сменить статус', classes:'toastError'})
+                }
+            }
+        ).catch(error=>{
+            errorConnectionToast();
+            console.log(error);
+        })
+    }
 
     async function createList(data, list_id, display="card"){
             let previous_number = "";
@@ -388,7 +519,12 @@ function serverError(q){
                  let response_data = await response.json();
                  createDetail(response_data);
                 {% if request.user.profile.isBuh %}
-                 addBuhButton(response_data.id, response_data.isBuh);
+                  if(response_data.buh_status === null){
+                   showStatusButton(response_data.id);
+                  }
+                  else{
+                    showStatusData(response_data.buh_status)
+                  }
                 {% endif %}
               } else {
                 throw new Error(response.status);
@@ -400,7 +536,25 @@ function serverError(q){
             });
         }
 
+  function showStatusData(data){
 
+          let modal = document.getElementById("modal1");
+          let div = document.createElement("div");
+          let date = data.date.substr(0, 10);
+          let time = data.date.substr(11, 8);
+          let comment = data.comment === '' || data.comment === null ? '<span style="color: grey; font-style:italic">Без комментариев</span>' : data.comment;
+          console.log(date);
+          console.log(time);
+          div.innerHTML = `
+            <span class="my_status_title">Бухгалтерия</span>
+            <div class="my_status">
+            Статус: ${data.status}<br>
+            Время: ${date} <span style="color: grey">${time}</span><br>
+            Комментарии: ${comment}
+            </div>
+`;
+          modal.appendChild(div);
+  }
 
         function addBuhButton(id, bool){
           let modal = document.getElementById("modal1");

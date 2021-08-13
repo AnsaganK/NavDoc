@@ -53,6 +53,7 @@ urlpatterns = [
 ]
 
 urlpatterns+=[
+    path('username-change/', username_change_form, name='username_change'),
     path('password-change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
     path('password-change/done', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
     path("new/send", new_send, name="new_send"),
@@ -95,6 +96,7 @@ urlpatterns+=[
 
     path("fetch/note/create", FetchNoteCreate.as_view(), name="FetchNoteCreate"),
     path("fetch/note/status", FetchUserAgree.as_view(), name="FetchUserAgree"),
+    path("fetch/note/counting/status", FetchBuhStatusNote.as_view(), name="FetchBuhStatusNote"),
 
     path("fetch/counting/agree/<int:pk>", FetchBuhAgree.as_view(), name="FetchBuhAgree"),
 ]

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Profile, Role, Department, ServiceNote, Tags, NoteFiles, NoteUsers, ServiceNoteTypes, Currency
+from .models import Profile, Role, Department, ServiceNote, Tags, NoteFiles, NoteUsers, ServiceNoteTypes, Currency, \
+    BuhStatus
 
 admin.site.register(Profile)
 admin.site.register(Role)
@@ -10,3 +11,4 @@ admin.site.register(NoteFiles)
 admin.site.register(NoteUsers)
 admin.site.register(ServiceNoteTypes)
 admin.site.register(Currency)
+admin.site.register(BuhStatus)

@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.fields import ChoiceField
+
 from .models import *
 from bs4 import BeautifulSoup as BS
 
@@ -26,6 +28,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ("id", "first_name", "last_name", "email", "profile")
 
+
 class UserInfoSerializer(serializers.ModelSerializer):
     profile = ProfileInfoSerializer()
     class Meta:
@@ -36,6 +39,14 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('first_name', 'last_name')
+
+
+class BuhStatusSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    status = ChoiceField(choices=BuhStatus.status_choices)
+    class Meta:
+        model = BuhStatus
+        fields = '__all__'
 
 
 class ServiceNoteSerializer(serializers.ModelSerializer):
@@ -94,6 +105,7 @@ class ServiceMyNoteDetailSerializer(serializers.ModelSerializer):
     files = NoteFilesSerializer(many=True)
     buh = UserSerializer()
     tags = TagSerializer(many=True)
+    buh_status = BuhStatusSerializer()
     type = NoteTypeSerializer()
     class Meta:
         model = ServiceNote

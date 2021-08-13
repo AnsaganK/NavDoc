@@ -233,8 +233,14 @@ select{
                         {% endfor %}
                     </select>
                 </div>
-                <label for="">Итого</label>
-                <input type="number" name="summa" autocomplete="off"  style="text-align: center" required>
+                <input type="number" name="summa" autocomplete="off"  style="text-align: center; width:70%;" required placeholder="Итого">
+                    <div class="input-field col s12" style="width: 29%; display:inline-block;">
+                        <select name="currency" id="" class="select_types" style="display: none">
+                            {% for currency in currencies %}
+                            <option value="{{currency.pk}}">{{ currency.name }}({{ currency.code }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
             <div class="form_item" style="margin-bottom: 30px;margin-top: 10px;">
                 <label for="">Файлы</label>
@@ -456,7 +462,7 @@ select{
                 <span style="font-size: 14px;color: white">${date_create}</span>
                 </h5>
                     <p>
-                    ${comment === null || comment === '' ? '<p style="color: gray">Без комментариев</p>' : comment}
+                    ${comment === null || comment === ' '  || comment === '' ? '<p style="color: gray">Без комментариев</p>' : comment}
                     </p>
                     </div>
                 </div>
@@ -813,7 +819,7 @@ function serverError(q){
                             ${tags}
                         </div>
                     </div>
-                    <button type="submit" class="form_button btn waves-effect">Изменить</button>
+                    <button type="submit" class="form_button modal-close btn waves-effect">Изменить</button>
                 </form>
           </div>
           `;

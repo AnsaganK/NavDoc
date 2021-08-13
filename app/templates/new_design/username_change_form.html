@@ -1,0 +1,39 @@
+{% extends 'new_design/base.html' %}
+
+{% block title %}
+    Смена логина
+{% endblock %}
+M
+{% block content %}
+    <p style="
+    text-align: center;
+    font-size: 24px;
+    color: #6f9fcc;
+">Форма для смены пароля</p>
+    <form action="" method="post" style="
+    width: 321px;
+    margin: auto;
+">
+        <p>
+            <input type="text" name="username" value="{{ request.user.username }}">
+        </p>
+        {% csrf_token %}
+        <p><button type="submit" value="Сменить" class="btn-primary btn waves-effect" style="margin: 10px auto; display: block; width: min-content; color:white;">Сменить</button></p>
+    </form>
+<a href="{% url 'new_profile' %}" style="
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+">Вернуться в профиль</a>
+{% endblock %}
+
+{% block script %}
+<script>
+    {% if errorMessage %}
+        M.toast({html: '{{ errorMessage }}', classes: "toastError"})
+    {% endif %}
+    {% if successMessage %}
+        M.toast({html: '{{ successMessage }}', classes: "toastSuccess"})
+    {% endif %}
+</script>
+{% endblock %}

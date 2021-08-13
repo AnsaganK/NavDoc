@@ -3,8 +3,9 @@ function createDetail(data){
             let create_user_last_name;
           let modal = document.getElementById("modal1");
           modal.classList.add("note_info");
-          let buh = data.buh !== null ? `${data.buh.first_name} ${data.buh.last_name}(подписано)`: 'в ожидании';
-
+          let buh = data.buh_status !== null ? `${data.buh_status.user.first_name} ${data.buh_status.user.last_name}(${data.buh_status.status})`: 'в ожидании';
+          let buh_edit = data.buh_status !== null && data.buh_status.status === 'На редактирование' ? 'Было отправлено на редактирование бухгалтером' : null
+          let buh_error = data.buh_status !== null && data.buh_status.status === 'Отказано' ? 'Было отказано бухгалтером' : null
           let tags = '';
           data.tags.length > 0?data.tags.forEach((i)=>{tags+=`<li class="note_detail_tag">${i.name}</li>`}):"";
 
@@ -38,18 +39,19 @@ function createDetail(data){
 
           let user_count = 0;
           let users = '';
+          console.log(data.users);
           data.users.forEach((i)=>{
             let user_status = '';
             user_count++;
             if(user_count === data.user_index){
               console.log(i);
-              if (status == null){
+              if (i.status == null){
                 user_status = 'current_user';
-              }else if(status === 'success'){
+              }else if(i.status === 'success'){
                 user_status = 'success_user';
-              }else if(status === 'edit'){
+              }else if(i.status === 'edit'){
                 user_status = 'edit_user';
-              }else if(status === 'error') {
+              }else if(i.status === 'error') {
                 user_status = 'error_user';
               }
             }else if(user_count < data.user_index){
@@ -104,6 +106,14 @@ function createDetail(data){
                     ${tags}
                     </ul>
                 </div>
+                <span style="color: #ff8546;
+    font-size: 19px;
+    text-align: center;
+    display: block;">${buh_edit ? buh_edit : ''}</span>
+                    <span style="color: red;
+    font-size: 19px;
+    text-align: center;
+    display: block;">${buh_error ? buh_error : ''}</span>
                 ${users}
             </div>`;
 }

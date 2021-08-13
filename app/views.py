@@ -17,7 +17,8 @@ from rest_framework.parsers import FileUploadParser
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from .forms import DepartmentForm, UserForm, ServiceNoteForm, TagForm, UserEditForm, ProfileForm, ServiceNoteEditForm
-from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers, Profile, ServiceNoteTypes, Currency
+from .models import Department, ServiceNote, Role, Tags, NoteFiles, NoteUsers, Profile, ServiceNoteTypes, Currency, \
+    BuhStatus
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -1093,32 +1094,36 @@ class FetchMyNotesList(APIView):
 
 class FetchCountingList(APIView):
     def get(self, request, format=None):
-        if request.GET:
-            status = request.GET.get("status")
-            user = request.user
-            # if user.profile.isBuh and user.types:
-            #     notes = ServiceNote.objects.filter(user=user)
-            if status == "success":
-                notes = ServiceNote.objects.filter(isBuh=True).order_by("-pk")
+        user = request.user
+        if user.profile and user.profile.isBuh:
+            notes = ServiceNote.objects.filter(type__user=user)
+            if request.GET:
+                status = request.GET.get("status")
+                # if user.profile.isBuh and user.types:
+                #     notes = ServiceNote.objects.filter(user=user)
+                if status == "success":
+                    notes = notes.filter(buh_status__status='Одобрено').order_by("-pk")
+                else:
+                    notes = notes.filter(buh_status=None).order_by("-pk")
             else:
-                notes = ServiceNote.objects.filter(isBuh=False).order_by("-pk")
+                notes = notes.filter(buh_status=None).order_by("-pk")
+            #count_wait = ServiceNote.objects.filter(isBuh=False).count()
+            #count_success = ServiceNote.objects.filter(isBuh=True).count()
+            paginator = Paginator(notes, 15)  # 3 поста на каждой странице
+            page = request.GET.get('page')
+            try:
+                notes = paginator.page(page)
+            except PageNotAnInteger:
+                # Если страница не является целым числом, поставим первую страницу
+                notes = paginator.page(1)
+            except EmptyPage:
+                # Если страница больше максимальной, доставить последнюю страницу результатов
+                notes = paginator.page(paginator.num_pages)
+            serializer = ServiceMyNoteDetailSerializer(notes, many=True)
+            return Response({"data":serializer.data, "page": notes.number, "isPrevious": notes.has_previous(),
+                             "isNext": notes.has_next()})
         else:
-            notes = ServiceNote.objects.filter(isBuh=False).order_by("-pk")
-        count_wait = ServiceNote.objects.filter(isBuh=False).count()
-        count_success = ServiceNote.objects.filter(isBuh=True).count()
-        paginator = Paginator(notes, 15)  # 3 поста на каждой странице
-        page = request.GET.get('page')
-        try:
-            notes = paginator.page(page)
-        except PageNotAnInteger:
-            # Если страница не является целым числом, поставим первую страницу
-            notes = paginator.page(1)
-        except EmptyPage:
-            # Если страница больше максимальной, доставить последнюю страницу результатов
-            notes = paginator.page(paginator.num_pages)
-        serializer = ServiceMyNoteDetailSerializer(notes, many=True)
-        return Response({"data":serializer.data, "page": notes.number, "isPrevious": notes.has_previous(),
-                         "isNext": notes.has_next()})
+            return redirect('new_profile')
         #return render(request, "counting.html",
         #              {"notes": notes, "page": page, "count_wait": count_wait, "count_success": count_success,
         #               "status": status})
@@ -1329,6 +1334,10 @@ class FetchNoteCreate(APIView):
                 type = ServiceNoteTypes.objects.filter(pk=int(post['type'])).first()
                 if type:
                     data.type=type
+            if post['currency'] != '':
+                currency = Currency.objects.filter(pk=int(post['currency'])).first()
+                if currency:
+                    data.currency = currency
             for i in post:
                 if "user" in i:
                     user_count += 1
@@ -1425,6 +1434,37 @@ class FetchUserAgree(APIView):
             return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
 
 
+class FetchBuhStatusNote(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    def post(self, request, format=None):
+        if request.user.profile and request.user.profile.isBuh:
+            post = request.data
+            print(post)
+            comment = post["comment"]
+            buh_status = post["status"]
+            note = ServiceNote.objects.get(pk=post["id"])
+            if buh_status == 'На редактирование':
+                note.status = edit
+            elif buh_status == 'Отказано':
+                note.status = error
+            if note:
+                #if note.buh_status == None or note.buh_status.status == 'На редактирование':
+                buhStatus = BuhStatus(user=request.user, status=buh_status, comment=comment)
+                buhStatus.save()
+                note.buh_status = buhStatus
+                note.save()
+                if status == 'Одобрено' and note.user_index == len(note.users.all()):
+                    chef_user = Profile.objects.filter(isChef=True).first()
+                    if chef_user and chef_user.token:
+                        send_push(chef_user.token, f"Поступило СЗ №{note.number}", note.title)
+
+                return Response({"message": "Подтверждено"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "СЗ не найдено"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"message": "У вас недостаточно прав"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class FetchNoteEdit(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     def post(self, request, format=None):
@@ -1433,6 +1473,7 @@ class FetchNoteEdit(APIView):
         note = ServiceNote.objects.get(pk=post["id"])
         note.tags.clear()
         userNote = NoteUsers.objects.filter(status="edit").filter(note=note).filter(note__user_index=F('index')).first()
+        buhStatusNote = BuhStatus.objects.filter(status="На редактирование").filter(notes=note).first()
         files = request.FILES
         form = ServiceNoteEditForm(post, files, instance=note)
         if form.is_valid():
@@ -1442,11 +1483,20 @@ class FetchNoteEdit(APIView):
                     tag_id = i.split("_")[-1]
                     tag = Tags.objects.get(pk=tag_id)
                     data.tags.add(tag)
-            userNote.status = None
+            if userNote:
+                print('Это от одного из пользователей')
+                userNote.status = None
+                userNote.save()
+
+            if buhStatusNote:
+                print('Это от бухгалтера')
+                note.buh_status = None
+                note.save()
+                buhStatusNote.delete()
+
             note.status = None
 
             note.save()
-            userNote.save()
         return Response({}, status=status.HTTP_200_OK)
 
 
@@ -1471,7 +1521,10 @@ def new_send(request):
     day = date.day if date.day > 9 else "0" + str(date.day)
     current_date = f"{year}-{month}-{day}"
     types = ServiceNoteTypes.objects.all()
-    return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number, "current_date":current_date,"types": types})
+    currencies = Currency.objects.all()
+    return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number,
+                                                    "current_date":current_date, "types": types,
+                                                    "currencies": currencies})
 
 @login_required()
 def new_my(request):
@@ -1542,6 +1595,19 @@ def note_type_delete(request, pk):
         note.delete()
     return redirect('new_note_types')
 
+@login_required()
+def username_change_form(request):
+    if request.method == 'POST':
+        user = request.user
+        username = request.POST['username']
+        if User.objects.filter(username=username).first():
+            message = 'Данный логин занят'
+            return render(request, 'new_design/username_change_form.html', {'errorMessage': message})
+        user.username = request.POST['username']
+        user.save()
+        message = 'Вы успешно сменили логин'
+        return render(request, 'new_design/username_change_form.html', {'successMessage': message})
+    return render(request, 'new_design/username_change_form.html',)
 '''
 def send_web_push(user, body):
     try:

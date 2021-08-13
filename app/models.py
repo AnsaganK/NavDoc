@@ -61,6 +61,25 @@ class Currency(models.Model):
         verbose_name_plural = 'Валюты'
 
 
+class BuhStatus(models.Model):
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, verbose_name='Бухгалтер', related_name='statuses')
+    status_choices = (
+        ('Одобрено', 'Одобрено'),
+        ('На редактирование', 'На редактирование'),
+        ('Отказано', 'Отказано')
+    )
+    status = models.CharField(max_length=256, choices=status_choices, default='Одобрено')
+    comment = models.TextField(null=True, blank=True, verbose_name='Комментарии',  default='')
+    date = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.status
+
+    class Meta:
+        verbose_name = 'Статус бухгалтера'
+        verbose_name_plural = 'Статусы бухгалтеров'
+
+
 class ServiceNote(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="notes")
     number = models.IntegerField(null=True, blank=True)
@@ -81,7 +100,7 @@ class ServiceNote(models.Model):
 
     isBuh = models.BooleanField(default=False, null=True, blank=True)
     buh = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-
+    buh_status = models.ForeignKey(BuhStatus, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='notes')
 
     def __str__(self):
         return self.title
