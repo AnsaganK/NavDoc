@@ -23,18 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd2d9b0-1762-4556-a5dd-f72f1c9daf92" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/templates/new_design/username_change_form.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/include/note_detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/include/note_detail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/counting.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/counting.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/new_design/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/new_design/send.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/new_design/send.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/note_pdf.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/note_pdf.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -282,7 +272,7 @@
       <workItem from="1628564388715" duration="525000" />
       <workItem from="1628651062124" duration="19213000" />
       <workItem from="1628736716366" duration="12389000" />
-      <workItem from="1628823563541" duration="17879000" />
+      <workItem from="1628823563541" duration="21285000" />
     </task>
     <servers />
   </component>
