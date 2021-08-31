@@ -1,0 +1,17 @@
+{% extends 'new_design/base.html' %}
+
+{% block title %}
+    {{ type.name }}
+{% endblock %}
+
+{% block content %}
+<form action="" method="post">
+    <input type="text" name="name" value="{{ type.name }}">
+    <select name="user" id="" style="display:block;margin: auto">
+        {% for user in users %}
+        <option value="{{ user.pk }}" {% if type.user.pk == user.pk %} selected {% endif %}>{{ user.last_name }} {{ user.first_name }}</option>
+        {% endfor %}
+    </select>
+    <button style="display: block;margin: auto" type="submit" class="btn">Изменить</button>
+</form>
+{% endblock %}

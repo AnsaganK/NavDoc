@@ -1579,6 +1579,23 @@ def new_note_types(request):
     types = ServiceNoteTypes.objects.filter(archive=False).order_by('-pk')
     return render(request, 'new_design/note_types.html', {'types': types,
                                                           'users': users})
+
+@login_required()
+def new_note_types_detail(request, pk):
+    type = ServiceNoteTypes.objects.filter(pk=pk).first()
+    if type:
+        if request.method == 'POST':
+            post = request.POST
+            name = post['name']
+            user = User.objects.filter(pk=post['user']).first()
+            type.name = name
+            type.user = user
+            type.save()
+            return redirect('new_note_types')
+        users = User.objects.filter(profile__isBuh=True).order_by('-pk')
+        return render(request, 'new_design/note_types_detail.html', {'type': type, 'users': users})
+    return redirect('new_note_types')
+
 @login_required()
 def new_currency(request):
     if request.method == 'POST':

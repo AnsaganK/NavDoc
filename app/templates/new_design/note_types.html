@@ -39,7 +39,7 @@
                         ({{ type.user.profile.position }})
                 </td>
                 <td class="user_actions" style="display: flex;justify-content: center">
-                        <a href="#modal_edit" class="modal-trigger" style="border-right: 1px solid #e0e0e0; padding: 0px 5px" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
+                        <a href="{% url 'new_note_types_detail' type.pk %}" class="modal-trigger" style="border-right: 1px solid #e0e0e0; padding: 0px 5px" onclick="selectTag({{i.pk}})"><i class="material-icons edit_icon">edit</i></a>
                         {% if request.user.profile.is_admin %} <a href="{% url 'note_type_delete' type.pk %}" class="modal-trigger" style="padding: 0px 5px" onclick="buttonAddId({{ i.pk }})"><i class="material-icons delete_icon">delete</i></a> {% endif %}
                 </td>
             </tr>
