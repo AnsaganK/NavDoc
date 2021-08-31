@@ -1507,7 +1507,7 @@ class FetchNewSend(APIView):
 
 @login_required()
 def new_send(request):
-    users = User.objects.filter(profile__archive=False).filter(profile__isChef=False)
+    users = User.objects.filter(profile__archive=False).filter(profile__isChef=False).order_by('-pk')
     tags = Tags.objects.all()
     last = ServiceNote.objects.last()
     if last:
