@@ -3,26 +3,27 @@ function createDetail(data){
             let create_user_last_name;
           let modal = document.getElementById("modal1");
           modal.classList.add("note_info");
+
           let buh = data.buh_status !== null ? `${data.buh_status.user.first_name} ${data.buh_status.user.last_name}(${data.buh_status.status})`: 'в ожидании';
-          let buh_edit = data.buh_status !== null && data.buh_status.status === 'На редактирование' ? 'Было отправлено на редактирование бухгалтером' : null
-          let buh_error = data.buh_status !== null && data.buh_status.status === 'Отказано' ? 'Было отказано бухгалтером' : null
+          let buh_edit = data.buh_status !== null && data.buh_status.status === 'На редактирование' ? `Было отправлено на редактирование бухгалтером<br><span style="font-size: 14px; color: grey">${data.buh_status.comment}</span>` : null
+          let buh_error = data.buh_status !== null && data.buh_status.status === 'Отказано' ? `Было отказано бухгалтером<br><span style="font-size: 14px; color: grey">${data.buh_status.comment}</span>` : null
           let tags = '';
           data.tags.length > 0?data.tags.forEach((i)=>{tags+=`<li class="note_detail_tag">${i.name}</li>`}):"";
 
           let file_count = 0;
           let files = ''
-          data.files.length>0?data.files.forEach((i)=>{
+          data.files.length>0 ? data.files.forEach((i)=>{
             file_count++;
             files+=`<a href="${i.file }" target="_blank" style="margin-left: 10px"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
                     <svg fill="#1b61a9" id="Layer_1" width="30" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <title>file, document, office, work, letter</title>
+                        <title>Файл</title>
                         <path d="M16.17,0H2V24H22V6.8ZM20,22H4V2h9V9h7ZM15,7V2h.25l4.29,5Z"/>
                         <rect x="6" y="12" width="12" height="2"/>
                         <rect x="6" y="15" width="12" height="2"/>
                         <rect x="6" y="18" width="12" height="2"/>
                         <rect x="6" y="7" width="5" height="2"/>
                     </svg></a>`;
-          }):"";
+          }) : "";
           files !== ''? files = `<div class="note_info_item"><span>Файлы:</span><span>${files}</span></div>` : ''
 
           let status = data.status;
@@ -98,7 +99,7 @@ function createDetail(data){
                     <div class="note_info_item"><span>Дата СЗ: </span> <span>${data.date}</span></div>
                     <div class="note_info_item"><span>Дата создания: </span> <span>${data.date_create.substr(0,10)}<br><span style="color:grey;">${data.date_create.substr(11,8)}</span></span></div>
                     <div class="note_info_item"><span>Текст: </span> <span><p>${data.text}</p></span></div>
-                    <div class="note_info_item"><span>Итого: </span> <span>${data.summa}</span></div>
+                    <div class="note_info_item"><span>Итого: </span> <span>${data.summa} ${data.currency_text}</span></div>
                     <div class="note_info_item"><span>Тип оплаты: </span> <span>${data.type === null ? '<span style="color:grey;">Не выбрано</span>' : data.type.name}</span></div>
                     <div class="note_info_item"><span>Бухгалтер: </span> <span> <span style="color:grey;">${buh}</span> </span></div>
                     ${files}

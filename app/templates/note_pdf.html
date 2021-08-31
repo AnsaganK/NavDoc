@@ -183,7 +183,7 @@
     <br>
 
 
-    <b {% if note.isChef and isSignature %}style="border:2px solid black;border-radius:100%;padding:20px;border-box:box-sizing;"{% endif %}>Итого: {{ note.summa }} {% if note.currency %}{{ note.currency.code }} {% else %} тенге {% endif %}</b>
+    <b {% if note.isChef and isSignature %}style="border:2px solid black;border-radius:100%;padding:20px;border-box:box-sizing;"{% endif %}>Итого: {{ note.summa }} {{ note.currency_text }}</b>
 </div>
 <div class="footer">
 

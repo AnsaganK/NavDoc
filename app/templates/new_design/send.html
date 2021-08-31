@@ -234,13 +234,15 @@ select{
                     </select>
                 </div>
                 <input type="number" name="summa" autocomplete="off"  style="text-align: center; width:70%;" required placeholder="Итого">
-                    <div class="input-field col s12" style="width: 29%; display:inline-block;">
-                        <select name="currency" id="" class="select_types" style="display: none">
-                            {% for currency in currencies %}
-                            <option value="{{currency.pk}}">{{ currency.name }}({{ currency.code }})</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+
+                        <input type="text" name="currency_text" style="width: 29%; display:inline-block;" placeholder="Валюта">
+<!--                    <div class="input-field col s12" style="width: 29%; display:inline-block;">-->
+<!--                        <select name="currency" id="" class="select_types" style="display: none">-->
+<!--                            {% for currency in currencies %}-->
+<!--                            <option value="{{currency.pk}}">{{ currency.name }}({{ currency.code }})</option>-->
+<!--                            {% endfor %}-->
+<!--                        </select>-->
+<!--                    </div>-->
 
             <div class="form_item" style="margin-bottom: 30px;margin-top: 10px;">
                 <label for="">Файлы</label>
@@ -793,13 +795,15 @@ function serverError(q){
                             </select>
                         </div>
                         <input type="number" name="summa" autocomplete="off"  style="text-align: center; width:70%;" required placeholder="Итого" value="${data.summa}">
-                        <div class="input-field col s12" style="width: 29%; display:inline-block;">
-                            <select name="currency" id="" class="select_types" style="display: none">
-                                {% for currency in currencies %}
-                                <option value="{{currency.pk}}">{{ currency.name }}({{ currency.code }})</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+
+                        <input type="text" name="currency_text" style="width: 29%; display:inline-block;" placeholder="Валюта" value="${data.currency_text}">
+<!--                        <div class="input-field col s12" style="width: 29%; display:inline-block;">-->
+<!--                            <select name="currency" id="" class="select_types" style="display: none">-->
+<!--                                {% for currency in currencies %}-->
+<!--                                <option value="{{currency.pk}}">{{ currency.name }}({{ currency.code }})</option>-->
+<!--                                {% endfor %}-->
+<!--                            </select>-->
+<!--                        </div>-->
                         <!--<input type="number" name="summa" autocomplete="off" style="text-align: center" required="" value="${data.summa}">-->
 
                     <div class="form_item" style="margin-bottom: 30px;margin-top: 10px;">

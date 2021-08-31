@@ -1334,10 +1334,10 @@ class FetchNoteCreate(APIView):
                 type = ServiceNoteTypes.objects.filter(pk=int(post['type'])).first()
                 if type:
                     data.type=type
-            if post['currency'] != '':
-                currency = Currency.objects.filter(pk=int(post['currency'])).first()
-                if currency:
-                    data.currency = currency
+            # if post['currency'] != '':
+            #     currency = Currency.objects.filter(pk=int(post['currency'])).first()
+            #     if currency:
+            #         data.currency = currency
             for i in post:
                 if "user" in i:
                     user_count += 1
@@ -1520,7 +1520,7 @@ def new_send(request):
     month = date.month if date.month > 9 else "0" + str(date.month)
     day = date.day if date.day > 9 else "0" + str(date.day)
     current_date = f"{year}-{month}-{day}"
-    types = ServiceNoteTypes.objects.all()
+    types = ServiceNoteTypes.objects.filter(archive=False)
     currencies = Currency.objects.all()
     return render(request, "new_design/send.html", {"users":users, "tags": tags, "number": number,
                                                     "current_date":current_date, "types": types,
@@ -1576,7 +1576,7 @@ def new_note_types(request):
         type.save()
         return redirect('new_note_types')
     users = User.objects.filter(profile__isBuh=True).order_by('-pk')
-    types = ServiceNoteTypes.objects.all().order_by('-pk')
+    types = ServiceNoteTypes.objects.filter(archive=False).order_by('-pk')
     return render(request, 'new_design/note_types.html', {'types': types,
                                                           'users': users})
 @login_required()
@@ -1592,7 +1592,8 @@ def new_currency(request):
 def note_type_delete(request, pk):
     note = ServiceNoteTypes.objects.filter(pk=pk).first()
     if note:
-        note.delete()
+        note.archive = True
+        note.save()
     return redirect('new_note_types')
 
 @login_required()

@@ -34,6 +34,7 @@ class Tags(models.Model):
 class ServiceNoteTypes(models.Model):
     name = models.CharField(max_length=250, default='', blank=True)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='types')
+    archive = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -95,6 +96,7 @@ class ServiceNote(models.Model):
     status = models.CharField(max_length=200, choices=statuses, null=True, blank=True)
     type = models.ForeignKey(ServiceNoteTypes, on_delete=models.DO_NOTHING, null=True, blank=True)
     currency = models.ForeignKey(Currency, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='notes')
+    currency_text = models.CharField(max_length=250, default='')
     confidentially = models.BooleanField(default=False, verbose_name='Конфиденциально')
     isChef = models.BooleanField(default=False, null=True, blank=True)
 

@@ -99,6 +99,13 @@ class NewSeriaizer(serializers.ModelSerializer):
         model = ServiceNote
         fields = '__all__'
 
+
+class CurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = ('name', 'code')
+
+
 class ServiceMyNoteDetailSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     users = UserNoteSerializer(many=True)
@@ -107,6 +114,7 @@ class ServiceMyNoteDetailSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     buh_status = BuhStatusSerializer()
     type = NoteTypeSerializer()
+    #currency = CurrencySerializer()
     class Meta:
         model = ServiceNote
         fields = '__all__'
